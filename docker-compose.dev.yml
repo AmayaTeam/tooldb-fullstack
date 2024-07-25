@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14.1-alpine
+    container_name: tools_app_pgdb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: tools_app
+      POSTGRES_USER: tools_app
+      POSTGRES_PASSWORD: tools_app
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  web:
+    image: tools_app_web_backend:latest
+    tty: true
+    build:
+      context: ./tgt_practice_backend
+      dockerfile: Dockerfile-dev
+    command: sh -c "poetry run python manage.py migrate &&
+      poetry run python manage.py runserver 0.0.0.0:8000"
+    container_name: tools_app_django
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env.dev
+  react:
+    build:
+      context: ./tgt_practice_frontend
+      dockerfile: Dockerfile-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    container_name: tgt_practice_frontend
+    env_file:
+      - .env.dev
+volumes:
+  db:

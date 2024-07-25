@@ -1,3 +1,4 @@
+import os
 import random
 import string
 
@@ -20,7 +21,6 @@ def index(request):
 @settings.AUTH.login_required(scopes=["User.Read", "Directory.Read.All"])
 def call_api(request, *, context):
     if context["access_token"]:
-        print("I'm in IF")
         api_result = requests.get(
             "https://graph.microsoft.com/v1.0/me/appRoleAssignments",
             headers={"Authorization": "Bearer " + context["access_token"]},
@@ -36,7 +36,6 @@ def call_api(request, *, context):
         user, created = User.objects.get_or_create(
             username=user_info["userPrincipalName"]
         )
-        print(user)
         if created:
             app_role_id = api_result.json()["value"][0]["appRoleId"]
             if app_role_id == "0be6dabc-574d-4913-8652-befb6d290ed5":
@@ -47,7 +46,7 @@ def call_api(request, *, context):
             user.save()
         login(request, user)
 
-        redirect_url = "https://172.20.10.6/home"
+        redirect_url = os.getenv("REDIRECT_URL_TO_HOME")
 
         return redirect(redirect_url)
 
@@ -59,4 +58,4 @@ def graphql_docs(request):
 
 def logout_user(request):
     logout(request)
-    return redirect("https://172.20.10.6")
+    return redirect(os.getenv("REDIRECT_URL_TO_ROOT_FRONTEND"))

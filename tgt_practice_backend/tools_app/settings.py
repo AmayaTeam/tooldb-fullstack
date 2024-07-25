@@ -11,7 +11,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "t")
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ["http://172.20.10.6", "https://172.20.10.6", "http://172.20.10.6:3000", "https://172.20.10.6:3000"]
+CSRF_TRUSTED_ORIGINS = [
+    "http://172.20.10.6",
+    "https://172.20.10.6",
+    "http://172.20.10.6:3000",
+    "https://172.20.10.6:3000"
+]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -116,7 +121,6 @@ SITE_ID = 1
 
 SECURE_COOKIE = False
 SESSION_COOKIE_SECURE = False
-#SECURE_COOKIE = False
 
 AUTH = Auth(
     os.getenv("CLIENT_ID"),
@@ -129,3 +133,6 @@ AUTH = Auth(
     b2c_edit_profile_user_flow=os.getenv("EDITPROFILE_USER_FLOW"),
     b2c_reset_password_user_flow=os.getenv("RESETPASSWORD_USER_FLOW"),
 )
+
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS += ["http://localhost:3000"]
