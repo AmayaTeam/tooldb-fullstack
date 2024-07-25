@@ -1,0 +1,65 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 35px;
+    background-color: #aaaaaa;
+    border-bottom: 0.1px solid #4c4c4c;
+    padding: 0 20px; /* Добавьте отступы, если нужно */
+    position: fixed;
+    width: 100%/* Добавляем позиционирование относительно для родителя */
+}
+
+.header-left {
+    /* Стили для левой части заголовка */
+}
+
+.header-right {
+}
+
+.username {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    width: auto;
+    margin-right:100px;
+
+}
+.username p{
+    margin: 0;
+}
+
+.dropdown {
+    position: absolute;
+    top: 35px;
+    height: auto;
+    /*padding: 5px;*/
+    /*right: 0;*/
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Добавляем небольшую тень */
+    width: 80px; /* Добавляем ширину на основе содержимого */
+    /*min-width: 100%; !* Минимальная ширина, чтобы dropdown был шире чем username *!*/
+}
+
+.dropdown button {
+    display: block;
+    width: 100%; /* Занимаем всю доступную ширину */
+    padding: 5px 10px;
+    margin: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.dropdown button:hover {
+    background-color: #f0f0f0;
+}
+.dropdown button p{
+    font-size: 15px;
+}
+.choose-unit{
+    cursor: pointer;
+}
+.choose-unit p{
+    color: #4c4c4c;
+}

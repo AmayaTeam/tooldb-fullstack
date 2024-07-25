@@ -1,0 +1,38 @@
+[
+  {
+    "from_unit": "m",
+    "to_unit": "cm",
+    "factor_1": 100,
+    "factor_2": 1
+  },
+  {
+    "from_unit": "m",
+    "to_unit": "mm",
+    "factor_1": 1000,
+    "factor_2": 1
+  },
+  {
+    "from_unit": "m",
+    "to_unit": "mkm",
+    "factor_1": 1000000,
+    "factor_2": 1
+  },
+  {
+    "from_unit": "m",
+    "to_unit": "in",
+    "factor_1": 39.3700787,
+    "factor_2": 1
+  },
+  {
+    "from_unit": "m",
+    "to_unit": "ft",
+    "factor_1": 3.2808399,
+    "factor_2": 1
+  },
+  {
+    "from_unit": "mm",
+    "to_unit": "in",
+    "factor_1": 0.039370079,
+    "factor_2": 1
+  }
+]

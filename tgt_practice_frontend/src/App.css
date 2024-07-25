@@ -1,0 +1,22 @@
+#root {
+  /*max-width: 1280px;*/
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  /*text-align: center;*/
+  display: block;
+}
+
+.container {
+  width: 100%;
+
+  display: flex;
+  /*grid-template-columns: 1fr 1fr; !* Делит контейнер на две колонки с равной шириной *!*/
+  /*gap: 20px; !* Отступ между компонентами *!*/
+}
+
+
+
+
+
+

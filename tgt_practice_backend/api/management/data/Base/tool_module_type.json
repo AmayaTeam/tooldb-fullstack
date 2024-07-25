@@ -1,0 +1,660 @@
+[
+  {
+    "id": "a03bc0e2-5d29-476b-9d9c-dd144d6b73cb",
+    "name": "BM",
+    "r_modules_group_id": "5d920207-56f8-44d6-a855-82563748845c",
+    "module_type_id": null,
+    "hash_code": "585abe92b05780d4882c0764946d0046"
+  },
+  {
+    "id": "f776650e-669d-477f-84ce-1727e88dfe71",
+    "name": "CFS",
+    "r_modules_group_id": "5d920207-56f8-44d6-a855-82563748845c",
+    "module_type_id": null,
+    "hash_code": "7f17447a66d88cccf474c1a07d7941d5"
+  },
+  {
+    "id": "031c8710-8941-478c-a29e-32dc0c065b49",
+    "name": "Chorus XB EnP",
+    "r_modules_group_id": "958bfd9b-47e6-4c81-9f35-8d93dc41b03d",
+    "module_type_id": "98",
+    "hash_code": "6552d920110b1dd323c6601a1d0a7d49"
+  },
+  {
+    "id": "3605b747-261b-4c37-b2ed-ae59cbeaec67",
+    "name": "Chorus XT EnP",
+    "r_modules_group_id": "958bfd9b-47e6-4c81-9f35-8d93dc41b03d",
+    "module_type_id": "98",
+    "hash_code": "7ed1c32a29786840709c7ed815d38797"
+  },
+  {
+    "id": "1bc2fffc-978b-440d-88f9-72a2eb2cfb4c",
+    "name": "Centralizer GEO-42B",
+    "r_modules_group_id": "200c3b64-11c7-46b2-a3a2-4cf7b6a893a4",
+    "module_type_id": null,
+    "hash_code": "1c762efd8df814b61d908bab65a223e8"
+  },
+  {
+    "id": "576beb1f-2ea1-43db-8641-9a1bd2f2a8af",
+    "name": "RC-4 Helical 4 Arm Centralizer",
+    "r_modules_group_id": "200c3b64-11c7-46b2-a3a2-4cf7b6a893a4",
+    "module_type_id": null,
+    "hash_code": "fa88d29d243459943d8114bff1ff7bcb"
+  },
+  {
+    "id": "61ebc58c-ddc9-415d-9d08-b0381e76b004",
+    "name": "RC-4C",
+    "r_modules_group_id": "200c3b64-11c7-46b2-a3a2-4cf7b6a893a4",
+    "module_type_id": null,
+    "hash_code": "3249997d68978682019627d68fd9164f"
+  },
+  {
+    "id": "77997a67-0e7a-4bc1-bb1d-9987295d2a9e",
+    "name": "Knuckle Joint",
+    "r_modules_group_id": "200c3b64-11c7-46b2-a3a2-4cf7b6a893a4",
+    "module_type_id": null,
+    "hash_code": "9ddae938fbc5c34258d566e2222ef4f9"
+  },
+  {
+    "id": "b4ff34a7-8184-4bcc-b074-7012b8c91d3e",
+    "name": "Terminator",
+    "r_modules_group_id": "200c3b64-11c7-46b2-a3a2-4cf7b6a893a4",
+    "module_type_id": null,
+    "hash_code": "c72fa9c7c55a13106e30194fe29bc823"
+  },
+  {
+    "id": "db9ccb82-52e6-4b48-a2ce-023d2cbb991f",
+    "name": "RC-3B",
+    "r_modules_group_id": "200c3b64-11c7-46b2-a3a2-4cf7b6a893a4",
+    "module_type_id": null,
+    "hash_code": "e2e37e497ce961514e64d6f378aef6a8"
+  },
+  {
+    "id": "deafa631-9482-4a0c-aa7a-319982360767",
+    "name": "Spacers / Weight Bars",
+    "r_modules_group_id": "200c3b64-11c7-46b2-a3a2-4cf7b6a893a4",
+    "module_type_id": null,
+    "hash_code": "8a93a5377f6adf3e1322ae8ab709c43d"
+  },
+  {
+    "id": "df11699f-5f75-4e9a-b788-f8dceaf8871e",
+    "name": "RC-4B",
+    "r_modules_group_id": "200c3b64-11c7-46b2-a3a2-4cf7b6a893a4",
+    "module_type_id": null,
+    "hash_code": "32c46dd6540a6efbdc8ffd5287475f2e"
+  },
+  {
+    "id": "72ebd4c2-8f65-419e-a538-ec8f6fbaab1e",
+    "name": "MFC-60",
+    "r_modules_group_id": "27e32646-01c8-448a-8638-e1e532008ab6",
+    "module_type_id": null,
+    "hash_code": "e86feac96f69cf3d3e44ecd4fad25ef6"
+  },
+  {
+    "id": "92453c7a-37c5-4947-90a0-69e621280b0d",
+    "name": "Memory",
+    "r_modules_group_id": "27e32646-01c8-448a-8638-e1e532008ab6",
+    "module_type_id": null,
+    "hash_code": "dccef8454f2c19a9382f291e230a586d"
+  },
+  {
+    "id": "efdbe047-3623-4424-8544-9277c8884383",
+    "name": "MFC-24",
+    "r_modules_group_id": "27e32646-01c8-448a-8638-e1e532008ab6",
+    "module_type_id": null,
+    "hash_code": "0b4e8e64f97516c724b018e22e3a035b"
+  },
+  {
+    "id": "f3ac7d0f-3709-4a68-8627-fd86b91e8c28",
+    "name": "MFC-40",
+    "r_modules_group_id": "27e32646-01c8-448a-8638-e1e532008ab6",
+    "module_type_id": null,
+    "hash_code": "47eecbf576033cb07dff23f4a7bafab4"
+  },
+  {
+    "id": "42c1a697-b869-42a5-8ee7-6413271139e1",
+    "name": "TEMP",
+    "r_modules_group_id": "535cbd2e-b618-4fad-81a2-e7a644ee4706",
+    "module_type_id": null,
+    "hash_code": "b9eea3b40afe7acdd85d2941b0cae4c2"
+  },
+  {
+    "id": "562064db-893b-48ac-a295-bc39af3bb9dd",
+    "name": "CFS",
+    "r_modules_group_id": "535cbd2e-b618-4fad-81a2-e7a644ee4706",
+    "module_type_id": null,
+    "hash_code": "c7f88eeae6ed2b43577320f486176700"
+  },
+  {
+    "id": "95274c7d-21e5-4aa6-aca6-4e3e6f836b43",
+    "name": "BM",
+    "r_modules_group_id": "535cbd2e-b618-4fad-81a2-e7a644ee4706",
+    "module_type_id": null,
+    "hash_code": "358fa9aac17a5139bdd03c51499a8dc2"
+  },
+  {
+    "id": "c731b8a3-5b57-4912-a9c2-4d76c3b2ff0b",
+    "name": "RIST",
+    "r_modules_group_id": "535cbd2e-b618-4fad-81a2-e7a644ee4706",
+    "module_type_id": null,
+    "hash_code": "71a0506a83bb82cea7860aadec7ff639"
+  },
+  {
+    "id": "36b22c87-7af7-4dd7-9807-e881ac71d884",
+    "name": "SRG Go Box to Sucker Rod Box",
+    "r_modules_group_id": "5b697bcc-963f-471d-8e04-9baed3fecef5",
+    "module_type_id": "",
+    "hash_code": "d6d67824e50cc73393ed08502d8e9358"
+  },
+  {
+    "id": "4004a590-491f-41fc-9913-68d06a74a7e7",
+    "name": "X-OVERS-42",
+    "r_modules_group_id": "5b697bcc-963f-471d-8e04-9baed3fecef5",
+    "module_type_id": null,
+    "hash_code": "bbb3235193f78cd4c1544691225561c7"
+  },
+  {
+    "id": "73d7f75a-3185-4dd5-8360-af7664b6d44a",
+    "name": "SAKMAR Box to Go Box",
+    "r_modules_group_id": "5b697bcc-963f-471d-8e04-9baed3fecef5",
+    "module_type_id": null,
+    "hash_code": "1d101430da1f9bb445545032e5cb8a7a"
+  },
+  {
+    "id": "788a2ec0-6e4d-4ae9-9b93-f9491d4a22be",
+    "name": "GMS",
+    "r_modules_group_id": "5b697bcc-963f-471d-8e04-9baed3fecef5",
+    "module_type_id": null,
+    "hash_code": "80379deb8bb2682fd49b4a26d1ca95a1"
+  },
+  {
+    "id": "81ca3996-616f-4bd6-8fb3-5de7b64176f8",
+    "name": "Go Pin to Go Box with groove for c-plate",
+    "r_modules_group_id": "5b697bcc-963f-471d-8e04-9baed3fecef5",
+    "module_type_id": "",
+    "hash_code": "98f2547dc34c9fb32ae8c2ff6dbf615f"
+  },
+  {
+    "id": "9954b31c-254b-4695-a5d2-f7764e28e892",
+    "name": "SLB 1 3/8\" Box -> Go Pin (for EWL)",
+    "r_modules_group_id": "5b697bcc-963f-471d-8e04-9baed3fecef5",
+    "module_type_id": null,
+    "hash_code": "b4029bb654cf52f00570c8652ec24145"
+  },
+  {
+    "id": "e4b3d9f6-350a-4988-987a-c9fe3ae034b7",
+    "name": "X-OVERS-38",
+    "r_modules_group_id": "5b697bcc-963f-471d-8e04-9baed3fecef5",
+    "module_type_id": null,
+    "hash_code": "97043378bcb4bb546346c3dcf5428daa"
+  },
+  {
+    "id": "ebc051a9-cfe5-443d-bc7c-4a561d3378dc",
+    "name": "BP",
+    "r_modules_group_id": "5b697bcc-963f-471d-8e04-9baed3fecef5",
+    "module_type_id": "",
+    "hash_code": "ffc516ad9e83de5aef5035543ce233aa"
+  },
+  {
+    "id": "fcb8dbbd-0984-41f7-b879-63f19c527427",
+    "name": "SLB 1 3/8\" Pin -> Go Box (for EWL)",
+    "r_modules_group_id": "5b697bcc-963f-471d-8e04-9baed3fecef5",
+    "module_type_id": null,
+    "hash_code": "b469c7970a18a66f849416e249b42c9f"
+  },
+  {
+    "id": "5caf28b9-d4c5-4a9a-9a74-33138352ce41",
+    "name": "Micro-T",
+    "r_modules_group_id": "5df5876f-bd25-4fe4-98f0-017fa7224ab9",
+    "module_type_id": "252",
+    "hash_code": "ff50f595a1b5d50d77ba8720e80eac5c"
+  },
+  {
+    "id": "b965317d-ba44-4c90-bcc3-f1fbf14b9a0d",
+    "name": "Micro-T2",
+    "r_modules_group_id": "5df5876f-bd25-4fe4-98f0-017fa7224ab9",
+    "module_type_id": "86",
+    "hash_code": "db0d231f2b40350736a09cc5e6ee7da9"
+  },
+  {
+    "id": "3e7a1e0e-0c9a-4d56-bb2f-5ce4f79d1c2c",
+    "name": "Chorus 10",
+    "r_modules_group_id": "6df38d59-f775-4c3f-9865-c1acba87962a",
+    "module_type_id": "65",
+    "hash_code": "b0a61a9237c8e8311dc8880491f4d71e"
+  },
+  {
+    "id": "537f0712-cc3b-4b3b-b645-fef254d105ce",
+    "name": "Chorus 9",
+    "r_modules_group_id": "6df38d59-f775-4c3f-9865-c1acba87962a",
+    "module_type_id": "65",
+    "hash_code": "a3be0d35c80481c17efe3b6d55fb7983"
+  },
+  {
+    "id": "cbd40bb8-8d3e-49bd-b06d-0ce5abefea20",
+    "name": "Chorus 10h",
+    "r_modules_group_id": "6df38d59-f775-4c3f-9865-c1acba87962a",
+    "module_type_id": "65",
+    "hash_code": "969e6590bdbd3e0047c14f5fefa883b1"
+  },
+  {
+    "id": "0b75aeee-51dc-4665-9800-04800e479247",
+    "name": "MVA",
+    "r_modules_group_id": "71d827ad-a290-43cc-9209-e2de93b2333f",
+    "module_type_id": "",
+    "hash_code": "d7e3e9e2006c46526ac0af6cf6232cef"
+  },
+  {
+    "id": "1a52d781-938c-418e-b5ab-9bc4f30f2b38",
+    "name": "CFS-42B",
+    "r_modules_group_id": "71d827ad-a290-43cc-9209-e2de93b2333f",
+    "module_type_id": null,
+    "hash_code": "676020c8cda821c02efb9d88ab692965"
+  },
+  {
+    "id": "247f4286-035e-483f-8777-4133d3f3b956",
+    "name": "CFS",
+    "r_modules_group_id": "71d827ad-a290-43cc-9209-e2de93b2333f",
+    "module_type_id": "",
+    "hash_code": "b9e7ede692944e1e23327cd359037424"
+  },
+  {
+    "id": "4146afc0-5c1e-4e22-a587-ab480c237599",
+    "name": "Gas CFS",
+    "r_modules_group_id": "71d827ad-a290-43cc-9209-e2de93b2333f",
+    "module_type_id": null,
+    "hash_code": "d685ab6c6de1aea485486e4cfe276439"
+  },
+  {
+    "id": "495253c0-676e-4e9a-923d-5deca83600fd",
+    "name": "FBS",
+    "r_modules_group_id": "71d827ad-a290-43cc-9209-e2de93b2333f",
+    "module_type_id": "",
+    "hash_code": "1c330c16d63b63e22ab0e696c336af5a"
+  },
+  {
+    "id": "86ab134c-1d2b-422a-8900-98ecf0e8dfa0",
+    "name": "BM",
+    "r_modules_group_id": "71d827ad-a290-43cc-9209-e2de93b2333f",
+    "module_type_id": "",
+    "hash_code": "a236321917461d04da37912d286248ad"
+  },
+  {
+    "id": "a96cde47-49bb-4d3b-920a-bc670a2406d3",
+    "name": "MRI",
+    "r_modules_group_id": "71d827ad-a290-43cc-9209-e2de93b2333f",
+    "module_type_id": null,
+    "hash_code": "ed872e44a999e423bde6325849e51090"
+  },
+  {
+    "id": "2d399977-8098-491a-a459-c30db47f7ad1",
+    "name": "BM",
+    "r_modules_group_id": "84096c4f-0c92-409b-91c2-e842b39a22dd",
+    "module_type_id": null,
+    "hash_code": "838802647f6315d47ac49c92c46d4c1d"
+  },
+  {
+    "id": "3ba08f85-873e-4a7e-a859-f4d70ea8c472",
+    "name": "CFS",
+    "r_modules_group_id": "84096c4f-0c92-409b-91c2-e842b39a22dd",
+    "module_type_id": null,
+    "hash_code": "777aebcc05c5bc9cce79f17ea46f1ae1"
+  },
+  {
+    "id": "a17d4da4-da33-40ce-829b-d42886bbe7c7",
+    "name": "RIST",
+    "r_modules_group_id": "84096c4f-0c92-409b-91c2-e842b39a22dd",
+    "module_type_id": null,
+    "hash_code": "f606e159b0a2c156d901a0ed3294278a"
+  },
+  {
+    "id": "1d480fa8-cd87-4ce5-bb07-15c30f2c7d62",
+    "name": "DMPT-2I",
+    "r_modules_group_id": "89810e3a-2c47-46ba-80d1-4d4e4a42826e",
+    "module_type_id": "66",
+    "hash_code": "094f88bcffb2db54dab91be22cbb6b97"
+  },
+  {
+    "id": "648ad5b1-665d-4bad-9dd4-72f694562e87",
+    "name": "DMPT-1",
+    "r_modules_group_id": "89810e3a-2c47-46ba-80d1-4d4e4a42826e",
+    "module_type_id": null,
+    "hash_code": "02ab24668a81dfbfd297e9d9e8626975"
+  },
+  {
+    "id": "9a90ee2b-ef1c-4aa5-8e51-1eab4b164df3",
+    "name": "DMPT-HT",
+    "r_modules_group_id": "89810e3a-2c47-46ba-80d1-4d4e4a42826e",
+    "module_type_id": "73",
+    "hash_code": "ade3979c540d27c168eca110a689f17b"
+  },
+  {
+    "id": "d848d340-c44f-450c-bf78-5a17bd55447d",
+    "name": "DMPT-2",
+    "r_modules_group_id": "89810e3a-2c47-46ba-80d1-4d4e4a42826e",
+    "module_type_id": "250",
+    "hash_code": "32723f252ef101fa16eeaf5d4f9a5e74"
+  },
+  {
+    "id": "09ee725d-ba64-4ab8-9d57-022fb95b9d1f",
+    "name": "PT",
+    "r_modules_group_id": "91657d5b-8528-402d-a140-768b6a564a1b",
+    "module_type_id": "68",
+    "hash_code": "4cf8fd4b28ef50362d4e14770339965f"
+  },
+  {
+    "id": "43a37e7a-442d-49bc-91ec-34157a823c81",
+    "name": "HEX",
+    "r_modules_group_id": "91657d5b-8528-402d-a140-768b6a564a1b",
+    "module_type_id": "72",
+    "hash_code": "3e9b08b47064b57dfff031d6df4c7535"
+  },
+  {
+    "id": "4cd8a53c-88ab-4c2b-84a9-2b2c551f485a",
+    "name": "ILS",
+    "r_modules_group_id": "91657d5b-8528-402d-a140-768b6a564a1b",
+    "module_type_id": "49",
+    "hash_code": "a011b7c1d89c21cf7f7fd9c320c664b4"
+  },
+  {
+    "id": "7387339b-f37a-43cf-aa3d-c9e454ef465a",
+    "name": "FBS",
+    "r_modules_group_id": "91657d5b-8528-402d-a140-768b6a564a1b",
+    "module_type_id": "50",
+    "hash_code": "0df726e5ec9ba249dce5d6ff1da81901"
+  },
+  {
+    "id": "740c9d87-2f0d-4870-a9f6-f7794dd445e4",
+    "name": "NAV",
+    "r_modules_group_id": "91657d5b-8528-402d-a140-768b6a564a1b",
+    "module_type_id": "71",
+    "hash_code": "90ba84b64de508990dc898901c546b97"
+  },
+  {
+    "id": "82584198-86ae-490c-825c-1bf097b2182d",
+    "name": "GILS (Indigo)",
+    "r_modules_group_id": "91657d5b-8528-402d-a140-768b6a564a1b",
+    "module_type_id": "69",
+    "hash_code": "9cf19d952b34e37ca92ff3f8570865b0"
+  },
+  {
+    "id": "905630ae-4820-46cd-8d57-4d735b423b74",
+    "name": "XYC",
+    "r_modules_group_id": "91657d5b-8528-402d-a140-768b6a564a1b",
+    "module_type_id": "67",
+    "hash_code": "77cecb7e78265cf2111b427b1f052b22"
+  },
+  {
+    "id": "bf475251-5a1b-4ff5-bca9-186a97f94d6b",
+    "name": "ReCap",
+    "r_modules_group_id": "91657d5b-8528-402d-a140-768b6a564a1b",
+    "module_type_id": "82",
+    "hash_code": "0879449c8b8927d3df916b34f757d804"
+  },
+  {
+    "id": "c05d815f-f239-46d2-86d1-2c845fdf87a5",
+    "name": "BAT",
+    "r_modules_group_id": "91657d5b-8528-402d-a140-768b6a564a1b",
+    "module_type_id": "",
+    "hash_code": "7c8a1b3e850795c546575ba02c55c0b2"
+  },
+  {
+    "id": "df1b0b62-071f-4e24-ae3a-207223608911",
+    "name": "BAT1h",
+    "r_modules_group_id": "91657d5b-8528-402d-a140-768b6a564a1b",
+    "module_type_id": null,
+    "hash_code": "ab57e3b71d453ab7a3c80b4a4387880b"
+  },
+  {
+    "id": "ee5161c3-9577-423a-a4f5-380487700483",
+    "name": "Modem",
+    "r_modules_group_id": "91657d5b-8528-402d-a140-768b6a564a1b",
+    "module_type_id": "84",
+    "hash_code": "40e67a3dfb66d7333e66d8dc78e91751"
+  },
+  {
+    "id": "e1c3ca0a-45d2-4809-b14d-3594c7d5dd95",
+    "name": "PNN",
+    "r_modules_group_id": "d8e4fdcc-656f-4a63-8d66-da481e5ff249",
+    "module_type_id": null,
+    "hash_code": "35605217698813804171d8cdc160d268"
+  },
+  {
+    "id": "8e148d36-8a93-436f-a153-e532b440779c",
+    "name": "BM",
+    "r_modules_group_id": "fdbce50b-8025-498a-977c-dbd722dcbc77",
+    "module_type_id": null,
+    "hash_code": "e02a988a6c92e87d23a4a597dd13b8a7"
+  },
+  {
+    "id": "dcd44c1e-89d2-4df5-97a0-92d3d446c7c6",
+    "name": "CFS",
+    "r_modules_group_id": "fdbce50b-8025-498a-977c-dbd722dcbc77",
+    "module_type_id": null,
+    "hash_code": "3366d1d000c49bfa421042d36025df54"
+  },
+  {
+    "id": "e75bf1e4-c69e-4529-91a9-e21802d14463",
+    "name": "MRI",
+    "r_modules_group_id": "fdbce50b-8025-498a-977c-dbd722dcbc77",
+    "module_type_id": null,
+    "hash_code": "88083fe05f40b3bf7e252ca9949cbe0a"
+  },
+  {
+    "id": "edf91a57-50ea-42e1-8907-6c07aa3d6c66",
+    "name": "FBS",
+    "r_modules_group_id": "fdbce50b-8025-498a-977c-dbd722dcbc77",
+    "module_type_id": null,
+    "hash_code": "130f30f4d601d934ae5fd7ebdf527a6d"
+  },
+  {
+    "id": "83396ea8-6b8e-4bf1-a683-cfe409ae69a4",
+    "name": "PSTP-B",
+    "r_modules_group_id": "fe85fe91-e727-43c0-a4b0-75aa509eb18f",
+    "module_type_id": null,
+    "hash_code": "a5504ffefad93b7d97750e01cf3c6073"
+  },
+  {
+    "id": "b97e018c-7b00-44cd-aae2-40c77edfe089",
+    "name": "EQF-46",
+    "r_modules_group_id": "fe85fe91-e727-43c0-a4b0-75aa509eb18f",
+    "module_type_id": null,
+    "hash_code": "0a5f2fc49220150bea42b417d3abd8d9"
+  },
+  {
+    "id": "e47a1638-c47b-4ab9-88d0-da34ec41f734",
+    "name": "PFCS-A",
+    "r_modules_group_id": "fe85fe91-e727-43c0-a4b0-75aa509eb18f",
+    "module_type_id": null,
+    "hash_code": "50c5c196bba155aa8b927ea111cf6a20"
+  },
+  {
+    "id": "158e1f5d-2f09-467f-84cf-49b9f8b56b19",
+    "name": "Pulse-3E",
+    "r_modules_group_id": "aaaa3a68-8432-46e4-9b6c-46afcf3c4796",
+    "module_type_id": "88",
+    "hash_code": "651e6f439e27579e8e730efa0a706e9a"
+  },
+  {
+    "id": "468a1637-81d4-4d78-8f61-a62ed4401e88",
+    "name": "Pulse-2 Indigo",
+    "r_modules_group_id": "aaaa3a68-8432-46e4-9b6c-46afcf3c4796",
+    "module_type_id": "78",
+    "hash_code": "942b159372c48c1fd1a05c4baaed6f02"
+  },
+  {
+    "id": "afa6bc6b-313b-4810-9df6-3c3b1592039a",
+    "name": "Pulse1",
+    "r_modules_group_id": "aaaa3a68-8432-46e4-9b6c-46afcf3c4796",
+    "module_type_id": "89",
+    "hash_code": "68973b8a7e02f244a6e723592316896e"
+  },
+  {
+    "id": "b314b57d-40f8-432b-a8df-22e0ab2a248d",
+    "name": "Pulse-2M",
+    "r_modules_group_id": "aaaa3a68-8432-46e4-9b6c-46afcf3c4796",
+    "module_type_id": "77",
+    "hash_code": "98e6210b65443a84b4a5778e86cddf2a"
+  },
+  {
+    "id": "c2590b46-4f67-42a2-a149-4dd82ac14f4a",
+    "name": "Pulse-4",
+    "r_modules_group_id": "aaaa3a68-8432-46e4-9b6c-46afcf3c4796",
+    "module_type_id": "81",
+    "hash_code": "cceecf8da2187139959402cb335e2b12"
+  },
+  {
+    "id": "3fcc3d8e-bf62-4995-a7f5-ce839cbd0a3a",
+    "name": "SPACER SWX",
+    "r_modules_group_id": "37614d83-fa89-4b63-a9d4-3dba5a6d3d84",
+    "module_type_id": null,
+    "hash_code": "ac55e3fc6e4907484e122d7d9c29be7f"
+  },
+  {
+    "id": "657289f9-db81-4fdf-8966-d0696a46a013",
+    "name": "X-OVER SWX",
+    "r_modules_group_id": "37614d83-fa89-4b63-a9d4-3dba5a6d3d84",
+    "module_type_id": null,
+    "hash_code": "ea94ea5df1034496e28cd142f730a41c"
+  },
+  {
+    "id": "f4291536-15da-4f39-8b0b-30ba7fca5e41",
+    "name": "INDIGO SWX",
+    "r_modules_group_id": "37614d83-fa89-4b63-a9d4-3dba5a6d3d84",
+    "module_type_id": null,
+    "hash_code": "8ed10a1d7a94fba6c352bb73812fed0e"
+  },
+  {
+    "id": "100dfc91-5122-4019-953a-aba757e31ed8",
+    "name": "MRI",
+    "r_modules_group_id": "5d920207-56f8-44d6-a855-82563748845c",
+    "module_type_id": null,
+    "hash_code": "9178aa355ebeb54aa4b0cb85dff70188"
+  },
+  {
+    "id": "f6886969-69c0-4408-ac6e-f82f2a0ed761",
+    "name": "FBS",
+    "r_modules_group_id": "5d920207-56f8-44d6-a855-82563748845c",
+    "module_type_id": null,
+    "hash_code": "d9697fbd456bd8e102fb82a4b49be628"
+  },
+  {
+    "id": "4c5eba63-3303-4452-aa63-91ae7747dbd2",
+    "name": "Rubber centralizer",
+    "r_modules_group_id": "200c3b64-11c7-46b2-a3a2-4cf7b6a893a4",
+    "module_type_id": null,
+    "hash_code": "bfc9b5cd948e302856daf664f5ecb425"
+  },
+  {
+    "id": "e9696029-0e18-4c3a-8611-59cfab57ea5b",
+    "name": "BAT",
+    "r_modules_group_id": "27e32646-01c8-448a-8638-e1e532008ab6",
+    "module_type_id": null,
+    "hash_code": "f025e90567ecd9f49cae9951730f1bc9"
+  },
+  {
+    "id": "07138c75-3e39-4b5e-9d8e-8598f3f3fc86",
+    "name": "FBS",
+    "r_modules_group_id": "535cbd2e-b618-4fad-81a2-e7a644ee4706",
+    "module_type_id": null,
+    "hash_code": "445085b995cf2ddb1720e46d1b3c5aa2"
+  },
+  {
+    "id": "70490b8f-808b-44db-bad3-a6692895724d",
+    "name": "Bow Spring",
+    "r_modules_group_id": "535cbd2e-b618-4fad-81a2-e7a644ee4706",
+    "module_type_id": null,
+    "hash_code": "54f581ec8235b1d2cf3264131d71acc3"
+  },
+  {
+    "id": "2d203899-c149-4ec0-a443-5080686d5ce1",
+    "name": "GSR Go Pin to Sucker Rod Pin",
+    "r_modules_group_id": "5b697bcc-963f-471d-8e04-9baed3fecef5",
+    "module_type_id": "",
+    "hash_code": "c4677d827b14850fdf7ce6b80f5f8faa"
+  },
+  {
+    "id": "0162e367-633e-4017-b5fb-9946e69f49ef",
+    "name": "Chorus 9h",
+    "r_modules_group_id": "6df38d59-f775-4c3f-9865-c1acba87962a",
+    "module_type_id": "65",
+    "hash_code": "fb8448e955f05d7295735738e00c64af"
+  },
+  {
+    "id": "07c3d8b0-fbca-4658-ac30-59e2fbc7eaf8",
+    "name": "Chorus X10",
+    "r_modules_group_id": "6df38d59-f775-4c3f-9865-c1acba87962a",
+    "module_type_id": "99",
+    "hash_code": "3271fe6ae191bfce7deff8224f68c2ec"
+  },
+  {
+    "id": "5ebc21bd-72f8-444c-bccb-deea5b030eb6",
+    "name": "Chorus 9s",
+    "r_modules_group_id": "6df38d59-f775-4c3f-9865-c1acba87962a",
+    "module_type_id": "65",
+    "hash_code": "db716038c9c26c4f31b3fab92df3d9fb"
+  },
+  {
+    "id": "78c476d2-219e-46b4-9341-5d289f88b2da",
+    "name": "Rubber centralizer OD 50 mm",
+    "r_modules_group_id": "6df38d59-f775-4c3f-9865-c1acba87962a",
+    "module_type_id": "",
+    "hash_code": "2be4867cd7de527496b95d31e4fd7195"
+  },
+  {
+    "id": "7da7765e-0742-40ac-8641-413735450407",
+    "name": "Chorus-6",
+    "r_modules_group_id": "6df38d59-f775-4c3f-9865-c1acba87962a",
+    "module_type_id": "97",
+    "hash_code": "0bd2affbbc5bc829342bc60bb76bc90b"
+  },
+  {
+    "id": "e3327c4c-5730-4142-b0dc-be1c45569a14",
+    "name": "Chorus-5",
+    "r_modules_group_id": "6df38d59-f775-4c3f-9865-c1acba87962a",
+    "module_type_id": "97",
+    "hash_code": "74ba9089be2defcd7e3635e14a4b08ee"
+  },
+  {
+    "id": "14673aa5-acd1-4a87-9b0f-0d09371fae8a",
+    "name": "MRDA",
+    "r_modules_group_id": "71d827ad-a290-43cc-9209-e2de93b2333f",
+    "module_type_id": null,
+    "hash_code": "447e1d15484fd3758b8eb5979fd848b3"
+  },
+  {
+    "id": "3ae92535-3d99-4954-9255-e21a3a5a0aaf",
+    "name": "FBS",
+    "r_modules_group_id": "84096c4f-0c92-409b-91c2-e842b39a22dd",
+    "module_type_id": null,
+    "hash_code": "6b46b6cf22fb84fe3d94f6c51073a392"
+  },
+  {
+    "id": "c5e11fad-bf8d-4b8c-a049-b3fe7ce78a55",
+    "name": "TEMP",
+    "r_modules_group_id": "84096c4f-0c92-409b-91c2-e842b39a22dd",
+    "module_type_id": null,
+    "hash_code": "1396e7664823c9d9687cd1808eb73907"
+  },
+  {
+    "id": "e77a9bb5-dd35-4262-9dae-e28dce229889",
+    "name": "GFBS (Indigo)",
+    "r_modules_group_id": "91657d5b-8528-402d-a140-768b6a564a1b",
+    "module_type_id": "70",
+    "hash_code": "a8d39fff4c1ace96f3fa72c41a304464"
+  },
+  {
+    "id": "e7fde3d4-28e6-4217-8050-f818e706aa31",
+    "name": "Indigo1h",
+    "r_modules_group_id": "91657d5b-8528-402d-a140-768b6a564a1b",
+    "module_type_id": "33",
+    "hash_code": "839ba4794f724d88720a63d01dafd650"
+  },
+  {
+    "id": "7ff7c5a6-a80a-4baa-b5cf-9609453410de",
+    "name": "Pulse-3 Indigo",
+    "r_modules_group_id": "aaaa3a68-8432-46e4-9b6c-46afcf3c4796",
+    "module_type_id": "79",
+    "hash_code": "181994d8f7ca3690a24ba25bd2b66634"
+  }
+]

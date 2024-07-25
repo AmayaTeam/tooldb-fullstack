@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  nginx:
+    build: ./tgt_practice_backend/nginx
+    ports:
+      - "80:80"
+      - '443:443'
+    volumes:
+      - ./tgt_practice_backend/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./tgt_practice_backend/static:/static
+      - ./tgt_practice_backend/nginx/certificates:/etc/nginx/certs
+    depends_on:
+      - web
+  web:
+    build:
+      context: ./tgt_practice_backend
+    # запуск чего-то кроме рансервер
+    volumes:
+      - ./tgt_practice_backend/static:/static
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./tgt_practice_backend/.env
+#  react:
+#    build:
+#     context: ./tgt_practice_frontend
+#   volumes:
+#     - ./tgt_practice_frontend/dist:/app
+#   ports:
+#     - "3000:80"
+volumes:
+  static:

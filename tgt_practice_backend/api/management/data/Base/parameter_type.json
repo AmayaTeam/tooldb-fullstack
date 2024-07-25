@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Length",
+    "default_measure": "Distance"
+  },
+  {
+    "name": "Weight",
+    "default_measure": "Mass"
+  },
+  {
+    "name": "OD",
+    "default_measure": "Diameter"
+  },
+  {
+    "name": "OD Collapsed",
+    "default_measure": "Diameter"
+  },
+  {
+    "name": "OD Opened",
+    "default_measure": "Diameter"
+  },
+  {
+    "name": "h Shift",
+    "default_measure": "Distance"
+  },
+  {
+    "name": "h Scale",
+    "default_measure": "Distance"
+  },
+  {
+    "name": "Image h_y1",
+    "default_measure": "Distance"
+  },
+  {
+    "name": "Image h_y2",
+    "default_measure": "Distance"
+  },
+  {
+    "name": "COMP STR",
+    "default_measure": "Mass"
+  }
+]

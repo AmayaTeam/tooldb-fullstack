@@ -1,0 +1,62 @@
+/* Ваш стиль для центрированного логин окна */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+}
+
+.login-content {
+    width: 20rem;
+    height: 25rem;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25); /* Тень */
+    display: flex;
+    padding: 2rem;
+    flex-direction: column; /* Располагаем элементы в столбец */
+    align-items: center; /* Центрируем элементы по горизонтали */
+    gap: 5rem;
+}
+
+.heading {
+    max-width: 15rem;
+}
+
+.heading p {
+    text-align: center;
+    padding-top: 1rem;
+    color: #9F9F9F;
+    font-size: 1rem;
+    border-top: 0.3px solid #aaaaaa;
+}
+
+.login-button {
+    border: 0.3px #9F9F9F solid;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Тень */
+
+}
+.button-content{
+    width: 12rem;
+    height: 3rem;
+    background-color: #D9D9D9;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 5px 10px 5px 10px;
+
+}
+.button-icon{
+    width: 20px;
+    height: 20px;
+}
+.button-icon img{
+    border: none;
+}
+
+.button-info p {
+    color: #4c4c4c;
+    font-size: 16px;
+}
+
+

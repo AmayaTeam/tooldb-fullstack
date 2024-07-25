@@ -1,0 +1,187 @@
+[
+  {
+    "id": "80d5c792-6435-447d-85d7-f9ca07a7b993",
+    "name": "FCAP",
+    "sensor_id": null
+  },
+  {
+    "id": "15a734e6-8d66-426f-836d-ba4141389a26",
+    "name": "Temperature",
+    "sensor_id": "1"
+  },
+  {
+    "id": "5f4dd08a-c544-4b23-9e7a-1809701973c5",
+    "name": "Medium sensor",
+    "sensor_id": "0"
+  },
+  {
+    "id": "18e8c17f-156f-4050-9ff2-de0702481907",
+    "name": "Measurement(X) ",
+    "sensor_id": null
+  },
+  {
+    "id": "12b6c09d-c221-499c-8ba0-dc042eaabe0e",
+    "name": "Measurement(Y)",
+    "sensor_id": null
+  },
+  {
+    "id": "4052b4ad-8aa8-4e07-a5db-cec400da14d6",
+    "name": "Pressure",
+    "sensor_id": "0"
+  },
+  {
+    "id": "082796dd-2dc4-452c-9168-8fa5fa00ad33",
+    "name": "Short Sensor",
+    "sensor_id": "1"
+  },
+  {
+    "id": "0606371b-260e-42a1-91d1-0066d256bb3a",
+    "name": "Conductivity ",
+    "sensor_id": "0"
+  },
+  {
+    "id": "653f570b-a077-4f0c-bd0d-8daf10cf3975",
+    "name": "Hydrophone",
+    "sensor_id": null
+  },
+  {
+    "id": "178866df-1206-419d-a5ba-c2c335e170ad",
+    "name": "Extra Long Sensor",
+    "sensor_id": null
+  },
+  {
+    "id": "01ca233c-6580-4103-b2b6-42448bfc70a1",
+    "name": "TPRE",
+    "sensor_id": null
+  },
+  {
+    "id": "90f8854b-1670-4012-bddf-fd5994ea6ac5",
+    "name": "RES",
+    "sensor_id": null
+  },
+  {
+    "id": "514f6f6d-a98e-438c-ad3f-0439da630646",
+    "name": "Inclination accelerometer",
+    "sensor_id": null
+  },
+  {
+    "id": "40e0f7bb-df7f-4f90-a517-5ad15c9f340c",
+    "name": "Hydrophone 2",
+    "sensor_id": "1"
+  },
+  {
+    "id": "b6ab2b01-d957-4195-8c4e-ebf180c6517d",
+    "name": "Point centering force",
+    "sensor_id": null
+  },
+  {
+    "id": "f0ddbe8e-44f0-4f54-af61-19e1ed1b193b",
+    "name": "Hydrophone 1 \\ Hydrophone 9",
+    "sensor_id": "0"
+  },
+  {
+    "id": "8aa1a19f-d153-4b45-8bdf-e0aa0845893e",
+    "name": "Hydrophone 5",
+    "sensor_id": "4"
+  },
+  {
+    "id": "6dc99bd9-e94a-4642-bd43-52fb30ea44a9",
+    "name": "Hydrophone 6",
+    "sensor_id": "5"
+  },
+  {
+    "id": "3fca07f2-59c2-4a49-849a-c34d39ef82bb",
+    "name": "Hydrophone 8 \\ Hydrophone 10",
+    "sensor_id": "7"
+  },
+  {
+    "id": "5b87b1bb-979a-436c-a335-87479ab13c91",
+    "name": "Hydrophone 3",
+    "sensor_id": "2"
+  },
+  {
+    "id": "862f9a94-4d94-43e5-9741-50c6b4afcd44",
+    "name": "Hydrophone 7",
+    "sensor_id": "6"
+  },
+  {
+    "id": "b0395dde-01ee-4166-bd70-e640a79a5268",
+    "name": "Hydrophone 4",
+    "sensor_id": "3"
+  },
+  {
+    "id": "1f462f30-79ce-452e-bd8a-a3dd28d73239",
+    "name": "Rist",
+    "sensor_id": null
+  },
+  {
+    "id": "51b90f63-6b0a-4261-be2c-aec5c5c33aa9",
+    "name": "Fluid Capacitance",
+    "sensor_id": null
+  },
+  {
+    "id": "80eefbb2-0b83-4833-a45b-1d219d6a75dd",
+    "name": "Inline Spinner",
+    "sensor_id": null
+  },
+  {
+    "id": "2cce86e7-66a9-48bf-a5b0-09f9b8100fb9",
+    "name": "Flowmeter",
+    "sensor_id": "2"
+  },
+  {
+    "id": "198c8c27-753c-4df3-90e6-f9978330af89",
+    "name": "GR",
+    "sensor_id": "0"
+  },
+  {
+    "id": "1afd755d-e9b6-4c06-8608-5fb1bf124eb2",
+    "name": "HEX",
+    "sensor_id": null
+  },
+  {
+    "id": "c35c0b57-5e76-451a-b41b-8c0c081510f9",
+    "name": "PSTC",
+    "sensor_id": null
+  },
+  {
+    "id": "6045802f-477e-4bf9-8cfe-98416f37df35",
+    "name": "CQG Pressure",
+    "sensor_id": null
+  },
+  {
+    "id": "1bf62ef2-4d1c-4add-b0a7-fac73beebe38",
+    "name": "CCL",
+    "sensor_id": "2"
+  },
+  {
+    "id": "0fca73eb-625d-4a7b-8b41-aee158d807b6",
+    "name": "Caliper",
+    "sensor_id": null
+  },
+  {
+    "id": "8a89ee9c-6833-45ef-98bc-01686b9dc7de",
+    "name": "Spinner",
+    "sensor_id": null
+  },
+  {
+    "id": "921743e5-9108-4b97-a9f4-cc3e6f9a043b",
+    "name": "Probes",
+    "sensor_id": null
+  },
+  {
+    "id": "91b6feb1-843e-4fde-97b2-d8c2ee3bc706",
+    "name": "HPT",
+    "sensor_id": null
+  },
+  {
+    "id": "23800f72-e0ce-41e3-be50-1cac309bdff8",
+    "name": "Long Sensor",
+    "sensor_id": "0"
+  },
+  {
+    "id": "d60cae1b-373e-4d1d-a54b-9c23bd58ab99",
+    "name": "Heat Exchange",
+    "sensor_id": "0"
+  }
+]
