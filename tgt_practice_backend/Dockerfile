@@ -11,6 +11,8 @@ WORKDIR /app
 
 COPY . /app
 
+VOLUME /var/log/django
+
 RUN poetry install
 
 COPY ./entrypoint.sh /

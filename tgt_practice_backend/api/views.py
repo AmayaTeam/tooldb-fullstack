@@ -1,6 +1,7 @@
 import os
 import random
 import string
+import logging
 
 from django.conf import settings
 from django.http import HttpResponse
@@ -12,6 +13,7 @@ import requests
 import graphdoc
 
 __version__ = "0.2.0"
+logger = logging.getLogger(__name__)
 
 
 def index(request):
@@ -31,11 +33,16 @@ def call_api(request, *, context):
             headers={"Authorization": "Bearer " + context["access_token"]},
             timeout=30,
         )
+        logger.info(f"API result 1: {api_result.text}")
+        logger.info(f"API result 2: {api_result2.text}")
 
         user_info = api_result2.json()
+        logger.info(f"User info: {user_info}")
         user, created = User.objects.get_or_create(
             username=user_info["userPrincipalName"]
         )
+        logger.info(f"appRoleAssignments: {api_result.json()}")
+        logger.info(f"appRoleId: {api_result.json()['value'][0]['appRoleId']}")
         if created:
             app_role_id = api_result.json()["value"][0]["appRoleId"]
             if app_role_id == "0be6dabc-574d-4913-8652-befb6d290ed5":

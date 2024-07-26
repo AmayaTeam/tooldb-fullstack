@@ -3,7 +3,7 @@ import { setContext } from '@apollo/client/link/context';
 import Cookie from "js-cookie";
 
 const httpLink = createHttpLink({
-  uri: process.env.VITE_GRAPHQL_ENDPOINT!,
+  uri: 'https://172.20.10.6/api/graphql/',
   credentials: 'include'
 });
 

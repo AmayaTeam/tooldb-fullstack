@@ -14,8 +14,8 @@ services:
       - web
   web:
     build:
-      context: ./tgt_practice_backend/Dockerfile
-    # запуск чего-то кроме рансервер
+      context: ./tgt_practice_backend
+      dockerfile: Dockerfile
     volumes:
       - ./tgt_practice_backend/static:/static
     ports:
