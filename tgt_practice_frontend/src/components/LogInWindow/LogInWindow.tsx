@@ -17,7 +17,7 @@ const LogInWindow: React.FC = () => {
                     <h1>Log In</h1>
                 </div>
                 <div className="login-button">
-                    <a onClick={() => window.location.href = 'https://172.20.10.6/api'} className="button-content" style={{textDecoration: 'none'}}>
+                    <a onClick={() => window.location.href = import.meta.env.VITE_BACKEND_ROOT_URL} className="button-content" style={{textDecoration: 'none'}}>
                         <div className="button-icon">
                             <img src="/src/assets/MicrosoftLogo.png" alt="Microsoft Logo" />
                         </div>
