@@ -17,7 +17,7 @@ jobs:
         with:
           host: 172.20.10.6
           username: rndadmin
-          key: 33gf7svj8Vozp68V
+          password: 33gf7svj8Vozp68V
           port: 22
       - name: Pull Changes on Server
         run: |
