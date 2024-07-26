@@ -14,20 +14,13 @@ services:
       - web
   web:
     build:
-      context: ./tgt_practice_backend
+      context: ./tgt_practice_backend/Dockerfile
     # запуск чего-то кроме рансервер
     volumes:
       - ./tgt_practice_backend/static:/static
     ports:
       - "8000:8000"
     env_file:
-      - ./tgt_practice_backend/.env
-#  react:
-#    build:
-#     context: ./tgt_practice_frontend
-#   volumes:
-#     - ./tgt_practice_frontend/dist:/app
-#   ports:
-#     - "3000:80"
+      - .env
 volumes:
   static:

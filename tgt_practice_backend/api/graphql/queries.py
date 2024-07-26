@@ -35,6 +35,13 @@ class Query(graphene.ObjectType):
     tool_modules_by_id_with_unit_system = graphene.Field(ToolModuleObject, id=graphene.String(), unit_system=graphene.String(required=True))
     profile_by_id = graphene.Field(ProfileObject, user_id=graphene.String())
 
+    tool_module_types_by_group_id = graphene.List(ToolModuleTypeObject,
+                                                  group_id=graphene.String())  # по айди группы отдает все пренадлежащие ей типы модулей БЕЗ ПРИБОРОВ
+    tool_modules_by_module_type_id = graphene.List(ToolModuleObject,
+                                                   module_type_id=graphene.String())  # по айди типа модуля отдает все приборы в рамках одного
+    tool_modules_by_group_id = graphene.List(ToolModuleObject,
+                                             group_id=graphene.String())  # отдает всю вложенность в рамках айди группы
+
     unit_systems = graphene.List(UnitSystemObject)
 
     me = graphene.Field(UserType)
@@ -93,3 +100,15 @@ class Query(graphene.ObjectType):
                 parameter.save()
 
         return tool_module
+
+    @query_permission_required("api.view_toolmoduletype")
+    def resolve_tool_module_types_by_group_id(self, info, group_id):
+        return ToolModuleType.objects.filter(r_modules_group_id=group_id).all()
+
+    @query_permission_required("api.view_toolmodule")
+    def resolve_tool_modules_by_module_type_id(self, info, module_type_id):
+        return ToolModule.objects.filter(r_module_type_id=module_type_id).all()
+
+    @query_permission_required("api.view_toolmodule")
+    def resolve_tool_modules_by_group_id(self, info, group_id):
+        return ToolModule.objects.filter(r_module_type_id__r_modules_group_id=group_id).all()
