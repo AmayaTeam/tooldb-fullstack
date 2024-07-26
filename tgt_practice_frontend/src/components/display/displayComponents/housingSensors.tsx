@@ -9,7 +9,7 @@ interface HousingSensorsProps {
     role: string | undefined;
 }
 
-const HousingSensors: React.FC<HousingSensorsProps> = ({ sensors, sensorRecordPoints, handleSensorRecordPointChange, invalidParameters, role }) => (
+const HousingSensors: React.FC<HousingSensorsProps> = ({ sensors, handleSensorRecordPointChange, invalidParameters, role }) => (
     <div className="params">
         <h4>Housing Sensors</h4>
         <table className="Housing_params-table">
