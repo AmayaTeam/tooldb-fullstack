@@ -11,8 +11,8 @@ This project has two configurations: **DEV** for development and **MAIN** for pr
    * **Obtain the `.env.dev` file**: Download the `.env.dev` file from @stepantishhen and place it in the project root.
    * **Start the project using Docker Compose**: `sudo docker compose -f docker-compose.dev.yml up` 
    * **Populate the database with test data**: 
-      * Load unit system data: `sudo docker compose exec web poetry run python manage.py add_unit_system_data` 
-      * Load base data: `sudo docker compose exec web poetry run python manage.py add_base_data` 
+      * Load unit system data: `sudo docker compose -f docker-compose.dev.yml exec web poetry run python manage.py add_unit_system_data` 
+      * Load base data: `sudo docker compose -f docker-compose.dev.yml exec web poetry run python manage.py add_base_data` 
       * **Important:** Ensure the order of these commands is followed!
 
 **2. Feature Branching**
