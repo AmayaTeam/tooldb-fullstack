@@ -82,7 +82,7 @@ const Header: React.FC<HeaderProps> = ({ setSelectedUnitId }) => {
         Cookies.remove('csrftoken');
         localStorage.removeItem('jwt_token');
         localStorage.removeItem('refresh_token');
-        window.location.href = process.env.LOGOUT_USER_FRONTEND; // Redirect to login page
+        window.location.href = process.env.LOGOUT_USER_FRONTEND?.toString(); // Redirect to login page
     };
     return (
         <div className="header">
