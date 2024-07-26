@@ -1,7 +1,7 @@
 /.idea
 tgt_practice_backend/static/
-.env
 .env.dev
+.env
 # Logs
 logs
 *.log

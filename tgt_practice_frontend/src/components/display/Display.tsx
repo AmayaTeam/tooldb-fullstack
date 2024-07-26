@@ -28,6 +28,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
     const hiddenParameters = ['Image h_y1', 'Image h_y2'];
     const [showModal, setShowModal] = useState<boolean>(false);
     const [modalMessage, setModalMessage] = useState<string>("");
+    console.log(data.toolinstalledsensorSet);
 
     useEffect(() => {
         if (data && data.parameterSet) {
