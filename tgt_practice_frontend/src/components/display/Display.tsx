@@ -3,13 +3,14 @@ import "./Display.css";
 import useToolModuleQuery from "../../lib/hooks/tool_module.ts";
 import { useParameterUpdate } from "../../lib/hooks/ToolModule/useParameterUpdate.ts";
 import Cookies from 'js-cookie';
-import Modal from "../Modal/Modal.tsx";
 import HousingParams from "./displayComponents/housingParams.tsx";
 import DisplayHeader from "./displayComponents/displayHeader.tsx";
 import HousingSensors from "./displayComponents/housingSensors.tsx";
 import ImageSection from "./displayComponents/imageSection.tsx";
 import ControlButtons from "./displayComponents/controlButtons.tsx";
 import { Parameter, Sensor } from "src/types/interfaces.ts";
+import { useModal } from "src/contexts/ModalContext.tsx";
+import MessageModal from "./displayComponents/messageModal.tsx";
 
 
 interface DisplayProps {
@@ -26,9 +27,17 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
     const [sensorRecordPoints, setSensorRecordPoints] = useState<Record<string, string>>({});
     const [invalidParameters, setInvalidParameters] = useState<Record<string, boolean>>({});
     const hiddenParameters = ['Image h_y1', 'Image h_y2'];
-    const [showModal, setShowModal] = useState<boolean>(false);
-    const [modalMessage, setModalMessage] = useState<string>("");
-    console.log(data.toolinstalledsensorSet);
+
+    const { setModal, setModalContent } = useModal();
+
+    const onModalClose = () => {
+        setModal(false);
+    }
+
+    const showMessageModal = (message: string) => {
+        setModalContent(<MessageModal message={message} onClose={onModalClose} />);
+        setModal(true);
+    }
 
     useEffect(() => {
         if (data && data.parameterSet) {
@@ -98,8 +107,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
         const hasInvalidInputs = Object.values(invalidParameters).some((isInvalid) => isInvalid);
 
         if (hasInvalidInputs) {
-            setShowModal(true);
-            setModalMessage("The entered values have the wrong data type, the data will not be saved.");
+            showMessageModal("The entered values have the wrong data type, the data will not be saved.");
             return;
         }
 
@@ -134,11 +142,21 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
                             }
                         });
                     }
-                    setShowModal(true);
-                    setModalMessage("The update was successful!");
+                    for (const sensor of updatedSensors) {
+                        // Здесь должна быть ваша функция для обновления сенсоров
+                        // await updateSensor({
+                        //     variables: {
+                        //         input: {
+                        //             id: sensor.id,
+                        //             recordPoint: sensor.recordPoint
+                        //         }
+                        //     }
+                        // });
+                    }
+
+                    showMessageModal("The update was successful!")
                 } catch (error) {
-                    setShowModal(true);
-                    setModalMessage("An error occurred while saving the data.");
+                    showMessageModal("An error occurred while saving the data.")
                 }
             }
         }
@@ -152,29 +170,11 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
     const role = Cookies.get('role');
 
     const handleUndoChanges = () => {
-        if (data && data.parameterSet) {
-            const initialParameters = data.parameterSet.reduce((acc: Record<string, string>, param: Parameter) => {
-                if (!hiddenParameters.includes(param.parameterType.parameterName)) {
-                    acc[param.id] = param.parameterValue.toFixed(2);
-                }
-                return acc;
-            }, {});
-            setParameters(initialParameters);
-        }
-    
-        if (data && data.toolinstalledsensorSet) {
-            const initialSensors = data.toolinstalledsensorSet.reduce((acc: Record<string, string>, sensor: Sensor) => {
-                acc[sensor.id] = sensor.recordPoint;
-                return acc;
-            }, {});
-            setSensorRecordPoints(initialSensors);
-        }
-    
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach((input: HTMLInputElement) => {
+            input.value = input.defaultValue;
+        });
         setInvalidParameters({});
-    };
-
-    const closeModal = () => {
-        setShowModal(false);
     };
 
     return (
@@ -221,7 +221,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
                     />
                 </div>
             </div>
-            {showModal && <Modal onClose={closeModal} message={modalMessage} />}
+
         </div >
     );
 };

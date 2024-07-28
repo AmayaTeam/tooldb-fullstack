@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ToolModuleGroup } from 'src/types/interfaces';
-import ContextMenu from './ContextMenu';
+import { LevelName } from './contextMenu/contextMenuServices';
+import ContextMenu from './contextMenu/ContextMenu';
 
 interface LevelListProps {
     sortedData: ToolModuleGroup[];
@@ -10,11 +11,12 @@ interface LevelListProps {
 const LevelList: React.FC<LevelListProps> = ({ sortedData, onItemClick }) => {
     const [expandedItems, setExpandedItems] = useState<{ [key: string]: boolean }>({});
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+
     const [contextMenu, setContextMenu] = useState<{
         x: number;
         y: number;
-        options: string[];
-        onOptionClick: (option: string) => void;
+        levelName: LevelName;
+        objectId: string;
     } | null>(null);
 
     const handleToggle = (id: string) => {
@@ -29,41 +31,29 @@ const LevelList: React.FC<LevelListProps> = ({ sortedData, onItemClick }) => {
         onItemClick(id);
     };
 
-    const handleContextMenu = (event: React.MouseEvent, id: string, level: number) => {
+    const showContextMenu = (event: React.MouseEvent, levelName: LevelName, id: string) => {
         event.preventDefault();
-        let options: string[] = [];
-        if (level === 1) {
-            options = ['Delete Group', 'Create New Group', 'Create New Type'];
-        } else if (level === 2) {
-            options = ['Delete Type', 'Create New Type', 'Create New Module'];
-        } else if (level === 3) {
-            options = ['Delete Module', 'Create New Module'];
-        }
+
         setContextMenu({
             x: event.clientX,
             y: event.clientY,
-            options,
-            onOptionClick: (option) => handleContextMenuOptionClick(option, id, level),
+            levelName: levelName,
+            objectId: id
         });
-    };
-
-    const handleContextMenuOptionClick = (option: string, id: string, level: number) => {
-        console.log(`Option clicked: ${option} for id: ${id} at level: ${level}`);
-        setContextMenu(null);
     };
 
     return (
         <div>
             {sortedData.map((dataObj) => (
                 <div key={dataObj.id} className="level1">
-                    <p onClick={() => handleToggle(dataObj.id)} onContextMenu={(event) => handleContextMenu(event, dataObj.id, 1)}>
+                    <p onClick={() => handleToggle(dataObj.id)} onContextMenu={(event) => showContextMenu(event, LevelName.Group, dataObj.id)}>
                         {dataObj.name}
                     </p>
                     {expandedItems[dataObj.id] && (
                         <div className="level2">
                             {dataObj.toolmoduletypeSet.map((toolModuleType) => (
                                 <div key={toolModuleType.id}>
-                                    <p onClick={() => handleToggle(toolModuleType.id)} onContextMenu={(event) => handleContextMenu(event, toolModuleType.id, 2)}>
+                                    <p onClick={() => handleToggle(toolModuleType.id)} onContextMenu={(event) => showContextMenu(event, LevelName.Type, toolModuleType.id)}>
                                         {toolModuleType.name}
                                     </p>
                                     {expandedItems[toolModuleType.id] && (
@@ -72,7 +62,7 @@ const LevelList: React.FC<LevelListProps> = ({ sortedData, onItemClick }) => {
                                                 <div key={toolModule.id}>
                                                     <p
                                                         onClick={() => handleClick(toolModule.id)}
-                                                        onContextMenu={(event) => handleContextMenu(event, toolModule.id, 3)}
+                                                        onContextMenu={(event) => showContextMenu(event, LevelName.Module, toolModule.id)}
                                                         className={selectedItemId === toolModule.id ? 'selected' : ''}
                                                     >
                                                         {toolModule.sn}
@@ -91,8 +81,8 @@ const LevelList: React.FC<LevelListProps> = ({ sortedData, onItemClick }) => {
                 <ContextMenu
                     x={contextMenu.x}
                     y={contextMenu.y}
-                    options={contextMenu.options}
-                    onOptionClick={contextMenu.onOptionClick}
+                    levelName={contextMenu.levelName}
+                    objectId={contextMenu.objectId}
                     onClose={() => setContextMenu(null)}
                 />
             )}

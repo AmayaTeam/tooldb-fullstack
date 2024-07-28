@@ -1,9 +1,8 @@
-// import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ApolloProvider } from '@apollo/client';
 import client from './lib/apolloClient';
 import LogIn from "./pages/LogIn/LogIn.tsx";
-import HomePage from "./pages/HomePage/HomePage.tsx"; // Импортируем HomePage компонент
+import HomePage from "./pages/HomePage/HomePage.tsx";
 import './App.css';
 
 function App() {

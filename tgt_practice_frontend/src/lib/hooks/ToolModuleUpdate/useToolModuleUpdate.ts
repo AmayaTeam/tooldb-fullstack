@@ -1,6 +1,5 @@
 import { useMutation } from "@apollo/client";
-// @ts-ignore
-import { TOOLMODULE_UPDATE } from "src/graphql/mutations/ToolModuleUpdate/toolModuleUpdate.ts";
+import { TOOLMODULE_UPDATE } from "../../../graphql/mutations/ToolModuleUpdate/toolModuleUpdate.ts";
 
 export const useToolModuleUpdate = () => {
     const [updateToolModule, { data, loading, error }] = useMutation(TOOLMODULE_UPDATE);

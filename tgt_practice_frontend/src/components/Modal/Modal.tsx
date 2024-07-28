@@ -1,18 +1,14 @@
 import React from 'react';
 import './Modal.css';
+import { useModal } from 'src/contexts/ModalContext';
 
-interface ModalProps {
-    onClose: () => void;
-    message: string;
-}
 
-const Modal: React.FC<ModalProps> = ({ onClose, message }) => {
+const Modal: React.FC = () => {
+    const { modalContent } = useModal();
+
     return (
         <div className="modal">
-            <div className="modal-content">
-            <p>{message}</p>
-                <button className="close" onClick={onClose}>Close</button>
-            </div>
+            {modalContent}
         </div>
     );
 };
