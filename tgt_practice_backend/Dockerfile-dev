@@ -9,6 +9,6 @@ RUN pip install poetry
 
 WORKDIR /backend
 
-COPY . /backend
+COPY . .
 
 RUN poetry install

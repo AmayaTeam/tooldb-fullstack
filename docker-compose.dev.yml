@@ -16,6 +16,7 @@ services:
   web:
     image: tools_app_web_backend:latest
     tty: true
+    restart: always
     build:
       context: ./tgt_practice_backend
       dockerfile: Dockerfile-dev
@@ -23,7 +24,7 @@ services:
       poetry run python manage.py runserver 0.0.0.0:8000"
     container_name: tools_app_django
     volumes:
-      - .:/app
+      - ./tgt_practice_backend:/backend
     ports:
       - "8000:8000"
     depends_on:
@@ -31,14 +32,17 @@ services:
     env_file:
       - .env.dev
   react:
+    image: tools_app_react_frontend:latest
+    tty: true
     build:
       context: ./tgt_practice_frontend
       dockerfile: Dockerfile-dev
+    restart: always
     ports:
       - "3000:3000"
     volumes:
-      - .:/app
-      - /app/node_modules
+      - ./tgt_practice_frontend:/frontend
+      - /frontend/node_modules
     container_name: tgt_practice_frontend
     env_file:
       - .env.dev
