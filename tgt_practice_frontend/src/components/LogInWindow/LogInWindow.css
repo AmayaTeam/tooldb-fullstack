@@ -1,4 +1,3 @@
-/* Ваш стиль для центрированного логин окна */
 .login-container {
     display: flex;
     justify-content: center;
@@ -11,11 +10,11 @@
     width: 20rem;
     height: 25rem;
     background-color: white;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25); /* Тень */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
     display: flex;
     padding: 2rem;
-    flex-direction: column; /* Располагаем элементы в столбец */
-    align-items: center; /* Центрируем элементы по горизонтали */
+    flex-direction: column;
+    align-items: center;
     gap: 5rem;
 }
 
@@ -33,8 +32,7 @@
 
 .login-button {
     border: 0.3px #9F9F9F solid;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Тень */
-
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 .button-content{
     width: 12rem;
@@ -44,19 +42,30 @@
     justify-content: space-between; 
     align-items: center; 
     padding: 5px 10px 5px 10px;
-
+    margin-top: 0;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
+
+.button-content:hover {
+    background-color: #c9c9c9;
+}
+
 .button-icon{
     width: 20px;
     height: 20px;
 }
-.button-icon img{
-    border: none;
+.button-icon .microsoft-logo {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url("/src/assets/MicrosoftLogo.png");
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .button-info p {
     color: #4c4c4c;
     font-size: 16px;
 }
-
-

@@ -2,14 +2,6 @@ import React from "react";
 import './LogInWindow.css';
 
 const LogInWindow: React.FC = () => {
-
-    // useEffect(() => {
-    //     const fetchLoginUrl = async () => {
-    //         window.location.href = "http://localhost:8000/login";
-    //     };
-    //     fetchLoginUrl();
-    // }, []);
-
     return (
         <div className="login-container">
             <div className="login-content">
@@ -17,14 +9,14 @@ const LogInWindow: React.FC = () => {
                     <h1>Log In</h1>
                 </div>
                 <div className="login-button">
-                    <a onClick={() => window.location.href = import.meta.env.VITE_BACKEND_ROOT_URL} className="button-content" style={{textDecoration: 'none'}}>
+                    <button onClick={() => window.location.href = import.meta.env.VITE_BACKEND_ROOT_URL} className="button-content" style={{textDecoration: 'none'}}>
                         <div className="button-icon">
-                            <img src="/src/assets/MicrosoftLogo.png" alt="Microsoft Logo" />
+                            <span className="microsoft-logo"></span>
                         </div>
                         <div className="button-info">
                             <p>Log in via Microsoft</p>
                         </div>
-                    </a>
+                    </button>
                 </div>
                 <div className="heading">
                     <p>In order to log in to the app, you need to log in with Microsoft.</p>

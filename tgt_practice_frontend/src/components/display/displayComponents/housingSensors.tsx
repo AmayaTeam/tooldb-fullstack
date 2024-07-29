@@ -8,15 +8,14 @@ interface HousingSensorsProps {
     invalidParameters: Record<string, boolean>;
     role: string | undefined;
 }
-
-const HousingSensors: React.FC<HousingSensorsProps> = ({ sensors, sensorRecordPoints, handleSensorRecordPointChange, invalidParameters, role }) => (
+const HousingSensors: React.FC<HousingSensorsProps> = ({ sensors, handleSensorRecordPointChange, invalidParameters, role }) => (
     <div className="params">
         <h4>Housing Sensors</h4>
         <table className="Housing_params-table">
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Record Point</th>
+                    <th>Record Point{sensors.length > 0 && sensors[0].unit.name.en  ? `, ${sensors[0].unit.name.en}` : ""}</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,7 +54,6 @@ const DisplaySensorComponent: React.FC<DisplaySensorComponentProps> = ({ sensor,
                 className={`sensors_parametrs ${isInvalid ? 'invalid' : ''}`}
                 disabled={role === "user"}
             />
-            {sensor.unit.name.en}
         </td>
     </tr>
 );

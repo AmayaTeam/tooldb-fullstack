@@ -142,17 +142,6 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
                             }
                         });
                     }
-                    for (const sensor of updatedSensors) {
-                        // Здесь должна быть ваша функция для обновления сенсоров
-                        // await updateSensor({
-                        //     variables: {
-                        //         input: {
-                        //             id: sensor.id,
-                        //             recordPoint: sensor.recordPoint
-                        //         }
-                        //     }
-                        // });
-                    }
 
                     showMessageModal("The update was successful!")
                 } catch (error) {
@@ -211,9 +200,9 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
                         <ImageSection
                             img={img}
                             sn={data.sn}
+                            role={role}
                         />
                     </div>
-
                     <ControlButtons
                         handleSave={handleSave}
                         handleUndoChanges={handleUndoChanges}
