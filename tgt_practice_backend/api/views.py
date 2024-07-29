@@ -44,13 +44,22 @@ def call_api(request, *, context):
         logger.info(f"appRoleAssignments: {api_result.json()}")
         logger.info(f"appRoleId: {api_result.json()['value'][0]['appRoleId']}")
         if created:
-            app_role_id = api_result.json()["value"][0]["appRoleId"]
-            if app_role_id == "0be6dabc-574d-4913-8652-befb6d290ed5":
-                group, _ = Group.objects.get_or_create(name="manager")
-            else:
-                group, _ = Group.objects.get_or_create(name="user")
-            user.groups.add(group)
+            manager = "0be6dabc-574d-4913-8652-befb6d290ed5"
+            viewer = "c13d189a-26b8-4008-bd60-544b3c78fd8c"
+            roles_values = api_result.json()["value"]
+
+            manager_group, _ = Group.objects.get_or_create(name="manager")
+            user_group, _ = Group.objects.get_or_create(name="user")
+            for value in roles_values:
+                if value["appRoleId"] == manager:
+                    user.groups.add(manager_group)
+                    break
+                elif value["appRoleId"] == viewer:
+                    user.groups.add(manager_group)
+                    break
             user.save()
+
+
         login(request, user)
 
         redirect_url = os.getenv("REDIRECT_URL_TO_HOME")
