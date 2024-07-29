@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Display.css";
 import useToolModuleQuery from "../../lib/hooks/tool_module.ts";
 import { useParameterUpdate } from "../../lib/hooks/ToolModule/useParameterUpdate.ts";
+import { useRecordPointUpdate } from "src/lib/hooks/HousingSensors/useRecordPointUpdate.ts";
 import Cookies from 'js-cookie';
 import Modal from "../Modal/Modal.tsx";
 import HousingParams from "./displayComponents/housingParams.tsx";
@@ -11,17 +12,15 @@ import ImageSection from "./displayComponents/imageSection.tsx";
 import ControlButtons from "./displayComponents/controlButtons.tsx";
 import { Parameter, Sensor } from "src/types/interfaces.ts";
 
-
 interface DisplayProps {
     selectedItemId: string | null;
     selectedUnitId: string;
 }
 
 const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => {
-    console.log("Параметры запроса", selectedItemId, selectedUnitId);
-    console.log("Параметры запроса", selectedItemId, selectedUnitId);
     const { loading, error, data } = useToolModuleQuery({ id: selectedItemId, unitSystem: selectedUnitId });
     const { updateParameter } = useParameterUpdate();
+    const { updateRecordPoint } = useRecordPointUpdate();
     const [parameters, setParameters] = useState<Record<string, string>>({});
     const [sensorRecordPoints, setSensorRecordPoints] = useState<Record<string, string>>({});
     const [invalidParameters, setInvalidParameters] = useState<Record<string, boolean>>({});
@@ -134,6 +133,19 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
                             }
                         });
                     }
+
+                    for (const sensor of updatedSensors) {
+                        await updateRecordPoint({
+                            variables: {
+                                input: {
+                                    id: sensor.id,
+                                    recordPoint: parseFloat(sensor.recordPoint),
+                                    unitId: selectedUnitId
+                                }
+                            }
+                        });
+                    }
+
                     setShowModal(true);
                     setModalMessage("The update was successful!");
                 } catch (error) {
@@ -146,7 +158,6 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
-
 
     const img = "data:image/png;base64," + data.image;
     const role = Cookies.get('role');
@@ -161,7 +172,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
             }, {});
             setParameters(initialParameters);
         }
-    
+
         if (data && data.toolinstalledsensorSet) {
             const initialSensors = data.toolinstalledsensorSet.reduce((acc: Record<string, string>, sensor: Sensor) => {
                 acc[sensor.id] = sensor.recordPoint;
@@ -169,7 +180,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
             }, {});
             setSensorRecordPoints(initialSensors);
         }
-    
+
         setInvalidParameters({});
     };
 
@@ -222,7 +233,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
                 </div>
             </div>
             {showModal && <Modal onClose={closeModal} message={modalMessage} />}
-        </div >
+        </div>
     );
 };
 
