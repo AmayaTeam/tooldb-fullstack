@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Display.css";
 import useToolModuleQuery from "../../lib/hooks/tool_module.ts";
 import { useParameterUpdate } from "../../lib/hooks/ToolModule/useParameterUpdate.ts";
+import { useRecordPointUpdate } from "src/lib/hooks/HousingSensors/useRecordPointUpdate.ts";
 import Cookies from 'js-cookie';
 import HousingParams from "./displayComponents/housingParams.tsx";
 import DisplayHeader from "./displayComponents/displayHeader.tsx";
@@ -12,17 +13,15 @@ import { Parameter, Sensor } from "src/types/interfaces.ts";
 import { useModal } from "src/contexts/ModalContext.tsx";
 import MessageModal from "./displayComponents/messageModal.tsx";
 
-
 interface DisplayProps {
     selectedItemId: string | null;
     selectedUnitId: string;
 }
 
 const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => {
-    console.log("Параметры запроса", selectedItemId, selectedUnitId);
-    console.log("Параметры запроса", selectedItemId, selectedUnitId);
     const { loading, error, data } = useToolModuleQuery({ id: selectedItemId, unitSystem: selectedUnitId });
     const { updateParameter } = useParameterUpdate();
+    const { updateRecordPoint } = useRecordPointUpdate();
     const [parameters, setParameters] = useState<Record<string, string>>({});
     const [sensorRecordPoints, setSensorRecordPoints] = useState<Record<string, string>>({});
     const [invalidParameters, setInvalidParameters] = useState<Record<string, boolean>>({});
@@ -154,15 +153,28 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
-
     const img = "data:image/png;base64," + data.image;
     const role = Cookies.get('role');
 
     const handleUndoChanges = () => {
-        const inputs = document.querySelectorAll('input');
-        inputs.forEach((input: HTMLInputElement) => {
-            input.value = input.defaultValue;
-        });
+        if (data && data.parameterSet) {
+            const initialParameters = data.parameterSet.reduce((acc: Record<string, string>, param: Parameter) => {
+                if (!hiddenParameters.includes(param.parameterType.parameterName)) {
+                    acc[param.id] = param.parameterValue.toFixed(2);
+                }
+                return acc;
+            }, {});
+            setParameters(initialParameters);
+        }
+    
+        if (data && data.toolinstalledsensorSet) {
+            const initialSensors = data.toolinstalledsensorSet.reduce((acc: Record<string, string>, sensor: Sensor) => {
+                acc[sensor.id] = sensor.recordPoint;
+                return acc;
+            }, {});
+            setSensorRecordPoints(initialSensors);
+        }
+    
         setInvalidParameters({});
     };
 

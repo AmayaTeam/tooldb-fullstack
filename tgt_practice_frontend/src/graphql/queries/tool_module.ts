@@ -19,6 +19,7 @@ export default gql`
                 id
                 name
               }
+              id
               recordPoint
               unit {
                 name {
