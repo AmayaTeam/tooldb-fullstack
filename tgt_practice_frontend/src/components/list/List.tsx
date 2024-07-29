@@ -11,7 +11,8 @@ interface ListProps {
 }
 
 const List: React.FC<ListProps> = ({ onItemClick }) => {
-    const { loading, error, data } = useTreeQuery();
+    const [refetchKey, setRefetchKey] = useState<number>(0);
+    const { loading, error, data } = useTreeQuery(refetchKey);
     const [searchText, setSearchText] = useState<string>('');
     const [selectedSort, setSelectedSort] = useState<string>('novelty');
     const [sortedData, setSortedData] = useState<ToolModuleGroup[]>([]);
@@ -36,7 +37,6 @@ const List: React.FC<ListProps> = ({ onItemClick }) => {
         }
     }, [data, selectedSort, searchText]);
 
-
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchText(event.target.value);
     };
@@ -58,6 +58,10 @@ const List: React.FC<ListProps> = ({ onItemClick }) => {
         return data;
     };
 
+    const updateList = () => {
+        setRefetchKey(prevKey => prevKey + 1);
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
@@ -67,6 +71,7 @@ const List: React.FC<ListProps> = ({ onItemClick }) => {
             <SortOptions selectedSort={selectedSort} onCheckboxChange={handleCheckboxChange} />
             <LevelList
                 sortedData={sortedData}
+                updateListData={updateList}
                 onItemClick={onItemClick}
             />
         </div>

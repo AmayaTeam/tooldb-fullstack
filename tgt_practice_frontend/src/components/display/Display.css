@@ -17,7 +17,7 @@ input{
 }
 .sensors_parametrs.invalid {
     border: 1px solid red;
-   
+
 }
 
 p{
@@ -145,10 +145,20 @@ button {
     width: 89px;
     height: 32px;
 }
-img{
-    border: 0.3px solid #AAAAAA; 
 
+.display-content-info-image img {
+    border: 0.3px solid #AAAAAA;
 }
+
+.no-image-message { /* Добавляем стиль для сообщения */
+    display: flex;
+    justify-content: center; /* Центрируем текст */
+    align-items: center; /* Центрируем текст по вертикали */
+    height: 100px; /* Устанавливаем высоту, чтобы сообщение занимало место изображения */
+    border: 0.3px solid #AAAAAA; /* Добавляем границу для визуального разделения */
+    color: #9F9F9F; /* Устанавливаем цвет текста */
+}
+
 .display-content-buttons {
     width: 100%;
     margin-top: 20px;

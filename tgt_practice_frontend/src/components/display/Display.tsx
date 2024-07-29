@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import "./Display.css";
 import useToolModuleQuery from "../../lib/hooks/tool_module.ts";
 import { useParameterUpdate } from "../../lib/hooks/ToolModule/useParameterUpdate.ts";
+import { useRecordPointUpdate } from "src/lib/hooks/HousingSensors/useRecordPointUpdate.ts";
 import Cookies from 'js-cookie';
-import Modal from "../Modal/Modal.tsx";
 import HousingParams from "./displayComponents/housingParams.tsx";
 import DisplayHeader from "./displayComponents/displayHeader.tsx";
 import HousingSensors from "./displayComponents/housingSensors.tsx";
 import ImageSection from "./displayComponents/imageSection.tsx";
 import ControlButtons from "./displayComponents/controlButtons.tsx";
 import { Parameter, Sensor } from "src/types/interfaces.ts";
-
+import { useModal } from "src/contexts/ModalContext.tsx";
+import MessageModal from "./displayComponents/messageModal.tsx";
 
 interface DisplayProps {
     selectedItemId: string | null;
@@ -18,17 +19,24 @@ interface DisplayProps {
 }
 
 const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => {
-    console.log("Параметры запроса", selectedItemId, selectedUnitId);
-    console.log("Параметры запроса", selectedItemId, selectedUnitId);
     const { loading, error, data } = useToolModuleQuery({ id: selectedItemId, unitSystem: selectedUnitId });
     const { updateParameter } = useParameterUpdate();
+    const { updateRecordPoint } = useRecordPointUpdate();
     const [parameters, setParameters] = useState<Record<string, string>>({});
     const [sensorRecordPoints, setSensorRecordPoints] = useState<Record<string, string>>({});
     const [invalidParameters, setInvalidParameters] = useState<Record<string, boolean>>({});
     const hiddenParameters = ['Image h_y1', 'Image h_y2'];
-    const [showModal, setShowModal] = useState<boolean>(false);
-    const [modalMessage, setModalMessage] = useState<string>("");
-    console.log(data.toolinstalledsensorSet);
+
+    const { setModal, setModalContent } = useModal();
+
+    const onModalClose = () => {
+        setModal(false);
+    }
+
+    const showMessageModal = (message: string) => {
+        setModalContent(<MessageModal message={message} onClose={onModalClose} />);
+        setModal(true);
+    }
 
     useEffect(() => {
         if (data && data.parameterSet) {
@@ -98,8 +106,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
         const hasInvalidInputs = Object.values(invalidParameters).some((isInvalid) => isInvalid);
 
         if (hasInvalidInputs) {
-            setShowModal(true);
-            setModalMessage("The entered values have the wrong data type, the data will not be saved.");
+            showMessageModal("The entered values have the wrong data type, the data will not be saved.");
             return;
         }
 
@@ -134,11 +141,21 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
                             }
                         });
                     }
-                    setShowModal(true);
-                    setModalMessage("The update was successful!");
+                    for (const sensor of updatedSensors) {
+                        await updateRecordPoint({
+                            variables: {
+                                input: {
+                                    id: sensor.id,
+                                    recordPoint: parseFloat(sensor.recordPoint),
+                                    unitId: selectedUnitId
+                                }
+                            }
+                        });
+                    }
+
+                    showMessageModal("The update was successful!")
                 } catch (error) {
-                    setShowModal(true);
-                    setModalMessage("An error occurred while saving the data.");
+                    showMessageModal("An error occurred while saving the data.")
                 }
             }
         }
@@ -146,7 +163,6 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
-
 
     const img = "data:image/png;base64," + data.image;
     const role = Cookies.get('role');
@@ -171,10 +187,6 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
         }
     
         setInvalidParameters({});
-    };
-
-    const closeModal = () => {
-        setShowModal(false);
     };
 
     return (
@@ -211,9 +223,9 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
                         <ImageSection
                             img={img}
                             sn={data.sn}
+                            role={role}
                         />
                     </div>
-
                     <ControlButtons
                         handleSave={handleSave}
                         handleUndoChanges={handleUndoChanges}
@@ -221,7 +233,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
                     />
                 </div>
             </div>
-            {showModal && <Modal onClose={closeModal} message={modalMessage} />}
+
         </div >
     );
 };

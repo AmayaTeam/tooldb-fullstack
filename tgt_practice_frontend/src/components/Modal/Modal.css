@@ -36,6 +36,12 @@
     font-size: 14px; 
 }
 
+.modal-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
 .close:hover,
 .close:focus {
     background-color: #CCCCCC; 

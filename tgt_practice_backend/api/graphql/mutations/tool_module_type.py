@@ -25,7 +25,7 @@ class CreateToolModuleType(graphene.Mutation):
         except ObjectDoesNotExist:
             raise Exception("Tool Module Group does not exist")
         tool_module_type = ToolModuleType.objects.create(
-            r_modules_group_id=tool_module_group,
+            r_modules_group_id=tool_module_group.id,
             name=input.name,
             module_type=input.module_type,
             hash_code=input.hash_code,

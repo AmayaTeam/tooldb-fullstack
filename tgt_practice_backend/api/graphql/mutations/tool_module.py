@@ -26,23 +26,13 @@ class CreateToolModule(graphene.Mutation):
             raise Exception("Tool module type not found")
 
         tool_module = ToolModule.objects.create(
-            r_module_type_id=tool_module_type,
+            r_module_type_id=tool_module_type.id,
             sn=input.sn,
             dbsn=input.dbsn,
             dbtname=input.dbtname,
             dbdate=input.dbdate,
             dbversion=input.dbversion,
             dbcomment=input.dbcomment,
-            dbtlength=input.dbtlength,
-            dbtweight=input.dbtweight,
-            dbtmax_od=input.dbtmax_od,
-            dbtmax_od_collapsed=input.dbtmax_od_collapsed,
-            dbtmax_od_opened=input.dbtmax_od_opened,
-            dbtimage_h_shift=input.dbtimage_h_shift,
-            dbtimage_h_scale=input.dbtimage_h_scale,
-            dbtimage_h_y1=input.dbtimage_h_y1,
-            dbtimage_h_y2=input.dbtimage_h_y2,
-            dbtcomp_str=input.dbtcomp_str,
             image=input.image,
         )
         return ToolModulePayload(tool_module=tool_module)

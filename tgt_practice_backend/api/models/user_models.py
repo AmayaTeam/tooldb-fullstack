@@ -21,7 +21,7 @@ class Profile(models.Model):
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:
-        unitsystem = UnitSystem.objects.get(name__en="SI")
+        unitsystem = UnitSystem.objects.get(name__en="OilField")
         Profile.objects.create(user=instance, unitsystem=unitsystem)
 
 

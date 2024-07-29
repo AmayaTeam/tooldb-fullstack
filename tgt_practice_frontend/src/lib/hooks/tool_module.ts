@@ -7,7 +7,6 @@ interface UseToolModuleQueryProps {
 }
 
 const useToolModuleQuery = ({ id, unitSystem }: UseToolModuleQueryProps) => {
-    console.log("Параметры из хука:", id, unitSystem);
 
     const { loading, error, data } = useQuery(ToolModule, { variables: { id, unitSystem }, fetchPolicy: 'no-cache' });
 
