@@ -9,13 +9,14 @@ interface ContextMenuProps {
     levelName: LevelName;
     objectId: string;
     onClose: () => void;
+    onOptionClick: () => void;
 }
 
 
-const ContextMenu: React.FC<ContextMenuProps> = ({ x, y, levelName, objectId, onClose }) => {
+const ContextMenu: React.FC<ContextMenuProps> = ({ x, y, levelName, objectId, onClose, onOptionClick }) => {
     return (
         <div className="context-menu" style={{ top: y, left: x }} onMouseLeave={onClose}>
-            <OptionsList levelName={levelName} objectId={objectId} />
+            <OptionsList levelName={levelName} objectId={objectId} onOptionClick={onOptionClick} />
         </div>
     );
 };

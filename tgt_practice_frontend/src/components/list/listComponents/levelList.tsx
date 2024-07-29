@@ -5,10 +5,11 @@ import ContextMenu from './contextMenu/ContextMenu';
 
 interface LevelListProps {
     sortedData: ToolModuleGroup[];
+    updateListData: () => void;
     onItemClick: (id: string) => void;
 }
 
-const LevelList: React.FC<LevelListProps> = ({ sortedData, onItemClick }) => {
+const LevelList: React.FC<LevelListProps> = ({ sortedData, updateListData, onItemClick }) => {
     const [expandedItems, setExpandedItems] = useState<{ [key: string]: boolean }>({});
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
 
@@ -84,6 +85,7 @@ const LevelList: React.FC<LevelListProps> = ({ sortedData, onItemClick }) => {
                     levelName={contextMenu.levelName}
                     objectId={contextMenu.objectId}
                     onClose={() => setContextMenu(null)}
+                    onOptionClick={updateListData}
                 />
             )}
         </div>

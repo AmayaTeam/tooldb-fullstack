@@ -19,9 +19,10 @@ import { useDeleteToolModule } from 'src/lib/hooks/ToolModule/useDeleteToolModul
 interface OptionsListProps {
     levelName: LevelName;
     objectId: string;
+    onOptionClick: () => void;
 }
 
-const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId }) => {
+const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOptionClick }) => {
 
     const { setModal, setModalContent } = useModal();
     const { createToolModuleGroup } = useCreateToolModuleGroup();
@@ -97,9 +98,6 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId }) => {
 
         showCreationModal = () => {
             setModalContent(this.getCreationModal());
-
-            console.log('get creation modal');
-
             setModal(true);
         }
 
@@ -114,7 +112,6 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId }) => {
     }
 
 
-
     class GroupManager extends Manager {
 
         protected getCreationModal = () => {
@@ -126,7 +123,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId }) => {
         }
 
         private saveNewGroup = async (newGroupName: string) => {
-            const { data } = await createToolModuleGroup({
+            await createToolModuleGroup({
                 variables: {
                     input: {
                         name: newGroupName
@@ -134,7 +131,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId }) => {
                 }
             })
 
-            const newGroup = data.createToolModuleGroup.toolModuleGroup;
+            onOptionClick();
         }
 
         private deleteGroup = async () => {
@@ -148,6 +145,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId }) => {
 
             if (response.data.deleteToolModuleGroup.success) {
                 console.log("Deletion successful");
+                onOptionClick();
             } else {
                 throw new Error(`Failed to delete group with id ${this.objectId}`);
             }
@@ -166,7 +164,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId }) => {
         }
 
         private saveNewType = async (newTypeName: string) => {
-            const { data } = await createToolModuleType({
+            await createToolModuleType({
                 variables: {
                     input: {
                         name: newTypeName,
@@ -175,7 +173,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId }) => {
                 }
             });
 
-            const newToolModuleType = data.createToolModuleType.toolModuleType;
+            onOptionClick();
         }
 
         private deleteType = async () => {
@@ -188,6 +186,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId }) => {
             });
             if (response.data.deleteToolModuleType.success) {
                 console.log("Deletion successful");
+                onOptionClick();
             } else {
                 throw new Error(`Failed to delete type with id ${objectId}`);
             }
@@ -204,8 +203,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId }) => {
         }
 
         private saveNewModule = async (newModuleName: string, newModuleSerialNumber: string) => {
-            console.log(objectId);
-            const { data } = await createToolModule({
+            await createToolModule({
                 variables: {
                     "input": {
                         "rModuleTypeId": objectId,
@@ -215,7 +213,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId }) => {
                 }
             })
 
-            const newModuleData = data.createToolModule.toolModule;
+            onOptionClick();
         }
 
         private deleteModule = async () => {
@@ -228,12 +226,12 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId }) => {
             });
             if (response.data.deleteToolModule.success) {
                 console.log("Deletion successful");
+                onOptionClick();
             } else {
                 throw new Error(`Failed to delete module with id ${objectId}`);
             }
         }
     }
-
 
     const onModalClose = () => {
         setModal(false);
