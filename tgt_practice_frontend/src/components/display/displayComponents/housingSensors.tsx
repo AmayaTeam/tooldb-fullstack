@@ -24,7 +24,7 @@ const HousingSensors: React.FC<HousingSensorsProps> = ({ sensors, sensorRecordPo
                     <DisplaySensorComponent
                         key={sensor.rToolsensortype.id}
                         sensor={sensor}
-                        recordPoint={sensor.recordPoint}
+                        recordPoint={sensorRecordPoints[sensor.id] || ""}
                         onChange={handleSensorRecordPointChange}
                         isInvalid={invalidParameters[sensor.id]}
                         role={role} />
@@ -50,7 +50,7 @@ const DisplaySensorComponent: React.FC<DisplaySensorComponentProps> = ({ sensor,
         <td>
             <input
                 type="text"
-                value={recordPoint || ""}
+                value={recordPoint}
                 onChange={onChange(sensor.id)}
                 className={`sensors_parametrs ${isInvalid ? 'invalid' : ''}`}
                 disabled={role === "user"}
