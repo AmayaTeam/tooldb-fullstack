@@ -141,6 +141,17 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
                             }
                         });
                     }
+                    for (const sensor of updatedSensors) {
+                        await updateRecordPoint({
+                            variables: {
+                                input: {
+                                    id: sensor.id,
+                                    recordPoint: parseFloat(sensor.recordPoint),
+                                    unitId: selectedUnitId
+                                }
+                            }
+                        });
+                    }
 
                     showMessageModal("The update was successful!")
                 } catch (error) {
