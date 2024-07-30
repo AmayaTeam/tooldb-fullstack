@@ -20,6 +20,7 @@ interface DisplayProps {
 
 const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => {
     const { loading, error, data } = useToolModuleQuery({ id: selectedItemId, unitSystem: selectedUnitId });
+
     const { updateParameter } = useParameterUpdate();
     const { updateRecordPoint } = useRecordPointUpdate();
     const [parameters, setParameters] = useState<Record<string, string>>({});
@@ -47,6 +48,8 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
                 return acc;
             }, {});
             setParameters(initialParameters);
+            console.log(data.parameterSet);
+            
         }
 
         if (data && data.toolinstalledsensorSet) {

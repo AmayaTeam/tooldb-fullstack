@@ -37,6 +37,9 @@ const Header: React.FC<HeaderProps> = ({ setSelectedUnitId }) => {
             setSelectedUnit(unitSystemName || 'Choose the unit system..');
             const unitSystemId = userUnitSystemData.profileById.unitsystem?.id || '';
             setSelectedUnitId(unitSystemId);
+            console.log(unitSystemId);
+            console.log(unitSystemName);
+            
         }
     }, [userUnitSystemData]);
 
