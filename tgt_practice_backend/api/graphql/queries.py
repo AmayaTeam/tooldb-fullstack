@@ -4,7 +4,7 @@ from api.graphql.decorators import query_permission_required
 from api.graphql.conversion_utils import ConversionUtils
 
 from .types import (
-    ParameterTypeObject,
+    ParameterTypeUnitObject,
     ToolModuleGroupObject,
     ToolModuleTypeObject,
     ToolModuleObject,
@@ -24,6 +24,7 @@ from api.models import (
     ToolInstalledSensor,
     UnitSystem,
     Profile,
+    ParameterTypeUnit,
     UnitSystemMeasureUnit,
     ConversionFactor,
 )
@@ -59,8 +60,8 @@ class Query(graphene.ObjectType):
     me = graphene.Field(UserType)
     groups = graphene.List(GroupType)
 
-    parameters_with_unit_system = graphene.Field(
-        ParameterTypeObject, unit_system=graphene.String(required=True)
+    parameters_with_unit_system = graphene.List(
+        ParameterTypeUnitObject, unit_system=graphene.String(required=True)
     )
 
     def resolve_me(self, info):
@@ -139,13 +140,17 @@ class Query(graphene.ObjectType):
         ).all()
 
     def resolve_parameters_with_unit_system(self, info, unit_system):
+
         param_types = ParameterType.objects.all()
+        param_types_with_units = []
 
         for param_type in param_types:
             to_unit = ConversionUtils.get_unit_for_measure_and_unit_system(
                 param_type.default_measure, unit_system
             )
-            print(param_type.parameter_name, to_unit)
-        return param_types
+            type_with_unit, created = ParameterTypeUnit.objects.get_or_create(
+                parameter_type=param_type, unit=to_unit
+            )
+            param_types_with_units.append(type_with_unit)
 
-    # parameter_name -> mm/m/kg/in
+        return param_types_with_units
