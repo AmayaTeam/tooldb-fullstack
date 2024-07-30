@@ -1,6 +1,6 @@
 import graphene
 
-from api.graphql.mutations.parameter import UpdateParameter
+from api.graphql.mutations.parameter import CreateParameter, UpdateParameter
 from api.graphql.mutations.profile import UpdateProfile
 
 from api.graphql.mutations.tool_installed_sensor import (
@@ -51,6 +51,7 @@ class Mutation(graphene.ObjectType):
     update_tool_sensor_type = UpdateToolSensorType.Field()
     delete_tool_sensor_type = DeleteToolSensorType.Field()
 
+    create_parameter = CreateParameter.Field()
     update_parameter = UpdateParameter.Field()
 
     update_profile = UpdateProfile.Field()
