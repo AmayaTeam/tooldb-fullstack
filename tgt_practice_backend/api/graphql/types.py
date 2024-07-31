@@ -1,3 +1,4 @@
+import graphene
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from graphene_django import DjangoObjectType
@@ -117,3 +118,19 @@ class ConversionFactorObject(DjangoObjectType):
 class ProfileObject(DjangoObjectType):
     class Meta:
         model = Profile
+
+class ConvertedParameterType(graphene.ObjectType):
+    id = graphene.String()
+    parameter_type = graphene.Field(ParameterTypeObject)
+    parameter_value = graphene.Float()
+    unit = graphene.Field(UnitObject)
+
+class ToolModuleResponseType(graphene.ObjectType):
+    id = graphene.String()
+    sn = graphene.String()
+    dbsn = graphene.String()
+    dbtname = graphene.String()
+    image = graphene.String()
+    r_module_type = graphene.Field(ToolModuleTypeObject)
+    parameter_set = graphene.List(ConvertedParameterType)
+    toolinstalledsensorSet = graphene.List(ToolInstalledSensorObject)

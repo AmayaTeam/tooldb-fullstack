@@ -11,7 +11,10 @@ from .types import (
     ToolInstalledSensorObject,
     UserType,
     GroupType,
-    UnitSystemObject, ProfileObject,
+    UnitSystemObject,
+    ProfileObject,
+    ConvertedParameterType,
+    ToolModuleResponseType,
 )
 from api.models import (
     ToolModuleGroup,
@@ -32,7 +35,8 @@ class Query(graphene.ObjectType):
     tool_installed_sensors = graphene.List(ToolInstalledSensorObject)
 
     tool_modules_by_id = graphene.Field(ToolModuleObject, id=graphene.String())
-    tool_modules_by_id_with_unit_system = graphene.Field(ToolModuleObject, id=graphene.String(), unit_system=graphene.String(required=True))
+    tool_modules_by_id_with_unit_system = graphene.Field(ToolModuleResponseType, id=graphene.String(),
+                                                         unit_system=graphene.String(required=True))
     profile_by_id = graphene.Field(ProfileObject, user_id=graphene.String())
 
     tool_module_types_by_group_id = graphene.List(ToolModuleTypeObject,
@@ -87,19 +91,43 @@ class Query(graphene.ObjectType):
 
     def resolve_tool_modules_by_id_with_unit_system(root, info, id, unit_system):
         tool_module = ToolModule.objects.get(pk=id)
+        converted_parameters = []
 
         for parameter in tool_module.parameter_set.all():
             from_unit = parameter.unit
-            to_unit = ConversionUtils.get_unit_for_measure_and_unit_system(parameter.parameter_type.default_measure, unit_system)
+            to_unit = ConversionUtils.get_unit_for_measure_and_unit_system(parameter.parameter_type.default_measure,
+                                                                           unit_system)
             conversion_factor = ConversionUtils.get_conversion_factor(from_unit, to_unit)
 
             if conversion_factor:
-                parameter.parameter_value = ConversionUtils.convert_value(parameter.parameter_value, conversion_factor.factor_1,
+                converted_value = ConversionUtils.convert_value(parameter.parameter_value, conversion_factor.factor_1,
                                                                 conversion_factor.factor_2)
-                parameter.unit = to_unit
-                parameter.save()
+                converted_parameters.append(ConvertedParameterType(
+                    id=str(parameter.id),
+                    parameter_type=parameter.parameter_type,
+                    parameter_value=converted_value,
+                    unit=to_unit
+                ))
+            else:
+                converted_parameters.append(ConvertedParameterType(
+                    id=str(parameter.id),
+                    parameter_type=parameter.parameter_type,
+                    parameter_value=parameter.parameter_value,
+                    unit=parameter.unit
+                ))
 
-        return tool_module
+        toolinstalledsensor_set = tool_module.toolinstalledsensor_set.all()
+
+        return ToolModuleResponseType(
+            id=str(tool_module.id),
+            sn=tool_module.sn,
+            dbsn=tool_module.dbsn,
+            dbtname=tool_module.dbtname,
+            image=tool_module.image,
+            r_module_type=tool_module.r_module_type,
+            parameter_set=converted_parameters,
+            toolinstalledsensorSet=toolinstalledsensor_set
+        )
 
     @query_permission_required("api.view_toolmoduletype")
     def resolve_tool_module_types_by_group_id(self, info, group_id):
