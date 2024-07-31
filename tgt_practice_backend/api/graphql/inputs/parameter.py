@@ -10,5 +10,5 @@ class CreateParameterInput(graphene.InputObjectType):
 
 class UpdateParameterInput(graphene.InputObjectType):
     id = graphene.UUID(required=True)
-    unit_id = graphene.UUID()
+    unit_id = graphene.UUID(required=True)
     parameter_value = graphene.Float()
