@@ -122,10 +122,10 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
             const updatedSensors = Object.entries(sensorRecordPoints).reduce((acc, [sensorId, value]) => {
                 const originalSensor = data.toolinstalledsensorSet.find((sensor: Sensor) => sensor.id === sensorId);
                 if (originalSensor && originalSensor.recordPoint !== value) {
-                    acc.push({ id: sensorId, recordPoint: value });
+                    acc.push({ id: sensorId, recordPoint: value, unitId: originalSensor.unit.id });
                 }
                 return acc;
-            }, [] as { id: string; recordPoint: string }[]);
+            }, [] as { id: string; recordPoint: string, unitId: string }[]);
 
             if (updatedParameters.length > 0 || updatedSensors.length > 0) {
                 console.log("Обновление параметров:", updatedParameters);
@@ -148,7 +148,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
                                 input: {
                                     id: sensor.id,
                                     recordPoint: parseFloat(sensor.recordPoint),
-                                    unitId: selectedUnitId
+                                    unitId: sensor.unitId
                                 }
                             }
                         });
