@@ -6,17 +6,17 @@ import Cookies from 'js-cookie';
 import { useUnitSystemsQuery } from '../../lib/hooks/useUnitSystemsQuery';
 import { useUserUnitSystemQuery } from '../../lib/hooks/useUserUnitSystemQuery';
 import { useUpdateProfileUnitSystem } from '../../lib/hooks/UnitSystem/useUpdateProfileUnitSystem';
+import { useUnitSystem } from 'src/contexts/UnitSystemContext';
 
-interface HeaderProps {
-    setSelectedUnitId: React.Dispatch<React.SetStateAction<string>>;
-}
 
-const Header: React.FC<HeaderProps> = ({ setSelectedUnitId }) => {
+const Header: React.FC = () => {
     const [isUnitDropdownOpen, setIsUnitDropdownOpen] = useState(false);
     const [isUsernameDropdownOpen, setIsUsernameDropdownOpen] = useState(false);
     const [username, setUsername] = useState('');
     const [userId, setUserId] = useState('');
     const [selectedUnit, setSelectedUnit] = useState('Choose the unit system..');
+
+    const { setSelectedUnitId } = useUnitSystem();
 
     const { loading: userLoading, error: userError, data: userData } = useQuery(GET_CURRENT_USER);
     const { loading: unitSystemsLoading, error: unitSystemsError, data: unitSystemsData } = useUnitSystemsQuery();
@@ -37,9 +37,6 @@ const Header: React.FC<HeaderProps> = ({ setSelectedUnitId }) => {
             setSelectedUnit(unitSystemName || 'Choose the unit system..');
             const unitSystemId = userUnitSystemData.profileById.unitsystem?.id || '';
             setSelectedUnitId(unitSystemId);
-            console.log(unitSystemId);
-            console.log(unitSystemName);
-            
         }
     }, [userUnitSystemData]);
 

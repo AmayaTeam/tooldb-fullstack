@@ -45,6 +45,12 @@ export interface Parameter {
     };
 }
 
+export interface NewParameter {
+    parameterTypeId: string;
+    parameterValue: number;
+    unitId: string;
+}
+
 export interface Sensor {
     id: string;
     rToolsensortype: {

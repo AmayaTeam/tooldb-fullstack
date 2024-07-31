@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ToolModuleGroup } from 'src/types/interfaces';
-import { LevelName } from './contextMenu/contextMenuServices';
+import { LevelName } from './contextMenu/contextMenuTypes';
 import ContextMenu from './contextMenu/ContextMenu';
 
 interface LevelListProps {

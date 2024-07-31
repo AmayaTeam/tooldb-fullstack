@@ -1,6 +1,6 @@
 import React from 'react';
 import "../../List.css"
-import { LevelName } from './contextMenuServices';
+import { LevelName } from './contextMenuTypes';
 import OptionsList from './OptionsList';
 
 interface ContextMenuProps {

@@ -1,13 +1,14 @@
 import React from 'react';
 import { useModal } from 'src/contexts/ModalContext';
-import { LevelName, Option } from './contextMenuServices';
+import { LevelName, Option } from './contextMenuTypes';
+import { NewParameter } from 'src/types/interfaces';
 
 import GroupCreationModal from './modals/GroupCreationModal';
 import GroupDeletionModal from './modals/GroupDeletionModal';
 import TypeDeletionModal from './modals/TypeDeletionModal';
 import TypeCreationModal from './modals/TypeCreationModal';
 import ModuleDeletionModal from './modals/ModuleDeletionModal';
-import ModuleCreationModal from './modals/ModuleCreationModal';
+import ModuleCreationModal from './modals/ModuleCreationModal/ModuleCreationModal';
 
 import { useCreateToolModuleGroup } from 'src/lib/hooks/ToolModuleGroup/useCreateToolModuleGroup';
 import { useDeleteToolModuleGroup } from 'src/lib/hooks/ToolModuleGroup/useDeleteToolModuleGroup';
@@ -15,6 +16,7 @@ import { useCreateToolModuleType } from 'src/lib/hooks/ToolModuleType/useCreateT
 import { useDeleteToolModuleType } from 'src/lib/hooks/ToolModuleType/useDeleteToolModuleType';
 import { useCreateToolModule } from 'src/lib/hooks/ToolModule/useCreateToolModule';
 import { useDeleteToolModule } from 'src/lib/hooks/ToolModule/useDeleteToolModule';
+import { useCreateParameter } from 'src/lib/hooks/ToolModule/useCreateParameter';
 
 interface OptionsListProps {
     levelName: LevelName;
@@ -33,6 +35,8 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
 
     const { deleteToolModule } = useDeleteToolModule();
     const { createToolModule } = useCreateToolModule();
+
+    const { createParameter } = useCreateParameter();
 
     function getOptionsList() {
         const optionsNames: string[] = getOptionsNames();
@@ -168,7 +172,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
                 variables: {
                     input: {
                         name: newTypeName,
-                        rModuleGroup: objectId
+                        rModuleGroup: this.objectId
                     }
                 }
             });
@@ -180,7 +184,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
             const response = await deleteToolModuleType({
                 variables: {
                     input: {
-                        id: objectId
+                        id: this.objectId
                     }
                 }
             });
@@ -202,18 +206,41 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
             return (<ModuleDeletionModal onClose={onModalClose} onSubmit={this.deleteModule} />)
         }
 
-        private saveNewModule = async (newModuleName: string, newModuleSerialNumber: string) => {
-            await createToolModule({
+        private saveNewModule = async (newModuleData: any) => {
+            const { data } = await createToolModule({
                 variables: {
                     "input": {
-                        "rModuleTypeId": objectId,
-                        "sn": newModuleSerialNumber,
-                        "dbtname": newModuleName
+                        "rModuleTypeId": this.objectId,
+                        "sn": newModuleData.sn
                     }
                 }
-            })
+            });
+
+            const newModuleId = data.createToolModule.toolModule.id;
+
+            await this.createParameters(newModuleId, newModuleData.parameters);
 
             onOptionClick();
+        }
+
+        private createParameters = async (newModuleId: string, parameters: NewParameter[]) => {
+            for (const param of parameters) {
+                try {
+                    const { data } = await createParameter({
+                        variables: {
+                            "input": {
+                                "toolmoduleId": newModuleId,
+                                "parameterType": param.parameterTypeId,
+                                "parameterValue": param.parameterValue,
+                                "unitId": param.unitId
+                            }
+                        }
+                    });
+                    console.log('Parameter created with ID:', data.createParameter.parameter.id);
+                } catch (err) {
+                    console.error('Error creating parameter:', err);
+                }
+            }
         }
 
         private deleteModule = async () => {
