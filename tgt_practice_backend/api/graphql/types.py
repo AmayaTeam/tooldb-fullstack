@@ -22,6 +22,7 @@ from api.models.tool_models import (
     ToolModuleType,
     ToolModule,
     ParameterType,
+    ParameterTypeUnit,
     Parameter
 )
 
@@ -109,11 +110,13 @@ class UnitSystemMeasureUnitObject(DjangoObjectType):
     class Meta:
         model = UnitSystemMeasureUnit
 
-
 class ConversionFactorObject(DjangoObjectType):
     class Meta:
         model = ConversionFactor
 
+class ParameterTypeUnitObject(DjangoObjectType):
+    class Meta:
+        model = ParameterTypeUnit
 
 class ProfileObject(DjangoObjectType):
     class Meta:

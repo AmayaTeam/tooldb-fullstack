@@ -4,11 +4,14 @@ import App from './App.tsx'
 import './index.css'
 
 import { ModalProvider } from './contexts/ModalContext.tsx';
+import { UnitSystemProvider } from './contexts/UnitSystemContext.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ModalProvider>
-      <App />
-    </ModalProvider>
+    <UnitSystemProvider>
+      <ModalProvider>
+        <App />
+      </ModalProvider>
+    </UnitSystemProvider>
   </React.StrictMode>,
 )

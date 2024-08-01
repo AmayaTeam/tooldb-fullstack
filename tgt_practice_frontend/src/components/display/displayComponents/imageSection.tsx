@@ -19,7 +19,8 @@ const handleImageExport = async (img: string, sn: string) => {
 
 const ImageSection: React.FC<ImageSectionProps> = ({ img, sn, role}) => (
     <div className="display-content-info-image">
-        {img && img.length > 'data:image/png;base64,'.length ? (
+        {img && img.length > 'data:image/png;base64,'.length &&
+        img.length > 'data:image/png;base64,null'.length ? (
             <img src={img} width={"100px"} alt={"Изображение отсутствует"}/>
         ) : (
             <div className="no-image-message">Изображение отсутствует</div>

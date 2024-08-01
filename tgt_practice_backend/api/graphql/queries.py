@@ -4,6 +4,7 @@ from api.graphql.decorators import query_permission_required
 from api.graphql.conversion_utils import ConversionUtils
 
 from .types import (
+    ParameterTypeUnitObject,
     ToolModuleGroupObject,
     ToolModuleTypeObject,
     ToolModuleObject,
@@ -15,6 +16,9 @@ from .types import (
     ProfileObject,
     ConvertedParameterType,
     ToolModuleResponseType,
+    ParameterType,
+    UnitSystemObject,
+    ProfileObject,
 )
 from api.models import (
     ToolModuleGroup,
@@ -23,7 +27,10 @@ from api.models import (
     ToolSensorType,
     ToolInstalledSensor,
     UnitSystem,
-    Profile, UnitSystemMeasureUnit, ConversionFactor,
+    Profile,
+    ParameterTypeUnit,
+    UnitSystemMeasureUnit,
+    ConversionFactor,
 )
 
 
@@ -39,17 +46,24 @@ class Query(graphene.ObjectType):
                                                          unit_system=graphene.String(required=True))
     profile_by_id = graphene.Field(ProfileObject, user_id=graphene.String())
 
-    tool_module_types_by_group_id = graphene.List(ToolModuleTypeObject,
-                                                  group_id=graphene.String())  # по айди группы отдает все пренадлежащие ей типы модулей БЕЗ ПРИБОРОВ
-    tool_modules_by_module_type_id = graphene.List(ToolModuleObject,
-                                                   module_type_id=graphene.String())  # по айди типа модуля отдает все приборы в рамках одного
-    tool_modules_by_group_id = graphene.List(ToolModuleObject,
-                                             group_id=graphene.String())  # отдает всю вложенность в рамках айди группы
+    tool_module_types_by_group_id = graphene.List(
+        ToolModuleTypeObject, group_id=graphene.String()
+    )  # по айди группы отдает все пренадлежащие ей типы модулей БЕЗ ПРИБОРОВ
+    tool_modules_by_module_type_id = graphene.List(
+        ToolModuleObject, module_type_id=graphene.String()
+    )  # по айди типа модуля отдает все приборы в рамках одного
+    tool_modules_by_group_id = graphene.List(
+        ToolModuleObject, group_id=graphene.String()
+    )  # отдает всю вложенность в рамках айди группы
 
     unit_systems = graphene.List(UnitSystemObject)
 
     me = graphene.Field(UserType)
     groups = graphene.List(GroupType)
+
+    parameters_with_unit_system = graphene.List(
+        ParameterTypeUnitObject, unit_system=graphene.String(required=True)
+    )
 
     def resolve_me(self, info):
         user = info.context.user
@@ -139,4 +153,22 @@ class Query(graphene.ObjectType):
 
     @query_permission_required("api.view_toolmodule")
     def resolve_tool_modules_by_group_id(self, info, group_id):
-        return ToolModule.objects.filter(r_module_type_id__r_modules_group_id=group_id).all()
+        return ToolModule.objects.filter(
+            r_module_type_id__r_modules_group_id=group_id
+        ).all()
+
+    def resolve_parameters_with_unit_system(self, info, unit_system):
+
+        param_types = ParameterType.objects.all()
+        param_types_with_units = []
+
+        for param_type in param_types:
+            to_unit = ConversionUtils.get_unit_for_measure_and_unit_system(
+                param_type.default_measure, unit_system
+            )
+            type_with_unit, created = ParameterTypeUnit.objects.get_or_create(
+                parameter_type=param_type, unit=to_unit
+            )
+            param_types_with_units.append(type_with_unit)
+
+        return param_types_with_units

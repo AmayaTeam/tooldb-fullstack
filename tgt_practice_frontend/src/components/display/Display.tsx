@@ -12,14 +12,17 @@ import ControlButtons from "./displayComponents/controlButtons.tsx";
 import { Parameter, Sensor } from "src/types/interfaces.ts";
 import { useModal } from "src/contexts/ModalContext.tsx";
 import MessageModal from "./displayComponents/messageModal.tsx";
+import { useUnitSystem } from "src/contexts/UnitSystemContext.tsx";
 
 interface DisplayProps {
     selectedItemId: string | null;
-    selectedUnitId: string;
 }
 
-const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => {
+const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
+    const { selectedUnitId } = useUnitSystem();
+
     const { loading, error, data } = useToolModuleQuery({ id: selectedItemId, unitSystem: selectedUnitId });
+
     const { updateParameter } = useParameterUpdate();
     const { updateRecordPoint } = useRecordPointUpdate();
     const [parameters, setParameters] = useState<Record<string, string>>({});
@@ -178,7 +181,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
             }, {});
             setParameters(initialParameters);
         }
-    
+
         if (data && data.toolinstalledsensorSet) {
             const initialSensors = data.toolinstalledsensorSet.reduce((acc: Record<string, string>, sensor: Sensor) => {
                 acc[sensor.id] = sensor.recordPoint;
@@ -186,7 +189,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
             }, {});
             setSensorRecordPoints(initialSensors);
         }
-    
+
         setInvalidParameters({});
     };
 
