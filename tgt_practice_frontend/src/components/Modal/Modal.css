@@ -17,8 +17,8 @@
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
-    max-width: 400px;
+    max-width: 80%;
+    width: fit-content;
     text-align: center;
     position: relative;
 }

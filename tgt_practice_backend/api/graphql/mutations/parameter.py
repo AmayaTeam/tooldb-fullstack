@@ -3,8 +3,28 @@ import graphene
 from api.graphql.decorators import permission_required
 from api.graphql.inputs.parameter import UpdateParameterInput
 from api.graphql.payloads import ParameterPayload
-from api.models import Unit
-from api.models.tool_models import Parameter
+
+from api.graphql.inputs.parameter import CreateParameterInput
+from api.models.tool_models import ToolModule, ParameterType, Parameter
+from api.models.unit_system_models import Unit
+
+
+class CreateParameter(graphene.Mutation):
+    class Arguments:
+        input = CreateParameterInput(required=True)
+
+    Output = ParameterPayload
+
+    @classmethod
+    @permission_required("api.add_parameter")
+    def mutate(cls, root, info, input):
+        parameter = Parameter.objects.create(
+            unit=Unit.objects.get(pk=input["unit_id"]),
+            toolmodule=ToolModule.objects.get(pk=input["toolmodule_id"]),
+            parameter_type=ParameterType.objects.get(pk=input["parameter_type"]),
+            parameter_value=input["parameter_value"],
+        )
+        return ParameterPayload(parameter=parameter)
 
 
 class UpdateParameter(graphene.Mutation):
@@ -12,6 +32,7 @@ class UpdateParameter(graphene.Mutation):
         input = UpdateParameterInput(required=True)
 
     Output = ParameterPayload
+
     @classmethod
     @permission_required("api.change_parameter")
     def mutate(cls, root, info, input):

@@ -12,14 +12,17 @@ import ControlButtons from "./displayComponents/controlButtons.tsx";
 import { Parameter, Sensor } from "src/types/interfaces.ts";
 import { useModal } from "src/contexts/ModalContext.tsx";
 import MessageModal from "./displayComponents/messageModal.tsx";
+import { useUnitSystem } from "src/contexts/UnitSystemContext.tsx";
 
 interface DisplayProps {
     selectedItemId: string | null;
-    selectedUnitId: string;
 }
 
-const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => {
+const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
+    const { selectedUnitId } = useUnitSystem();
+
     const { loading, error, data } = useToolModuleQuery({ id: selectedItemId, unitSystem: selectedUnitId });
+
     const { updateParameter } = useParameterUpdate();
     const { updateRecordPoint } = useRecordPointUpdate();
     const [parameters, setParameters] = useState<Record<string, string>>({});
@@ -114,18 +117,18 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
             const updatedParameters = Object.entries(parameters).reduce((acc, [paramId, value]) => {
                 const originalParam = data.parameterSet.find((param: Parameter) => param.id === paramId);
                 if (originalParam && originalParam.parameterValue.toFixed(2) !== value) {
-                    acc.push({ id: paramId, parameterValue: parseFloat(value) });
+                    acc.push({ id: paramId, parameterValue: parseFloat(value), unitId: originalParam.unit.id });
                 }
                 return acc;
-            }, [] as { id: string; parameterValue: number }[]);
+            }, [] as { id: string; parameterValue: number; unitId: string }[]);
 
             const updatedSensors = Object.entries(sensorRecordPoints).reduce((acc, [sensorId, value]) => {
                 const originalSensor = data.toolinstalledsensorSet.find((sensor: Sensor) => sensor.id === sensorId);
                 if (originalSensor && originalSensor.recordPoint !== value) {
-                    acc.push({ id: sensorId, recordPoint: value });
+                    acc.push({ id: sensorId, recordPoint: value, unitId: originalSensor.unit.id });
                 }
                 return acc;
-            }, [] as { id: string; recordPoint: string }[]);
+            }, [] as { id: string; recordPoint: string, unitId: string }[]);
 
             if (updatedParameters.length > 0 || updatedSensors.length > 0) {
                 console.log("Обновление параметров:", updatedParameters);
@@ -136,7 +139,8 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
                             variables: {
                                 input: {
                                     id: param.id,
-                                    parameterValue: param.parameterValue
+                                    parameterValue: param.parameterValue,
+                                    unitId: param.unitId
                                 }
                             }
                         });
@@ -147,7 +151,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
                                 input: {
                                     id: sensor.id,
                                     recordPoint: parseFloat(sensor.recordPoint),
-                                    unitId: selectedUnitId
+                                    unitId: sensor.unitId
                                 }
                             }
                         });
@@ -177,7 +181,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
             }, {});
             setParameters(initialParameters);
         }
-    
+
         if (data && data.toolinstalledsensorSet) {
             const initialSensors = data.toolinstalledsensorSet.reduce((acc: Record<string, string>, sensor: Sensor) => {
                 acc[sensor.id] = sensor.recordPoint;
@@ -185,7 +189,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, selectedUnitId }) => 
             }, {});
             setSensorRecordPoints(initialSensors);
         }
-    
+
         setInvalidParameters({});
     };
 

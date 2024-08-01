@@ -25,6 +25,7 @@ export default gql`
                 name {
                   en
                 }
+                id
               }
             }
             parameterSet {
@@ -37,6 +38,7 @@ export default gql`
                 name {
                   en
                 }
+                id
               }
             }
         }

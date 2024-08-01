@@ -1,3 +1,4 @@
+import graphene
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from graphene_django import DjangoObjectType
@@ -21,6 +22,7 @@ from api.models.tool_models import (
     ToolModuleType,
     ToolModule,
     ParameterType,
+    ParameterTypeUnit,
     Parameter
 )
 
@@ -108,12 +110,30 @@ class UnitSystemMeasureUnitObject(DjangoObjectType):
     class Meta:
         model = UnitSystemMeasureUnit
 
-
 class ConversionFactorObject(DjangoObjectType):
     class Meta:
         model = ConversionFactor
 
+class ParameterTypeUnitObject(DjangoObjectType):
+    class Meta:
+        model = ParameterTypeUnit
 
 class ProfileObject(DjangoObjectType):
     class Meta:
         model = Profile
+
+class ConvertedParameterType(graphene.ObjectType):
+    id = graphene.String()
+    parameter_type = graphene.Field(ParameterTypeObject)
+    parameter_value = graphene.Float()
+    unit = graphene.Field(UnitObject)
+
+class ToolModuleResponseType(graphene.ObjectType):
+    id = graphene.String()
+    sn = graphene.String()
+    dbsn = graphene.String()
+    dbtname = graphene.String()
+    image = graphene.String()
+    r_module_type = graphene.Field(ToolModuleTypeObject)
+    parameter_set = graphene.List(ConvertedParameterType)
+    toolinstalledsensorSet = graphene.List(ToolInstalledSensorObject)

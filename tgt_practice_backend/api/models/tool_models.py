@@ -51,7 +51,9 @@ class ToolModule(models.Model):
 class ParameterType(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     parameter_name = models.TextField(null=True, blank=True)
-    default_measure = models.ForeignKey(Measure, on_delete=models.CASCADE, null=True, blank=True)
+    default_measure = models.ForeignKey(
+        Measure, on_delete=models.CASCADE, null=True, blank=True
+    )
 
     def __str__(self):
         return self.parameter_name
@@ -66,3 +68,14 @@ class Parameter(models.Model):
 
     def __str__(self):
         return str(self.parameter_type.parameter_name)
+
+
+class ParameterTypeUnit(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE, null=True, blank=True)
+    parameter_type = models.ForeignKey(
+        ParameterType, on_delete=models.CASCADE, null=True, blank=True
+    )
+
+    def __str__(self):
+        return f"ParameterType: {str(self.parameter_type)}. Unit: {str(self.unit)}"

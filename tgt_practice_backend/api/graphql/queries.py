@@ -4,6 +4,7 @@ from api.graphql.decorators import query_permission_required
 from api.graphql.conversion_utils import ConversionUtils
 
 from .types import (
+    ParameterTypeUnitObject,
     ToolModuleGroupObject,
     ToolModuleTypeObject,
     ToolModuleObject,
@@ -11,7 +12,13 @@ from .types import (
     ToolInstalledSensorObject,
     UserType,
     GroupType,
-    UnitSystemObject, ProfileObject,
+    UnitSystemObject,
+    ProfileObject,
+    ConvertedParameterType,
+    ToolModuleResponseType,
+    ParameterType,
+    UnitSystemObject,
+    ProfileObject,
 )
 from api.models import (
     ToolModuleGroup,
@@ -20,7 +27,10 @@ from api.models import (
     ToolSensorType,
     ToolInstalledSensor,
     UnitSystem,
-    Profile, UnitSystemMeasureUnit, ConversionFactor,
+    Profile,
+    ParameterTypeUnit,
+    UnitSystemMeasureUnit,
+    ConversionFactor,
 )
 
 
@@ -32,20 +42,28 @@ class Query(graphene.ObjectType):
     tool_installed_sensors = graphene.List(ToolInstalledSensorObject)
 
     tool_modules_by_id = graphene.Field(ToolModuleObject, id=graphene.String())
-    tool_modules_by_id_with_unit_system = graphene.Field(ToolModuleObject, id=graphene.String(), unit_system=graphene.String(required=True))
+    tool_modules_by_id_with_unit_system = graphene.Field(ToolModuleResponseType, id=graphene.String(),
+                                                         unit_system=graphene.String(required=True))
     profile_by_id = graphene.Field(ProfileObject, user_id=graphene.String())
 
-    tool_module_types_by_group_id = graphene.List(ToolModuleTypeObject,
-                                                  group_id=graphene.String())  # по айди группы отдает все пренадлежащие ей типы модулей БЕЗ ПРИБОРОВ
-    tool_modules_by_module_type_id = graphene.List(ToolModuleObject,
-                                                   module_type_id=graphene.String())  # по айди типа модуля отдает все приборы в рамках одного
-    tool_modules_by_group_id = graphene.List(ToolModuleObject,
-                                             group_id=graphene.String())  # отдает всю вложенность в рамках айди группы
+    tool_module_types_by_group_id = graphene.List(
+        ToolModuleTypeObject, group_id=graphene.String()
+    )  # по айди группы отдает все пренадлежащие ей типы модулей БЕЗ ПРИБОРОВ
+    tool_modules_by_module_type_id = graphene.List(
+        ToolModuleObject, module_type_id=graphene.String()
+    )  # по айди типа модуля отдает все приборы в рамках одного
+    tool_modules_by_group_id = graphene.List(
+        ToolModuleObject, group_id=graphene.String()
+    )  # отдает всю вложенность в рамках айди группы
 
     unit_systems = graphene.List(UnitSystemObject)
 
     me = graphene.Field(UserType)
     groups = graphene.List(GroupType)
+
+    parameters_with_unit_system = graphene.List(
+        ParameterTypeUnitObject, unit_system=graphene.String(required=True)
+    )
 
     def resolve_me(self, info):
         user = info.context.user
@@ -87,19 +105,43 @@ class Query(graphene.ObjectType):
 
     def resolve_tool_modules_by_id_with_unit_system(root, info, id, unit_system):
         tool_module = ToolModule.objects.get(pk=id)
+        converted_parameters = []
 
         for parameter in tool_module.parameter_set.all():
             from_unit = parameter.unit
-            to_unit = ConversionUtils.get_unit_for_measure_and_unit_system(parameter.parameter_type.default_measure, unit_system)
+            to_unit = ConversionUtils.get_unit_for_measure_and_unit_system(parameter.parameter_type.default_measure,
+                                                                           unit_system)
             conversion_factor = ConversionUtils.get_conversion_factor(from_unit, to_unit)
 
             if conversion_factor:
-                parameter.parameter_value = ConversionUtils.convert_value(parameter.parameter_value, conversion_factor.factor_1,
+                converted_value = ConversionUtils.convert_value(parameter.parameter_value, conversion_factor.factor_1,
                                                                 conversion_factor.factor_2)
-                parameter.unit = to_unit
-                parameter.save()
+                converted_parameters.append(ConvertedParameterType(
+                    id=str(parameter.id),
+                    parameter_type=parameter.parameter_type,
+                    parameter_value=converted_value,
+                    unit=to_unit
+                ))
+            else:
+                converted_parameters.append(ConvertedParameterType(
+                    id=str(parameter.id),
+                    parameter_type=parameter.parameter_type,
+                    parameter_value=parameter.parameter_value,
+                    unit=parameter.unit
+                ))
 
-        return tool_module
+        toolinstalledsensor_set = tool_module.toolinstalledsensor_set.all()
+
+        return ToolModuleResponseType(
+            id=str(tool_module.id),
+            sn=tool_module.sn,
+            dbsn=tool_module.dbsn,
+            dbtname=tool_module.dbtname,
+            image=tool_module.image,
+            r_module_type=tool_module.r_module_type,
+            parameter_set=converted_parameters,
+            toolinstalledsensorSet=toolinstalledsensor_set
+        )
 
     @query_permission_required("api.view_toolmoduletype")
     def resolve_tool_module_types_by_group_id(self, info, group_id):
@@ -111,4 +153,22 @@ class Query(graphene.ObjectType):
 
     @query_permission_required("api.view_toolmodule")
     def resolve_tool_modules_by_group_id(self, info, group_id):
-        return ToolModule.objects.filter(r_module_type_id__r_modules_group_id=group_id).all()
+        return ToolModule.objects.filter(
+            r_module_type_id__r_modules_group_id=group_id
+        ).all()
+
+    def resolve_parameters_with_unit_system(self, info, unit_system):
+
+        param_types = ParameterType.objects.all()
+        param_types_with_units = []
+
+        for param_type in param_types:
+            to_unit = ConversionUtils.get_unit_for_measure_and_unit_system(
+                param_type.default_measure, unit_system
+            )
+            type_with_unit, created = ParameterTypeUnit.objects.get_or_create(
+                parameter_type=param_type, unit=to_unit
+            )
+            param_types_with_units.append(type_with_unit)
+
+        return param_types_with_units

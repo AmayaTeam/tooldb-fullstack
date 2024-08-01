@@ -3,7 +3,6 @@ name = "tgt-practice-backend"
 version = "0.1.0"
 description = "Dashboard for TGT Practice"
 authors = ["Your Name <you@example.com>"]
-readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
