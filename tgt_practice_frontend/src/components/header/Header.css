@@ -5,9 +5,9 @@
     height: 35px;
     background-color: #aaaaaa;
     border-bottom: 0.1px solid #4c4c4c;
-    padding: 0 20px; /* Добавьте отступы, если нужно */
+    padding: 0 20px; 
     position: fixed;
-    width: 100%/* Добавляем позиционирование относительно для родителя */
+    width: 100%; 
 }
 
 .header-left {
@@ -22,28 +22,30 @@
     display: flex;
     align-items: center;
     width: auto;
-    margin-right:100px;
-
+    margin-right: 100px;
 }
-.username p{
+
+.username p {
     margin: 0;
+}
+
+.user-role {
+    color: #4c4c4c; 
+    margin-right: 15px;
 }
 
 .dropdown {
     position: absolute;
     top: 35px;
     height: auto;
-    /*padding: 5px;*/
-    /*right: 0;*/
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Добавляем небольшую тень */
-    width: 80px; /* Добавляем ширину на основе содержимого */
-    /*min-width: 100%; !* Минимальная ширина, чтобы dropdown был шире чем username *!*/
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    width: 80px; 
 }
 
 .dropdown button {
     display: block;
-    width: 100%; /* Занимаем всю доступную ширину */
+    width: 100%; 
     padding: 5px 10px;
     margin: 0;
     border: none;
@@ -54,12 +56,15 @@
 .dropdown button:hover {
     background-color: #f0f0f0;
 }
-.dropdown button p{
+
+.dropdown button p {
     font-size: 15px;
 }
-.choose-unit{
+
+.choose-unit {
     cursor: pointer;
 }
-.choose-unit p{
+
+.choose-unit p {
     color: #4c4c4c;
 }
