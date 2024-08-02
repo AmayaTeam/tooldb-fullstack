@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Header.css';
 import { useQuery } from '@apollo/client';
 import GET_CURRENT_USER from '../../graphql/queries/get_current_user';
@@ -23,6 +23,9 @@ const Header: React.FC = () => {
     const { error: userUnitSystemError, data: userUnitSystemData } = useUserUnitSystemQuery(userId);
     const { updateProfileUnitSystem } = useUpdateProfileUnitSystem();
 
+    const unitDropdownRef = useRef<HTMLDivElement>(null);
+    const usernameDropdownRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         if (userData && userData.me) {
             setUsername(userData.me.username);
@@ -41,6 +44,29 @@ const Header: React.FC = () => {
             setSelectedUnitId(unitSystemId);
         }
     }, [userUnitSystemData]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                unitDropdownRef.current &&
+                !unitDropdownRef.current.contains(event.target as Node)
+            ) {
+                setIsUnitDropdownOpen(false);
+            }
+            if (
+                usernameDropdownRef.current &&
+                !usernameDropdownRef.current.contains(event.target as Node)
+            ) {
+                setIsUsernameDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     if (userLoading || unitSystemsLoading) console.log("Loading...");
     if (userError) console.log("Error:" + userError.message);
@@ -98,7 +124,7 @@ const Header: React.FC = () => {
                 <div className="choose-unit" onClick={toggleUnitDropdown}>
                     <p>{selectedUnit}</p>
                     {isUnitDropdownOpen && (
-                        <div className="dropdown">
+                        <div className="dropdown" ref={unitDropdownRef}>
                             {unitSystemsData?.unitSystems.map((unit: any) => (
                                 <button key={unit.id} onClick={() => handleUnitSelection(unit)}>
                                     {unit.name.en}
@@ -110,11 +136,11 @@ const Header: React.FC = () => {
             </div>
 
             <div className="header-right">
-            <span className="heading">{role}</span>
+                <span className="heading">{role}</span>
                 <div className="username" onClick={toggleUsernameDropdown}>
                     <p> {username}</p>
                     {isUsernameDropdownOpen && (
-                        <div className="dropdown">
+                        <div className="dropdown" ref={usernameDropdownRef}>
                             <button onClick={handleLogout}><p>LogOut</p></button>
                         </div>
                     )}
