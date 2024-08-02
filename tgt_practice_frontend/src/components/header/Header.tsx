@@ -8,13 +8,13 @@ import { useUserUnitSystemQuery } from '../../lib/hooks/useUserUnitSystemQuery';
 import { useUpdateProfileUnitSystem } from '../../lib/hooks/UnitSystem/useUpdateProfileUnitSystem';
 import { useUnitSystem } from 'src/contexts/UnitSystemContext';
 
-
 const Header: React.FC = () => {
     const [isUnitDropdownOpen, setIsUnitDropdownOpen] = useState(false);
     const [isUsernameDropdownOpen, setIsUsernameDropdownOpen] = useState(false);
     const [username, setUsername] = useState('');
     const [userId, setUserId] = useState('');
     const [selectedUnit, setSelectedUnit] = useState('Choose the unit system..');
+    const [role, setRole] = useState('');
 
     const { setSelectedUnitId } = useUnitSystem();
 
@@ -26,8 +26,10 @@ const Header: React.FC = () => {
     useEffect(() => {
         if (userData && userData.me) {
             setUsername(userData.me.username);
-            setUserId(userData.me.id)
-            Cookies.set("role", userData.me.groups[0].name);
+            setUserId(userData.me.id);
+            const userRole = userData.me.groups[0].name;
+            setRole(userRole);
+            Cookies.set("role", userRole);
         }
     }, [userData]);
 
@@ -84,6 +86,7 @@ const Header: React.FC = () => {
         localStorage.removeItem('refresh_token');
         window.location.href = import.meta.env.VITE_LOGOUT_USER_FRONTEND; // Redirect to login page
     };
+
     return (
         <div className="header">
             <div className="header-left">
@@ -91,6 +94,7 @@ const Header: React.FC = () => {
             </div>
 
             <div className="header-center">
+                <span className="heading">System Unit:</span>
                 <div className="choose-unit" onClick={toggleUnitDropdown}>
                     <p>{selectedUnit}</p>
                     {isUnitDropdownOpen && (
@@ -106,8 +110,9 @@ const Header: React.FC = () => {
             </div>
 
             <div className="header-right">
+            <span className="heading">{role}</span>
                 <div className="username" onClick={toggleUsernameDropdown}>
-                    <p>{username}</p>
+                    <p> {username}</p>
                     {isUsernameDropdownOpen && (
                         <div className="dropdown">
                             <button onClick={handleLogout}><p>LogOut</p></button>
