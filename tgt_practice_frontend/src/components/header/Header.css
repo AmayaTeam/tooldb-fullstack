@@ -13,7 +13,10 @@
 .header-left {
     /* Стили для левой части заголовка */
 }
-
+.header-center{
+    display: flex;
+    align-items: center;
+}
 .header-right {
     display: flex;
 }
@@ -30,9 +33,9 @@
     margin: 0;
 }
 
-.user-role {
+.heading {
     color: #4c4c4c; 
-    margin-right: 15px;
+    margin-right: 10px;
 }
 
 .dropdown {
@@ -67,5 +70,5 @@
 }
 
 .choose-unit p {
-    color: #4c4c4c;
-}
+/*     color: #4c4c4c;
+ */}

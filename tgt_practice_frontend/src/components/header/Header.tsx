@@ -94,6 +94,7 @@ const Header: React.FC = () => {
             </div>
 
             <div className="header-center">
+                <span className="heading">System Unit:</span>
                 <div className="choose-unit" onClick={toggleUnitDropdown}>
                     <p>{selectedUnit}</p>
                     {isUnitDropdownOpen && (
@@ -109,7 +110,7 @@ const Header: React.FC = () => {
             </div>
 
             <div className="header-right">
-            <span className="user-role">{role}</span>
+            <span className="heading">{role}</span>
                 <div className="username" onClick={toggleUsernameDropdown}>
                     <p> {username}</p>
                     {isUsernameDropdownOpen && (
