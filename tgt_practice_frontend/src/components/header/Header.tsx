@@ -13,7 +13,7 @@ const Header: React.FC = () => {
     const [isUsernameDropdownOpen, setIsUsernameDropdownOpen] = useState(false);
     const [username, setUsername] = useState('');
     const [userId, setUserId] = useState('');
-    const [selectedUnit, setSelectedUnit] = useState('Choose the unit system..');
+    const [selectedUnit, setSelectedUnit] = useState('Choose the unit system');
     const [role, setRole] = useState('');
 
     const { setSelectedUnitId } = useUnitSystem();
@@ -36,7 +36,7 @@ const Header: React.FC = () => {
     useEffect(() => {
         if (userUnitSystemData && userUnitSystemData.profileById) {
             const unitSystemName = userUnitSystemData.profileById.unitsystem?.name?.en;
-            setSelectedUnit(unitSystemName || 'Choose the unit system..');
+            setSelectedUnit(unitSystemName || 'Choose the unit system');
             const unitSystemId = userUnitSystemData.profileById.unitsystem?.id || '';
             setSelectedUnitId(unitSystemId);
         }
@@ -47,12 +47,14 @@ const Header: React.FC = () => {
     if (unitSystemsError) console.log("Error:" + unitSystemsError.message);
     if (userUnitSystemError) console.log("Error:" + userUnitSystemError.message);
 
-    const toggleUnitDropdown = () => {
-        setIsUnitDropdownOpen(!isUnitDropdownOpen);
+    const toggleUnitDropdown = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        setIsUnitDropdownOpen(prevState => !prevState);
     };
 
-    const toggleUsernameDropdown = () => {
-        setIsUsernameDropdownOpen(!isUsernameDropdownOpen);
+    const toggleUsernameDropdown = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        setIsUsernameDropdownOpen(prevState => !prevState);
     };
 
     const handleUnitSelection = async (unit: any) => {
@@ -96,7 +98,7 @@ const Header: React.FC = () => {
             <div className="header-center">
                 <span className="heading">System Unit:</span>
                 <div className="choose-unit" onClick={toggleUnitDropdown}>
-                    <p>{selectedUnit}</p>
+                    <p>{selectedUnit} <span className={`arrow ${isUnitDropdownOpen ? 'open' : ''}`}></span></p>
                     {isUnitDropdownOpen && (
                         <div className="dropdown">
                             {unitSystemsData?.unitSystems.map((unit: any) => (
@@ -112,7 +114,7 @@ const Header: React.FC = () => {
             <div className="header-right">
             <span className="heading">{role}</span>
                 <div className="username" onClick={toggleUsernameDropdown}>
-                    <p> {username}</p>
+                    <p>{username} <span className={`arrow ${isUsernameDropdownOpen ? 'open' : ''}`}></span></p>
                     {isUsernameDropdownOpen && (
                         <div className="dropdown">
                             <button onClick={handleLogout}><p>LogOut</p></button>

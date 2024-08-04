@@ -11,12 +11,14 @@
 }
 
 .header-left {
-    /* Стили для левой части заголовка */
+    /* Styles for the left part of the header */
 }
-.header-center{
+
+.header-center {
     display: flex;
     align-items: center;
 }
+
 .header-right {
     display: flex;
 }
@@ -67,8 +69,28 @@
 
 .choose-unit {
     cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 .choose-unit p {
-/*     color: #4c4c4c;
- */}
+    margin: 0;
+}
+
+.arrow {
+    display: inline-block;
+    margin-left: 5px;
+    margin-bottom: 0.1rem;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #000;
+    transition: transform 0.3s ease;
+}
+
+.arrow.open {
+    transform: rotate(180deg);
+}
+
+
