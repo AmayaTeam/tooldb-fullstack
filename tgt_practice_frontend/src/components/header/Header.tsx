@@ -140,9 +140,9 @@ const Header: React.FC = () => {
             </div>
 
             <div className="header-right">
-                <span className="heading">{role}</span>
-                <div className="username" onClick={toggleUsernameDropdown} ref={usernameDropdownRef}>
-                    <p>{username}</p>
+            <span className="heading">{role.charAt(0).toUpperCase() + role.slice(1)}</span>
+                <div className="username" onClick={toggleUsernameDropdown}>
+                    <p> {username}</p>
                     {isUsernameDropdownOpen && (
                         <div className="dropdown">
                             <button onClick={handleLogout}><p>LogOut</p></button>
