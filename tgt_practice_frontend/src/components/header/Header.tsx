@@ -125,10 +125,10 @@ const Header: React.FC = () => {
 
             <div className="header-center">
                 <span className="heading">Unit System:</span>
-                <div className="choose-unit" onClick={toggleUnitDropdown}>
+                <div className="choose-unit" onClick={toggleUnitDropdown} ref={unitDropdownRef}>
                     <p>{selectedUnit}</p>
                     {isUnitDropdownOpen && (
-                        <div className="dropdown" ref={unitDropdownRef}>
+                        <div className="dropdown">
                             {unitSystemsData?.unitSystems.map((unit: any) => (
                                 <button key={unit.id} onClick={() => handleUnitSelection(unit)}>
                                     {unit.name.en}
@@ -141,10 +141,10 @@ const Header: React.FC = () => {
 
             <div className="header-right">
                 <span className="heading">{role}</span>
-                <div className="username" onClick={toggleUsernameDropdown}>
-                    <p> {username}</p>
+                <div className="username" onClick={toggleUsernameDropdown} ref={usernameDropdownRef}>
+                    <p>{username}</p>
                     {isUsernameDropdownOpen && (
-                        <div className="dropdown" ref={usernameDropdownRef}>
+                        <div className="dropdown">
                             <button onClick={handleLogout}><p>LogOut</p></button>
                         </div>
                     )}
