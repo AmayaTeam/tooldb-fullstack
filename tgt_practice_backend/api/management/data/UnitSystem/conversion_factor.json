@@ -34,5 +34,11 @@
     "to_unit": "in",
     "factor_1": 0.039370079,
     "factor_2": 1
+  },
+  {
+    "from_unit": "mm",
+    "to_unit": "ft",
+    "factor_1": 1,
+    "factor_2": 304.8
   }
 ]
