@@ -30,7 +30,7 @@ const Header: React.FC = () => {
         if (userData && userData.me) {
             setUsername(userData.me.username);
             setUserId(userData.me.id);
-            const userRole = userData.me.groups[0].name;
+            const userRole = capitalizeRole(userData.me.groups[0].name);
             setRole(userRole);
             Cookies.set("role", userRole);
         }
@@ -111,6 +111,10 @@ const Header: React.FC = () => {
         localStorage.removeItem('jwt_token');
         localStorage.removeItem('refresh_token');
         window.location.href = import.meta.env.VITE_LOGOUT_USER_FRONTEND; // Redirect to login page
+    };
+
+    const capitalizeRole = (role: string) => {
+        return role.charAt(0).toUpperCase() + role.slice(1);
     };
 
     return (
