@@ -54,7 +54,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
 
         if (data && data.toolinstalledsensorSet) {
             const initialSensors = data.toolinstalledsensorSet.reduce((acc: Record<string, string>, sensor: Sensor) => {
-                acc[sensor.id] = sensor.recordPoint;
+                acc[sensor.id] = sensor.recordPoint.toFixed(2);
                 return acc;
             }, {});
             setSensorRecordPoints(initialSensors);
@@ -124,11 +124,11 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
 
             const updatedSensors = Object.entries(sensorRecordPoints).reduce((acc, [sensorId, value]) => {
                 const originalSensor = data.toolinstalledsensorSet.find((sensor: Sensor) => sensor.id === sensorId);
-                if (originalSensor && originalSensor.recordPoint !== value) {
-                    acc.push({ id: sensorId, recordPoint: value, unitId: originalSensor.unit.id });
+                if (originalSensor && originalSensor.recordPoint.toFixed(2) !== value) {
+                    acc.push({ id: sensorId, recordPoint: parseFloat(value), unitId: originalSensor.unit.id });
                 }
                 return acc;
-            }, [] as { id: string; recordPoint: string, unitId: string }[]);
+            }, [] as { id: string; recordPoint: number, unitId: string }[]);
 
             if (updatedParameters.length > 0 || updatedSensors.length > 0) {
                 console.log("Обновление параметров:", updatedParameters);
@@ -150,7 +150,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
                             variables: {
                                 input: {
                                     id: sensor.id,
-                                    recordPoint: parseFloat(sensor.recordPoint),
+                                    recordPoint: sensor.recordPoint,
                                     unitId: sensor.unitId
                                 }
                             }
@@ -168,7 +168,8 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
-    const img = "data:image/png;base64," + data.image;
+    const img = data.image;
+    
     const role = Cookies.get('role');
 
     const handleUndoChanges = () => {
@@ -184,7 +185,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
 
         if (data && data.toolinstalledsensorSet) {
             const initialSensors = data.toolinstalledsensorSet.reduce((acc: Record<string, string>, sensor: Sensor) => {
-                acc[sensor.id] = sensor.recordPoint;
+                acc[sensor.id] = sensor.recordPoint.toFixed(2);
                 return acc;
             }, {});
             setSensorRecordPoints(initialSensors);
@@ -225,6 +226,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
                         </div>
 
                         <ImageSection
+                            toolModuleId={selectedItemId!}
                             img={img}
                             sn={data.sn}
                             role={role}

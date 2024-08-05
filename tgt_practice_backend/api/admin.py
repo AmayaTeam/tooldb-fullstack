@@ -7,6 +7,7 @@ from api.models.tool_models import (
     ToolModuleType,
     ToolModule,
     ParameterType,
+    ParameterTypeUnit,
     Parameter,
 )
 from api.models.unit_system_models import (
@@ -77,6 +78,14 @@ class ParameterTypeAdmin(admin.ModelAdmin):
     list_display = ("parameter_name", "default_measure")
     search_fields = ("parameter_name", "default_measure")
     list_display_links = ("parameter_name",)
+
+
+@admin.register(ParameterTypeUnit)
+class ParameterTypeUnitAdmin(admin.ModelAdmin):
+    list_display = ("parameter_type", "unit")
+    search_fields = ("parameter_type", "unit")
+    list_display_links = ("parameter_type", "unit")
+
 
 
 @admin.register(Parameter)

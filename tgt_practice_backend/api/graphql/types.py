@@ -128,6 +128,12 @@ class ConvertedParameterType(graphene.ObjectType):
     parameter_value = graphene.Float()
     unit = graphene.Field(UnitObject)
 
+class ConvertedToolInstalledSensorType(graphene.ObjectType):
+    id = graphene.String()
+    r_toolsensortype = graphene.Field(ToolSensorTypeObject)
+    record_point = graphene.Float()
+    unit = graphene.Field(UnitObject)
+
 class ToolModuleResponseType(graphene.ObjectType):
     id = graphene.String()
     sn = graphene.String()
@@ -136,4 +142,4 @@ class ToolModuleResponseType(graphene.ObjectType):
     image = graphene.String()
     r_module_type = graphene.Field(ToolModuleTypeObject)
     parameter_set = graphene.List(ConvertedParameterType)
-    toolinstalledsensorSet = graphene.List(ToolInstalledSensorObject)
+    toolinstalledsensorSet = graphene.List(ConvertedToolInstalledSensorType)

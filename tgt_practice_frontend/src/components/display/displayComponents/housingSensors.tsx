@@ -44,7 +44,7 @@ interface DisplaySensorComponentProps {
 const DisplaySensorComponent: React.FC<DisplaySensorComponentProps> = ({ sensor, recordPoint, onChange, isInvalid, role }) => (
     <tr>
         <td>
-            <input type="text" defaultValue={sensor.rToolsensortype.name} disabled={role === "user"} />
+            <input type="text" defaultValue={sensor.rToolsensortype.name} disabled={role === "User"} />
         </td>
         <td>
             <input
@@ -52,7 +52,7 @@ const DisplaySensorComponent: React.FC<DisplaySensorComponentProps> = ({ sensor,
                 value={recordPoint}
                 onChange={onChange(sensor.id)}
                 className={`sensors_parametrs ${isInvalid ? 'invalid' : ''}`}
-                disabled={role === "user"}
+                disabled={role === "User"}
             />
             {sensor.unit.name.en}
         </td>

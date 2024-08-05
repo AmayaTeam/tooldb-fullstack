@@ -57,7 +57,7 @@ export interface Sensor {
         id: string;
         name: string;
     };
-    recordPoint: string;
+    recordPoint: number;
     unit: {
         name: {
             en: string;

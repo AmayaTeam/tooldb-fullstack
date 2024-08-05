@@ -1,3 +1,5 @@
+import logging
+
 import graphene
 from django.contrib.auth.models import Group
 from api.graphql.decorators import query_permission_required
@@ -19,6 +21,7 @@ from .types import (
     ParameterType,
     UnitSystemObject,
     ProfileObject,
+    ConvertedToolInstalledSensorType,
 )
 from api.models import (
     ToolModuleGroup,
@@ -130,7 +133,29 @@ class Query(graphene.ObjectType):
                     unit=parameter.unit
                 ))
 
-        toolinstalledsensor_set = tool_module.toolinstalledsensor_set.all()
+        converted_sensors = []
+        distance_measure = ConversionUtils.get_measure()
+
+        for sensor in tool_module.toolinstalledsensor_set.all():
+            from_unit = sensor.unit
+            to_unit = ConversionUtils.get_unit_for_measure_and_unit_system(distance_measure, unit_system)
+
+            conversion_factor = ConversionUtils.get_conversion_factor(from_unit, to_unit)
+            if conversion_factor:
+                converted_record_point = ConversionUtils.convert_value(sensor.record_point, conversion_factor.factor_1,
+                                                                       conversion_factor.factor_2)
+            else:
+                converted_record_point = sensor.record_point
+
+            logging.info(
+                f"Sensor {sensor.id} record point conversion: {sensor.record_point} {from_unit} to {converted_record_point} {to_unit if to_unit else from_unit}.")
+
+            converted_sensors.append(ConvertedToolInstalledSensorType(
+                id=str(sensor.id),
+                r_toolsensortype=sensor.r_toolsensortype,
+                record_point=converted_record_point,
+                unit=to_unit if to_unit else from_unit
+            ))
 
         return ToolModuleResponseType(
             id=str(tool_module.id),
@@ -140,7 +165,7 @@ class Query(graphene.ObjectType):
             image=tool_module.image,
             r_module_type=tool_module.r_module_type,
             parameter_set=converted_parameters,
-            toolinstalledsensorSet=toolinstalledsensor_set
+            toolinstalledsensorSet=converted_sensors
         )
 
     @query_permission_required("api.view_toolmoduletype")

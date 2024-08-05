@@ -7,7 +7,7 @@ interface ControlButtonsProps {
 }
 
 const ControlButtons: React.FC<ControlButtonsProps> = ({ handleSave, handleUndoChanges, role }) => (
-    role === "manager" ? (
+    role === "Manager" ? (
         <div className="display-content-buttons">
             <button onClick={handleSave}>Save</button>
             <button onClick={handleUndoChanges}>Undo Changes</button>

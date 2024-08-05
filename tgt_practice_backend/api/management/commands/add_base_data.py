@@ -1,6 +1,7 @@
 import base64
 import datetime
 import os
+from itertools import chain
 
 from django.contrib.auth.models import User, Group, Permission
 from django.core.management import BaseCommand
@@ -229,9 +230,9 @@ class Command(BaseCommand):
         print("Permissions created")
 
         # Только чтение для user
-        user_permissions = Permission.objects.filter(
+        user_permissions = list(chain(Permission.objects.filter(
             content_type__app_label="api", codename__startswith="view"
-        )
+        ), Permission.objects.filter(codename="change_profile")))
         user_group.permissions.set(user_permissions)
 
         User.objects.create_superuser(

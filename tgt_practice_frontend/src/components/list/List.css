@@ -7,12 +7,15 @@
     margin-top: 35px;
     padding: 20px;
 }
+.list-container p{
+    font-size: 1.1rem;
 
+}
 .level1 p {
     cursor: pointer;
     margin: 0;
-    font-size: 1.2rem;
-    padding: 2px;
+/*     font-size: 1.2rem;
+ */    padding: 2px;
     background: url("/src/assets/folder-icon.png") no-repeat left center;
     padding-left: 20px;
 }
@@ -20,8 +23,8 @@
 .level2 p {
     cursor: pointer;
     margin-left: 20px;
-    font-size: 1rem;
-    padding: 2px;
+/*     font-size: 1rem;
+ */    padding: 2px;
     background: url("/src/assets/type-icon.png") no-repeat left center;
     padding-left: 25px;
 }
@@ -33,15 +36,15 @@
 .level3 p {
     cursor: pointer;
     margin-left: 40px;
-    font-size: 0.9rem;
-    padding: 2px;
+/*     font-size: 0.9rem;
+ */    padding: 2px;
     align-items: center;
     background: url("/src/assets/module-icon.png") no-repeat left center;
     padding-left: 25px;
 }
 
-.level3 p.selected {
-    background-color: lightgrey;
+p.selected {
+    font-weight: 800;
 }
 
 
