@@ -1,6 +1,12 @@
-from api.models import UnitSystemMeasureUnit, ConversionFactor
+import logging
+
+from api.models import UnitSystemMeasureUnit, ConversionFactor, Measure
+
+logger = logging.getLogger('conversion')
 
 class ConversionUtils:
+    DISTANCE_MEASURE_NAME_EN = "Distance"
+
     @staticmethod
     def get_unit_for_measure_and_unit_system(measure, unit_system):
         try:
@@ -27,3 +33,12 @@ class ConversionUtils:
     @staticmethod
     def convert_value(value, factor_1, factor_2):
         return (factor_1 / factor_2) * value
+
+    @staticmethod
+    def get_measure():
+        try:
+            return Measure.objects.get(name__en=ConversionUtils.DISTANCE_MEASURE_NAME_EN)
+        except Measure.DoesNotExist:
+            logger.error(f"Measure with name '{ConversionUtils.DISTANCE_MEASURE_NAME_EN}' does not exist.")
+            return None
+

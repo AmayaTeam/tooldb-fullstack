@@ -155,6 +155,11 @@ LOGGING = {
             "level": "INFO",
             "propagate": True
         },
+    "conversion": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True,
+        },
     },
     "formatters": {
         "app": {
