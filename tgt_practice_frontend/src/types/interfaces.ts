@@ -63,4 +63,19 @@ export interface Sensor {
             en: string;
         };
     };
+    }
+
+export interface ParameterWithUnitSystem {
+    id: string;
+    unit: {
+        id: string;
+        name: {
+            en: string;
+        }
+    }
+    parameterType: {
+        id: string;
+        parameterName: string;
+        parameterValue: number;
+    }
 }
