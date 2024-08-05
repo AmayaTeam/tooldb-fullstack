@@ -54,7 +54,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
 
         if (data && data.toolinstalledsensorSet) {
             const initialSensors = data.toolinstalledsensorSet.reduce((acc: Record<string, string>, sensor: Sensor) => {
-                acc[sensor.id] = sensor.recordPoint;
+                acc[sensor.id] = sensor.recordPoint.toFixed(2);
                 return acc;
             }, {});
             setSensorRecordPoints(initialSensors);
