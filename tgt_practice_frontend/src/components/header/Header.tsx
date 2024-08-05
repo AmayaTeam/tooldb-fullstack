@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Header.css';
 import { useQuery } from '@apollo/client';
 import GET_CURRENT_USER from '../../graphql/queries/get_current_user';
@@ -23,11 +23,14 @@ const Header: React.FC = () => {
     const { error: userUnitSystemError, data: userUnitSystemData } = useUserUnitSystemQuery(userId);
     const { updateProfileUnitSystem } = useUpdateProfileUnitSystem();
 
+    const unitDropdownRef = useRef<HTMLDivElement>(null);
+    const usernameDropdownRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         if (userData && userData.me) {
             setUsername(userData.me.username);
             setUserId(userData.me.id);
-            const userRole = userData.me.groups[0].name;
+            const userRole = capitalizeRole(userData.me.groups[0].name);
             setRole(userRole);
             Cookies.set("role", userRole);
         }
@@ -41,6 +44,29 @@ const Header: React.FC = () => {
             setSelectedUnitId(unitSystemId);
         }
     }, [userUnitSystemData]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                unitDropdownRef.current &&
+                !unitDropdownRef.current.contains(event.target as Node)
+            ) {
+                setIsUnitDropdownOpen(false);
+            }
+            if (
+                usernameDropdownRef.current &&
+                !usernameDropdownRef.current.contains(event.target as Node)
+            ) {
+                setIsUsernameDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     if (userLoading || unitSystemsLoading) console.log("Loading...");
     if (userError) console.log("Error:" + userError.message);
@@ -89,6 +115,10 @@ const Header: React.FC = () => {
         window.location.href = import.meta.env.VITE_LOGOUT_USER_FRONTEND; // Redirect to login page
     };
 
+    const capitalizeRole = (role: string) => {
+        return role.charAt(0).toUpperCase() + role.slice(1);
+    };
+
     return (
         <div className="header">
             <div className="header-left">
@@ -97,7 +127,7 @@ const Header: React.FC = () => {
 
             <div className="header-center">
                 <span className="heading">Unit System:</span>
-                <div className="choose-unit" onClick={toggleUnitDropdown}>
+                <div className="choose-unit" onClick={toggleUnitDropdown} ref={unitDropdownRef}>
                     <p>{selectedUnit} <span className={`arrow ${isUnitDropdownOpen ? 'open' : ''}`}></span></p>
                     {isUnitDropdownOpen && (
                         <div className="dropdown">
@@ -112,7 +142,7 @@ const Header: React.FC = () => {
             </div>
 
             <div className="header-right">
-            <span className="heading">{role.charAt(0).toUpperCase() + role.slice(1)}</span>
+            <span className="heading" ref={usernameDropdownRef}>{role.charAt(0).toUpperCase() + role.slice(1)}</span>
                 <div className="username" onClick={toggleUsernameDropdown}>
                     <p>{username} <span className={`arrow ${isUsernameDropdownOpen ? 'open' : ''}`}></span></p>
                     {isUsernameDropdownOpen && (
