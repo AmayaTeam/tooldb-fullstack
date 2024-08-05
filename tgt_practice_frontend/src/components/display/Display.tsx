@@ -168,7 +168,8 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
-    const img = "data:image/png;base64," + data.image;
+    const img = data.image;
+    
     const role = Cookies.get('role');
 
     const handleUndoChanges = () => {
@@ -225,6 +226,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
                         </div>
 
                         <ImageSection
+                            toolModuleId={selectedItemId!}
                             img={img}
                             sn={data.sn}
                             role={role}
