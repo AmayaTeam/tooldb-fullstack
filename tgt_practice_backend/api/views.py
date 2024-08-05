@@ -55,7 +55,7 @@ def call_api(request, *, context):
                     user.groups.add(manager_group)
                     break
                 elif value["appRoleId"] == viewer:
-                    user.groups.add(manager_group)
+                    user.groups.add(user_group)
                     break
             user.save()
 

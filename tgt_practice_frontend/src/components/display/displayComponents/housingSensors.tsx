@@ -54,7 +54,6 @@ const DisplaySensorComponent: React.FC<DisplaySensorComponentProps> = ({ sensor,
                 className={`sensors_parametrs ${isInvalid ? 'invalid' : ''}`}
                 disabled={role === "User"}
             />
-            {sensor.unit.name.en}
         </td>
     </tr>
 );
