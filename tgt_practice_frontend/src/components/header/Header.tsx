@@ -142,8 +142,8 @@ const Header: React.FC = () => {
             </div>
 
             <div className="header-right">
-            <span className="heading" ref={usernameDropdownRef}>{role.charAt(0).toUpperCase() + role.slice(1)}</span>
-                <div className="username" onClick={toggleUsernameDropdown}>
+                <span className="heading">{capitalizeRole(role)}</span>
+                <div className="username" onClick={toggleUsernameDropdown} ref={usernameDropdownRef}>
                     <p>{username} <span className={`arrow ${isUsernameDropdownOpen ? 'open' : ''}`}></span></p>
                     {isUsernameDropdownOpen && (
                         <div className="dropdown">
