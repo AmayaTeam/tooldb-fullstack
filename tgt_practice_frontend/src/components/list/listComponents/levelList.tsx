@@ -12,6 +12,8 @@ interface LevelListProps {
 const LevelList: React.FC<LevelListProps> = ({ sortedData, updateListData, onItemClick }) => {
     const [expandedItems, setExpandedItems] = useState<{ [key: string]: boolean }>({});
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+    const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
+    const [selectedTypeId, setSelectedTypeId] = useState<string | null>(null);
 
     const [contextMenu, setContextMenu] = useState<{
         x: number;
@@ -20,7 +22,14 @@ const LevelList: React.FC<LevelListProps> = ({ sortedData, updateListData, onIte
         objectId: string;
     } | null>(null);
 
-    const handleToggle = (id: string) => {
+    const handleToggle = (id: string, ss: number) => {
+        if (ss == 1) {
+            setSelectedGroupId(id);
+        } else {
+            if (ss == 2) {
+                setSelectedTypeId(id);
+            }
+        }
         setExpandedItems((prev) => ({
             ...prev,
             [id]: !prev[id],
@@ -47,14 +56,14 @@ const LevelList: React.FC<LevelListProps> = ({ sortedData, updateListData, onIte
         <div>
             {sortedData.map((dataObj) => (
                 <div key={dataObj.id} className="level1">
-                    <p onClick={() => handleToggle(dataObj.id)} onContextMenu={(event) => showContextMenu(event, LevelName.Group, dataObj.id)}>
+                    <p className={selectedGroupId === dataObj.id ? 'selected' : ''} onClick={() => handleToggle(dataObj.id, 1)} onContextMenu={(event) => showContextMenu(event, LevelName.Group, dataObj.id)}>
                         {dataObj.name}
                     </p>
                     {expandedItems[dataObj.id] && (
                         <div className="level2">
                             {dataObj.toolmoduletypeSet.map((toolModuleType) => (
                                 <div key={toolModuleType.id}>
-                                    <p onClick={() => handleToggle(toolModuleType.id)} onContextMenu={(event) => showContextMenu(event, LevelName.Type, toolModuleType.id)}>
+                                    <p className={selectedTypeId === toolModuleType.id ? 'selected' : ''} onClick={() => handleToggle(toolModuleType.id, 2)} onContextMenu={(event) => showContextMenu(event, LevelName.Type, toolModuleType.id)}>
                                         {toolModuleType.name}
                                     </p>
                                     {expandedItems[toolModuleType.id] && (

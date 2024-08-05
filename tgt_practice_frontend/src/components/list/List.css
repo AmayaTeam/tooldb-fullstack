@@ -43,8 +43,8 @@
     padding-left: 25px;
 }
 
-.level3 p.selected {
-    background-color: lightgrey;
+p.selected {
+    font-weight: 800;
 }
 
 
