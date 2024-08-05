@@ -23,7 +23,7 @@ const HousingParams: React.FC<HousingParamsProps> = ({ parameters, parameterSet,
                             className={`num_parametrs ${invalidParameters[param.id] ? 'invalid' : ''}`}
                             value={parameters[param.id] || ""}
                             onChange={handleParameterChange(param.id)}
-                            disabled={role === "user"}
+                            disabled={role === "User"}
                         />
                         <p className="unit_parametrs">{param.unit.name.en}</p>
                     </div>

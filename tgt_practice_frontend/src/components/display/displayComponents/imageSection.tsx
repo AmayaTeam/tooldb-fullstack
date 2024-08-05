@@ -100,7 +100,7 @@ const ImageSection: React.FC<ImageSectionProps> = ({ toolModuleId, img, sn, role
             <div className="info-image-buttons">
                 <button onClick={() => { handleImageExport(displayImage, sn) }}
                     disabled={!(displayImage && displayImage.length > 'data:image/png;base64,'.length)}>Export Image</button>
-                <button onClick={handleButtonClick} disabled={role === 'user'}>Import Image</button>
+                <button onClick={handleButtonClick} disabled={role === 'User'}>Import Image</button>
                 <input
                     type="file"
                     accept="image/*"
