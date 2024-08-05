@@ -27,9 +27,7 @@ const List: React.FC<ListProps> = ({ onItemClick }) => {
         if (data) {
             setSortedData(
                 sortData(data.toolModuleGroups, selectedSort).filter((group) =>
-                    group.name.toLowerCase().includes(searchText.toLowerCase()) ||
                     group.toolmoduletypeSet.some(type =>
-                        type.name.toLowerCase().includes(searchText.toLowerCase()) ||
                         type.toolmoduleSet?.some(module => module.sn.toLowerCase().includes(searchText.toLowerCase()))
                     )
                 )
@@ -73,6 +71,7 @@ const List: React.FC<ListProps> = ({ onItemClick }) => {
                 sortedData={sortedData}
                 updateListData={updateList}
                 onItemClick={onItemClick}
+                searchText={searchText}
             />
         </div>
     );

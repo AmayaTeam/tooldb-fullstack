@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToolModuleGroup } from 'src/types/interfaces';
 import { LevelName } from './contextMenu/contextMenuTypes';
 import ContextMenu from './contextMenu/ContextMenu';
@@ -7,9 +7,10 @@ interface LevelListProps {
     sortedData: ToolModuleGroup[];
     updateListData: () => void;
     onItemClick: (id: string) => void;
+    searchText: string;
 }
 
-const LevelList: React.FC<LevelListProps> = ({ sortedData, updateListData, onItemClick }) => {
+const LevelList: React.FC<LevelListProps> = ({ sortedData, updateListData, onItemClick, searchText }) => {
     const [expandedItems, setExpandedItems] = useState<{ [key: string]: boolean }>({});
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
     const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
@@ -21,6 +22,25 @@ const LevelList: React.FC<LevelListProps> = ({ sortedData, updateListData, onIte
         levelName: LevelName;
         objectId: string;
     } | null>(null);
+
+    useEffect(() => {
+        if (searchText.length > 0) {
+            const newExpandedItems: { [key: string]: boolean } = {};
+            sortedData.forEach(group => {
+                group.toolmoduletypeSet.forEach(type => {
+                    type.toolmoduleSet.forEach(module => {
+                        if (module.sn.toLowerCase().includes(searchText.toLowerCase())) {
+                            newExpandedItems[group.id] = true;
+                            newExpandedItems[type.id] = true;
+                        }
+                    });
+                });
+            });
+            setExpandedItems(newExpandedItems);
+        } else {
+            setExpandedItems({});
+        }
+    }, [searchText, sortedData]);
 
     const handleToggle = (id: string, ss: number) => {
         if (ss == 1) {
@@ -68,17 +88,19 @@ const LevelList: React.FC<LevelListProps> = ({ sortedData, updateListData, onIte
                                     </p>
                                     {expandedItems[toolModuleType.id] && (
                                         <div className="level3">
-                                            {toolModuleType.toolmoduleSet.map((toolModule) => (
-                                                <div key={toolModule.id}>
-                                                    <p
-                                                        onClick={() => handleClick(toolModule.id)}
-                                                        onContextMenu={(event) => showContextMenu(event, LevelName.Module, toolModule.id)}
-                                                        className={selectedItemId === toolModule.id ? 'selected' : ''}
-                                                    >
-                                                        {toolModule.sn}
-                                                    </p>
-                                                </div>
-                                            ))}
+                                            {toolModuleType.toolmoduleSet
+                                                .filter(module => module.sn.toLowerCase().includes(searchText.toLowerCase()))
+                                                .map((toolModule) => (
+                                                    <div key={toolModule.id}>
+                                                        <p
+                                                            onClick={() => handleClick(toolModule.id)}
+                                                            onContextMenu={(event) => showContextMenu(event, LevelName.Module, toolModule.id)}
+                                                            className={selectedItemId === toolModule.id ? 'selected' : ''}
+                                                        >
+                                                            {toolModule.sn}
+                                                        </p>
+                                                    </div>
+                                                ))}
                                         </div>
                                     )}
                                 </div>
