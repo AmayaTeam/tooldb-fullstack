@@ -203,6 +203,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
                         groupName={data.rModuleType.rModulesGroup.name}
                         moduleName={data.rModuleType.name}
                         housing={`${data.rModuleType.rModulesGroup.name}:${data.sn}`}
+                        role={role}
                     />
 
                     <div className="display-content-info">

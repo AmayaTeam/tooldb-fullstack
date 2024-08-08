@@ -5,15 +5,16 @@ interface DisplayHeaderProps {
     groupName: string;
     moduleName: string;
     housing: string;
+    role: string | undefined;
 }
 
-const DisplayHeader: React.FC<DisplayHeaderProps> = ({ sn, groupName, moduleName, housing }) => (
+const DisplayHeader: React.FC<DisplayHeaderProps> = ({ sn, groupName, moduleName, housing, role }) => (
     <div className="display-content-title">
         <div className="title">
             <div className="heading-of-param">
                 <h4 className="heading-of-param">SN :</h4>
             </div>
-            <input type="text" defaultValue={sn} disabled={true} />
+            <input type="text" defaultValue={sn} disabled={role === "User"} />
         </div>
         <div className="title">
             <div className="display-content-titles">
