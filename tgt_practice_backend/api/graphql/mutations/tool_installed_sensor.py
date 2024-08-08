@@ -8,7 +8,7 @@ from api.graphql.inputs.tool_installed_sensor import (
     DeleteToolInstalledSensorInput,
 )
 from api.graphql.payloads import ToolInstalledSensorPayload, DeletePayload
-from api.models import ToolModule, ToolSensorType, ToolInstalledSensor
+from api.models import ToolModule, ToolSensorType, ToolInstalledSensor, Unit
 
 
 class CreateToolInstalledSensor(graphene.Mutation):
@@ -52,8 +52,16 @@ class UpdateToolInstalledSensor(graphene.Mutation):
             tool_installed_sensor = ToolInstalledSensor.objects.get(pk=input.id)
         except ObjectDoesNotExist:
             raise Exception("Tool installed sensor not found")
-        # get current unit, convert and update unit and record_point
-        tool_installed_sensor.record_point = input.record_point
+
+        if "record_point" in input:
+            tool_installed_sensor.record_point = input.record_point
+
+        if "unit_id" in input:
+            try:
+                unit = Unit.objects.get(pk=input.unit_id)
+                tool_installed_sensor.unit = unit
+            except ObjectDoesNotExist:
+                raise Exception("Unit not found")
         tool_installed_sensor.save()
 
         return ToolInstalledSensorPayload(tool_installed_sensor=tool_installed_sensor)
