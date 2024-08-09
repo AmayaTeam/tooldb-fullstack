@@ -16,9 +16,10 @@ import { useUnitSystem } from "src/contexts/UnitSystemContext.tsx";
 
 interface DisplayProps {
     selectedItemId: string | null;
+    csvAnalysisResult?: any;
 }
 
-const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
+const Display: React.FC<DisplayProps> = ({ selectedItemId, csvAnalysisResult }) => {
     const { selectedUnitId } = useUnitSystem();
 
     const { loading, error, data } = useToolModuleQuery({ id: selectedItemId, unitSystem: selectedUnitId });
@@ -31,6 +32,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
     const hiddenParameters = ['Image h_y1', 'Image h_y2'];
 
     const { setModal, setModalContent } = useModal();
+
 
     const onModalClose = () => {
         setModal(false);
@@ -164,12 +166,65 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
             }
         }
     };
+    const renderTableRows = (modules) => {
+        return modules.map((module, index) => (
+            <tr key={index}>
+                <td>{module.sn}</td>
+                <td>{module.dbsn}</td>
+                <td>{module.rModuleType.rModulesGroup.name}</td>
+                <td>{module.rModuleType.name}</td>
+                <td>{module.parameterSet.reduce((acc, param) => acc + param.parameterValue.toFixed(2) + ' ', '')}</td>
+            </tr>
+        ));
+    };
+
+    if (csvAnalysisResult) {
+        const res = csvAnalysisResult;
+        console.log(res)
+        return (
+            <div className="display-container">
+                <div className="display">
+                    <div className="display-content">
+                        <div>
+                            <h4>Analysis CSV File</h4>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Serial</th>
+                                    <th>DB Serial</th>
+                                    <th>Group</th>
+                                    <th>Module Type</th>
+                                    <th>Parameters</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colSpan={5}><strong>New Modules</strong></td>
+                                    </tr>
+                                    {renderTableRows(res.analyseCsvFile.newModuleList)}
+                                    <tr>
+                                        <td colSpan={5}><strong>Modified Modules</strong></td>
+                                    </tr>
+                                    {renderTableRows(res.analyseCsvFile.modifiedModuleList)}
+                                    <tr>
+                                        <td colSpan={5}><strong>Errors</strong></td>
+                                    </tr>
+                                    {renderTableRows(res.analyseCsvFile.errorsList)}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
     const img = data.image;
-    
+
     const role = Cookies.get('role');
 
     const handleUndoChanges = () => {

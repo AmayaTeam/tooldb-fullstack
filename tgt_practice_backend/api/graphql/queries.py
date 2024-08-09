@@ -4,6 +4,7 @@ import graphene
 from django.contrib.auth.models import Group
 from api.graphql.decorators import query_permission_required
 from api.graphql.conversion_utils import ConversionUtils
+from api.graphql.odoo_utils import ODOOUtils
 
 from .types import (
     ParameterTypeUnitObject,
@@ -22,6 +23,7 @@ from .types import (
     UnitSystemObject,
     ProfileObject,
     ConvertedToolInstalledSensorType,
+    AnalyseCsvFileType
 )
 from api.models import (
     ToolModuleGroup,
@@ -66,6 +68,10 @@ class Query(graphene.ObjectType):
 
     parameters_with_unit_system = graphene.List(
         ParameterTypeUnitObject, unit_system=graphene.String(required=True)
+    )
+
+    analyse_csv_file = graphene.Field(
+        AnalyseCsvFileType, file=graphene.String(required=True)
     )
 
     def resolve_me(self, info):
@@ -197,3 +203,11 @@ class Query(graphene.ObjectType):
             param_types_with_units.append(type_with_unit)
 
         return param_types_with_units
+
+    def resolve_analyse_csv_file(self, info, file):
+        new_module, modified_module, errors = ODOOUtils.analyse_file(file)
+        return AnalyseCsvFileType(
+            new_module_list=new_module,
+            modified_module_list=modified_module,
+            errors_list=errors
+        )

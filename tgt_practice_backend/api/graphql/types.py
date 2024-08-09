@@ -143,3 +143,9 @@ class ToolModuleResponseType(graphene.ObjectType):
     r_module_type = graphene.Field(ToolModuleTypeObject)
     parameter_set = graphene.List(ConvertedParameterType)
     toolinstalledsensorSet = graphene.List(ConvertedToolInstalledSensorType)
+
+
+class AnalyseCsvFileType(graphene.ObjectType):
+    new_module_list = graphene.List(ToolModuleObject)
+    modified_module_list = graphene.List(ToolModuleObject)
+    errors_list = graphene.List(ToolModuleObject)

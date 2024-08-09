@@ -28,6 +28,7 @@ spotipy = "^2.23.0"
 localstorage = "^0.1.0"
 graphdoc = "^0.4.0"
 gunicorn = "^22.0.0"
+graphene-file-upload = "^1.3.0"
 
 [tool.flake8]
 max-line-length = 120
