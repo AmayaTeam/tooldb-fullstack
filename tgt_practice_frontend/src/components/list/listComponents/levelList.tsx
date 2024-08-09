@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToolModuleGroup } from 'src/types/interfaces';
 import { LevelName } from './contextMenu/contextMenuTypes';
 import ContextMenu from './contextMenu/ContextMenu';
@@ -7,14 +7,12 @@ interface LevelListProps {
     sortedData: ToolModuleGroup[];
     updateListData: () => void;
     onItemClick: (id: string) => void;
+    searchText: string;
 }
 
-const LevelList: React.FC<LevelListProps> = ({ sortedData, updateListData, onItemClick }) => {
+const LevelList: React.FC<LevelListProps> = ({ sortedData, updateListData, onItemClick, searchText }) => {
     const [expandedItems, setExpandedItems] = useState<{ [key: string]: boolean }>({});
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
-    const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
-    const [selectedTypeId, setSelectedTypeId] = useState<string | null>(null);
-
     const [contextMenu, setContextMenu] = useState<{
         x: number;
         y: number;
@@ -22,14 +20,27 @@ const LevelList: React.FC<LevelListProps> = ({ sortedData, updateListData, onIte
         objectId: string;
     } | null>(null);
 
-    const handleToggle = (id: string, ss: number) => {
-        if (ss == 1) {
-            setSelectedGroupId(id);
+    useEffect(() => {
+        if (searchText.length > 0) {
+            const newExpandedItems: { [key: string]: boolean } = {};
+            sortedData.forEach(group => {
+                group.toolmoduletypeSet.forEach(type => {
+                    const hasMatchingModule = type.toolmoduleSet.some(module =>
+                        module.sn.toLowerCase().includes(searchText.toLowerCase())
+                    );
+                    if (hasMatchingModule) {
+                        newExpandedItems[group.id] = true;
+                        newExpandedItems[type.id] = true;
+                    }
+                });
+            });
+            setExpandedItems(newExpandedItems);
         } else {
-            if (ss == 2) {
-                setSelectedTypeId(id);
-            }
+            setExpandedItems({});
         }
+    }, [searchText, sortedData]);
+
+    const handleToggle = (id: string) => {
         setExpandedItems((prev) => ({
             ...prev,
             [id]: !prev[id],
@@ -54,39 +65,49 @@ const LevelList: React.FC<LevelListProps> = ({ sortedData, updateListData, onIte
 
     return (
         <div>
-            {sortedData.map((dataObj) => (
-                <div key={dataObj.id} className="level1">
-                    <p className={selectedGroupId === dataObj.id ? 'selected' : ''} onClick={() => handleToggle(dataObj.id, 1)} onContextMenu={(event) => showContextMenu(event, LevelName.Group, dataObj.id)}>
-                        {dataObj.name}
-                    </p>
-                    {expandedItems[dataObj.id] && (
-                        <div className="level2">
-                            {dataObj.toolmoduletypeSet.map((toolModuleType) => (
-                                <div key={toolModuleType.id}>
-                                    <p className={selectedTypeId === toolModuleType.id ? 'selected' : ''} onClick={() => handleToggle(toolModuleType.id, 2)} onContextMenu={(event) => showContextMenu(event, LevelName.Type, toolModuleType.id)}>
-                                        {toolModuleType.name}
-                                    </p>
-                                    {expandedItems[toolModuleType.id] && (
-                                        <div className="level3">
-                                            {toolModuleType.toolmoduleSet.map((toolModule) => (
-                                                <div key={toolModule.id}>
-                                                    <p
-                                                        onClick={() => handleClick(toolModule.id)}
-                                                        onContextMenu={(event) => showContextMenu(event, LevelName.Module, toolModule.id)}
-                                                        className={selectedItemId === toolModule.id ? 'selected' : ''}
-                                                    >
-                                                        {toolModule.sn}
-                                                    </p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            ))}
+            {sortedData.map((dataObj) => {
+                const filteredTypes = dataObj.toolmoduletypeSet.filter(type =>
+                    type.toolmoduleSet.some(module => module.sn.toLowerCase().includes(searchText.toLowerCase()))
+                );
+
+                if (filteredTypes.length === 0) return null;
+
+                return (
+                    <div key={dataObj.id} className="level1">
+                        <p onClick={() => handleToggle(dataObj.id)} onContextMenu={(event) => showContextMenu(event, LevelName.Group, dataObj.id)}>
+                            {dataObj.name}
+                        </p>
+                        {expandedItems[dataObj.id] && (
+                            <div className="level2">
+                                {filteredTypes.map((toolModuleType) => (
+                                    <div key={toolModuleType.id}>
+                                        <p onClick={() => handleToggle(toolModuleType.id)} onContextMenu={(event) => showContextMenu(event, LevelName.Type, toolModuleType.id)}>
+                                            {toolModuleType.name}
+                                        </p>
+                                        {expandedItems[toolModuleType.id] && (
+                                            <div className="level3">
+                                                {toolModuleType.toolmoduleSet
+                                                    .filter(module => module.sn.toLowerCase().includes(searchText.toLowerCase()))
+                                                    .map((toolModule) => (
+                                                        <div key={toolModule.id}>
+                                                            <p
+                                                                onClick={() => handleClick(toolModule.id)}
+                                                                onContextMenu={(event) => showContextMenu(event, LevelName.Module, toolModule.id)}
+                                                                className={selectedItemId === toolModule.id ? 'selected' : ''}
+                                                            >
+                                                                {toolModule.sn}
+                                                            </p>
+                                                        </div>
+                                                    ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                );
+            })}
             {contextMenu && (
                 <ContextMenu
                     x={contextMenu.x}
