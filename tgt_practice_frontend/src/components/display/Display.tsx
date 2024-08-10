@@ -3,6 +3,7 @@ import "./Display.css";
 import useToolModuleQuery from "../../lib/hooks/tool_module.ts";
 import { useParameterUpdate } from "../../lib/hooks/ToolModule/useParameterUpdate.ts";
 import { useRecordPointUpdate } from "src/lib/hooks/HousingSensors/useRecordPointUpdate.ts";
+import { useUpdateToolModule } from "src/lib/hooks/ToolModule/useUpdateToolModule";
 import Cookies from 'js-cookie';
 import HousingParams from "./displayComponents/housingParams.tsx";
 import DisplayHeader from "./displayComponents/displayHeader.tsx";
@@ -25,9 +26,11 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
 
     const { updateParameter } = useParameterUpdate();
     const { updateRecordPoint } = useRecordPointUpdate();
+    const { updateToolModule } = useUpdateToolModule();
     const [parameters, setParameters] = useState<Record<string, string>>({});
     const [sensorRecordPoints, setSensorRecordPoints] = useState<Record<string, string>>({});
     const [invalidParameters, setInvalidParameters] = useState<Record<string, boolean>>({});
+    const [sn, setSn] = useState<string>('');
     const hiddenParameters = ['Image h_y1', 'Image h_y2'];
 
     const { setModal, setModalContent } = useModal();
@@ -58,6 +61,10 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
                 return acc;
             }, {});
             setSensorRecordPoints(initialSensors);
+        }
+
+        if (data) {
+            setSn(data.sn);
         }
     }, [data]);
 
@@ -105,6 +112,11 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
         }
     };
 
+    const handleToolModuleSnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = event.target;
+        setSn(value);
+    };
+
     const handleSave = async () => {
         const hasInvalidInputs = Object.values(invalidParameters).some((isInvalid) => isInvalid);
 
@@ -130,9 +142,12 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
                 return acc;
             }, [] as { id: string; recordPoint: number, unitId: string }[]);
 
-            if (updatedParameters.length > 0 || updatedSensors.length > 0) {
+            const updatedSn = data.sn !== sn;
+
+            if (updatedParameters.length > 0 || updatedSensors.length > 0 || updatedSn) {
                 console.log("Обновление параметров:", updatedParameters);
                 console.log("Обновление сенсоров:", updatedSensors);
+                console.log("Обновление sn:", updatedSn);
                 try {
                     for (const param of updatedParameters) {
                         await updateParameter({
@@ -152,6 +167,26 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
                                     id: sensor.id,
                                     recordPoint: sensor.recordPoint,
                                     unitId: sensor.unitId
+                                }
+                            }
+                        });
+                    }
+
+                    await updateToolModule({
+                        variables: {
+                            input: {
+                                id: selectedItemId,
+                                sn: data.sn
+                            }
+                        }
+                    });
+
+                    if (updatedSn) {
+                        await updateToolModule({
+                            variables: {
+                                input: {
+                                    id: selectedItemId,
+                                    sn: sn
                                 }
                             }
                         });
@@ -192,6 +227,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
         }
 
         setInvalidParameters({});
+        setSn(data.sn);
     };
 
     return (
@@ -199,11 +235,12 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
             <div className="display">
                 <div className="display-content">
                     <DisplayHeader
-                        sn={data.sn}
+                        sn={sn}
                         groupName={data.rModuleType.rModulesGroup.name}
                         moduleName={data.rModuleType.name}
                         housing={`${data.rModuleType.rModulesGroup.name}:${data.sn}`}
                         role={role}
+                        handleSnChange={handleToolModuleSnChange}
                     />
 
                     <div className="display-content-info">
@@ -229,7 +266,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
                         <ImageSection
                             toolModuleId={selectedItemId!}
                             img={img}
-                            sn={data.sn}
+                            sn={sn}
                             role={role}
                         />
                     </div>
