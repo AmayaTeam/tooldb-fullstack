@@ -6,7 +6,7 @@ interface UseToolModuleQueryProps {
     unitSystem: string | null;
 }
 
-const useToolModuleQuery = ({ id, unitSystem }: UseToolModuleQueryProps) => {
+export const useToolModuleQuery = ({ id, unitSystem }: UseToolModuleQueryProps) => {
 
     const { loading, error, data } = useQuery(ToolModule, { variables: { id, unitSystem }, fetchPolicy: 'no-cache' });
 
@@ -16,5 +16,3 @@ const useToolModuleQuery = ({ id, unitSystem }: UseToolModuleQueryProps) => {
         data: data?.toolModulesByIdWithUnitSystem || {},
     };
 };
-
-export default useToolModuleQuery;

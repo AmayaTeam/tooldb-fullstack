@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Display.css";
-import useToolModuleQuery from "../../lib/hooks/tool_module.ts";
+import { useToolModuleQuery } from "../../lib/hooks/tool_module.ts";
 import { useParameterUpdate } from "../../lib/hooks/ToolModule/useParameterUpdate.ts";
 import { useRecordPointUpdate } from "src/lib/hooks/HousingSensors/useRecordPointUpdate.ts";
 import Cookies from 'js-cookie';

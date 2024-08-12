@@ -16,7 +16,10 @@ import { useCreateToolModuleType } from 'src/lib/hooks/ToolModuleType/useCreateT
 import { useDeleteToolModuleType } from 'src/lib/hooks/ToolModuleType/useDeleteToolModuleType';
 import { useCreateToolModule } from 'src/lib/hooks/ToolModule/useCreateToolModule';
 import { useDeleteToolModule } from 'src/lib/hooks/ToolModule/useDeleteToolModule';
+import { useToolModuleQuery } from 'src/lib/hooks/tool_module.ts';
 import { useCreateParameter } from 'src/lib/hooks/ToolModule/useCreateParameter';
+import { useUnitSystem } from 'src/contexts/UnitSystemContext.tsx';
+
 
 interface OptionsListProps {
     levelName: LevelName;
@@ -38,6 +41,13 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
 
     const { createParameter } = useCreateParameter();
 
+    const { selectedUnitId } = useUnitSystem();
+
+    const { loading, error, data } = useToolModuleQuery({
+        id: objectId,
+        unitSystem: selectedUnitId,
+    });
+
     function getOptionsList() {
         const optionsNames: string[] = getOptionsNames();
         const optionsFunctions = getOptionsFunctions();
@@ -58,7 +68,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
 
         levelMap.set(LevelName.Group, ['Create New Group', 'Delete Group', 'Create New Type']);
         levelMap.set(LevelName.Type, ['Delete Type', 'Create New Module']);
-        levelMap.set(LevelName.Module, ['Delete Module']);
+        levelMap.set(LevelName.Module, ['Delete Module', 'Duplicate Module']);
 
         return levelMap.get(levelName)!;
     }
@@ -90,7 +100,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
     function getModuleFunctions(typeId: string) {
         const moduleManager = new ModuleManager(typeId);
 
-        return [moduleManager.showDeletionModal];
+        return [moduleManager.showDeletionModal, moduleManager.duplicateModule];
     }
 
     abstract class Manager {
@@ -109,6 +119,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
             setModalContent(this.getDeletionModal());
             setModal(true);
         }
+
 
         protected abstract getCreationModal(): any;
         protected abstract getDeletionModal(): any;
@@ -258,6 +269,38 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
                 throw new Error(`Failed to delete module with id ${objectId}`);
             }
         }
+
+        public duplicateModule = async () => {
+            try {
+                const originalModule = data;
+                const { data: duplicatedModuleData } = await createToolModule({
+                    variables: {
+                        "input": {
+                            "rModuleTypeId": originalModule.rModuleType.id,
+                            "dbtname": originalModule.dbtname,
+                            "image": originalModule.image,
+                            "sn": "Duplicated:" + originalModule.sn, // временное решение
+                        },
+                    },
+                });
+
+                const duplicatedModuleId = duplicatedModuleData.createToolModule.toolModule.id;
+
+                const duplicatedParameters = originalModule.parameterSet.map(param => ({
+                    parameterTypeId: param.parameterType.id,
+                    parameterValue: param.parameterValue,
+                    unitId: param.unit.id,
+                }));
+
+                await this.createParameters(duplicatedModuleId, duplicatedParameters);
+
+                console.log('Module duplicated successfully');
+
+                onOptionClick();
+            } catch (error) {
+                console.error('Error duplicating module:', error);
+            }
+        };
     }
 
     const onModalClose = () => {

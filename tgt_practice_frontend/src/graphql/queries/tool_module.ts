@@ -13,6 +13,7 @@ export default gql`
               rModulesGroup {
                 name
               }
+              id
             }
             toolinstalledsensorSet {
               rToolsensortype {
@@ -31,6 +32,7 @@ export default gql`
             parameterSet {
               id
               parameterType {
+                id
                 parameterName
               }
               parameterValue
