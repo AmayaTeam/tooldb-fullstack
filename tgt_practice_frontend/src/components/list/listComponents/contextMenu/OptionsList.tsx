@@ -18,6 +18,7 @@ import { useCreateToolModule } from 'src/lib/hooks/ToolModule/useCreateToolModul
 import { useDeleteToolModule } from 'src/lib/hooks/ToolModule/useDeleteToolModule';
 import { useToolModuleQuery } from 'src/lib/hooks/tool_module.ts';
 import { useCreateParameter } from 'src/lib/hooks/ToolModule/useCreateParameter';
+import { useCreateSensor } from 'src/lib/hooks/HousingSensors/useCreateSensor.ts';
 import { useUnitSystem } from 'src/contexts/UnitSystemContext.tsx';
 
 
@@ -40,6 +41,8 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
     const { createToolModule } = useCreateToolModule();
 
     const { createParameter } = useCreateParameter();
+
+    const { createSensor } = useCreateSensor()
 
     const { selectedUnitId } = useUnitSystem();
 
@@ -254,6 +257,26 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
             }
         }
 
+        private createSensors = async (newModuleId: string, sensors: any[]) => {
+            for (const sensor of sensors) {
+                try {
+                    const { data } = await createSensor({
+                        variables: {
+                            "input": {
+                                "rToolmoduleId": newModuleId,
+                                "rToolsensortypeId": sensor.rToolsensortypeId,
+                                "recordPoint": sensor.recordPoint,
+                                "unitId": sensor.unitId
+                            }
+                        }
+                    });
+                    console.log('Sensor created with ID:', data.createToolInstalledSensor.toolInstalledSensor.id);
+                } catch (err) {
+                    console.error('Error creating sensor:', err);
+                }
+            }
+        }
+
         private deleteModule = async () => {
             const response = await deleteToolModule({
                 variables: {
@@ -292,7 +315,15 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
                     unitId: param.unit.id,
                 }));
 
+                const duplicatedSensors = originalModule.toolinstalledsensorSet.map(sensor => ({
+                    rToolsensortypeId: sensor.rToolsensortype.id,
+                    recordPoint: sensor.recordPoint,
+                    unitId: sensor.unit.id,
+                }));
+
                 await this.createParameters(duplicatedModuleId, duplicatedParameters);
+
+                await this.createSensors(duplicatedModuleId, duplicatedSensors);
 
                 console.log('Module duplicated successfully');
 

@@ -34,7 +34,7 @@ class CreateToolInstalledSensor(graphene.Mutation):
             r_toolmodule=tool_module,
             r_toolsensortype=tool_sensor_type,
             record_point=input.record_point,
-            # unit =
+            unit = Unit.objects.get(pk=input.unit_id),
         )
         return ToolInstalledSensorPayload(tool_installed_sensor=tool_installed_sensor)
 
