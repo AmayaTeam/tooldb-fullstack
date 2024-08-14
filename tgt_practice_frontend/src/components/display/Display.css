@@ -20,6 +20,95 @@ input{
 
 }
 
+.table-container {
+    position: relative;
+    overflow-x: hidden;
+    width: 100%;
+}
+.button-column {
+    width: 40px;
+    text-align: center;
+    vertical-align: middle;
+    border: none; /* Убираем рамки */
+    background: none; /* Убираем фон */
+}
+
+.Housing_params-table th.button-column,
+.Housing_params-table td.button-column {
+    border: none; /* Убираем рамки у ячеек в этом столбце */
+    background: none; /* Убираем фон у ячеек в этом столбце */
+}
+
+.Housing_params-table th.button-column:hover,
+.Housing_params-table td.button-column:hover {
+    background: none; /* Отменяем эффекты при наведении */
+}
+
+.Housing_params-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.Housing_params-table th,
+.Housing_params-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.Housing_params-table th {
+    background-color: #f9f9f9;
+    color: black;
+}
+
+.Housing_params-table input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: black;
+    padding: 4px;
+}
+
+.Housing_params-table input:disabled {
+    color: #999;
+}
+
+.sensors_parametrs.invalid {
+    border: 1px solid red;
+}
+
+.add-row-button,
+.remove-row-button {
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 16px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s;
+}
+
+.add-row-button:hover,
+.remove-row-button:hover {
+    background-color: #e0e0e0;
+}
+
+.button-column {
+    justify-content: center;
+    align-items: center;
+}
+
+.button-column button {
+    margin: 0;
+    padding: 0;
+}
+
 p{
     font-size: 16px;
 }
