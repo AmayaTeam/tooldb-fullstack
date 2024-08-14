@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ReactFileReader from 'react-file-reader';
 import { useAnalyseCsvFile } from "src/lib/hooks/analyse_csv_file.ts";
-import { useModal } from "src/contexts/ModalContext.tsx";
 
 interface UploadCsvFileButtonProps {
     role: string | undefined;
@@ -10,13 +9,7 @@ interface UploadCsvFileButtonProps {
 
 const UploadCsvFileButton: React.FC<UploadCsvFileButtonProps> = ({ role, onFileProcessed }) => {
     const [fileContent, setFileContent] = useState<string | null>(null);
-    const { setModal, setModalContent } = useModal();
     const { data, loading, error } = useAnalyseCsvFile({ file: fileContent });
-
-    const showMessageModal = (message: string) => {
-        setModalContent(<div>{message}</div>);
-        setModal(true);
-    };
 
     const handleFileChange = async (files: File[]) => {
         if (!files || files.length === 0) return;
@@ -26,6 +19,7 @@ const UploadCsvFileButton: React.FC<UploadCsvFileButtonProps> = ({ role, onFileP
             const content = event.target?.result;
             if (content) {
                 setFileContent(content.toString()); // Store the file content in state
+                console.log(content.toString());
             }
         };
         reader.readAsText(files[0]);

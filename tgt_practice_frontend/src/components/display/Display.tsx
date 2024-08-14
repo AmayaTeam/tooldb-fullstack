@@ -13,6 +13,7 @@ import { Parameter, Sensor } from "src/types/interfaces.ts";
 import { useModal } from "src/contexts/ModalContext.tsx";
 import MessageModal from "./displayComponents/messageModal.tsx";
 import { useUnitSystem } from "src/contexts/UnitSystemContext.tsx";
+import CsvImportTable from "./displayComponents/csvImportTable.tsx";
 
 interface DisplayProps {
     selectedItemId: string | null;
@@ -166,54 +167,14 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, csvAnalysisResult }) 
             }
         }
     };
-    const renderTableRows = (modules) => {
-        return modules.map((module, index) => (
-            <tr key={index}>
-                <td>{module.sn}</td>
-                <td>{module.dbsn}</td>
-                <td>{module.rModuleType.rModulesGroup.name}</td>
-                <td>{module.rModuleType.name}</td>
-                <td>{module.parameterSet.reduce((acc, param) => acc + param.parameterValue.toFixed(2) + ' ', '')}</td>
-            </tr>
-        ));
-    };
 
     if (csvAnalysisResult) {
         const res = csvAnalysisResult;
-        console.log(res)
         return (
             <div className="display-container">
                 <div className="display">
                     <div className="display-content">
-                        <div>
-                            <h4>Analysis CSV File</h4>
-                            <table>
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Serial</th>
-                                    <th>DB Serial</th>
-                                    <th>Group</th>
-                                    <th>Module Type</th>
-                                    <th>Parameters</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td colSpan={5}><strong>New Modules</strong></td>
-                                    </tr>
-                                    {renderTableRows(res.analyseCsvFile.newModuleList)}
-                                    <tr>
-                                        <td colSpan={5}><strong>Modified Modules</strong></td>
-                                    </tr>
-                                    {renderTableRows(res.analyseCsvFile.modifiedModuleList)}
-                                    <tr>
-                                        <td colSpan={5}><strong>Errors</strong></td>
-                                    </tr>
-                                    {renderTableRows(res.analyseCsvFile.errorsList)}
-                                </tbody>
-                            </table>
-                        </div>
+                        <CsvImportTable data={res}/>
                     </div>
                 </div>
             </div>

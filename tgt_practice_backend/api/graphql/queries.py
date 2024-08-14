@@ -205,9 +205,13 @@ class Query(graphene.ObjectType):
         return param_types_with_units
 
     def resolve_analyse_csv_file(self, info, file):
-        new_module, modified_module, errors = ODOOUtils.analyse_file(file)
+        new_module, modified_module, new_parameters, modified_parameters, new_group_list, new_module_type_list, errors = ODOOUtils.analyse_file(file)
         return AnalyseCsvFileType(
             new_module_list=new_module,
             modified_module_list=modified_module,
+            new_parameters=new_parameters,
+            modified_parameters=modified_parameters,
+            new_group_list=new_group_list,
+            new_module_type_list=new_module_type_list,
             errors_list=errors
         )

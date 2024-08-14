@@ -1,6 +1,7 @@
 
 export interface ToolModule {
     id: string;
+    odooId: string;
     sn: string;
     dbdate: string;
     dbversion: string;
@@ -18,6 +19,14 @@ export interface ToolModule {
     dbtimage_h_y2: number;
     dbtcomp_str: number;
     image: string;
+    rModuleType: {
+        id: string;
+        name: string;
+        rModulesGroup: {
+            id: string;
+            name: string
+        }
+    }
 }
 
 export interface ToolModuleType {
@@ -43,6 +52,9 @@ export interface Parameter {
             en: string;
         };
     };
+    toolmodule: {
+        id: string;
+    }
 }
 
 export interface NewParameter {

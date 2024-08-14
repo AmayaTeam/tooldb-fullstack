@@ -110,17 +110,21 @@ class UnitSystemMeasureUnitObject(DjangoObjectType):
     class Meta:
         model = UnitSystemMeasureUnit
 
+
 class ConversionFactorObject(DjangoObjectType):
     class Meta:
         model = ConversionFactor
+
 
 class ParameterTypeUnitObject(DjangoObjectType):
     class Meta:
         model = ParameterTypeUnit
 
+
 class ProfileObject(DjangoObjectType):
     class Meta:
         model = Profile
+
 
 class ConvertedParameterType(graphene.ObjectType):
     id = graphene.String()
@@ -128,11 +132,13 @@ class ConvertedParameterType(graphene.ObjectType):
     parameter_value = graphene.Float()
     unit = graphene.Field(UnitObject)
 
+
 class ConvertedToolInstalledSensorType(graphene.ObjectType):
     id = graphene.String()
     r_toolsensortype = graphene.Field(ToolSensorTypeObject)
     record_point = graphene.Float()
     unit = graphene.Field(UnitObject)
+
 
 class ToolModuleResponseType(graphene.ObjectType):
     id = graphene.String()
@@ -148,4 +154,8 @@ class ToolModuleResponseType(graphene.ObjectType):
 class AnalyseCsvFileType(graphene.ObjectType):
     new_module_list = graphene.List(ToolModuleObject)
     modified_module_list = graphene.List(ToolModuleObject)
+    new_parameters = graphene.List(ParameterObject)
+    modified_parameters = graphene.List(ParameterObject)
     errors_list = graphene.List(ToolModuleObject)
+    new_group_list = graphene.List(ToolModuleGroupObject)
+    new_module_type_list = graphene.List(ToolModuleTypeObject)

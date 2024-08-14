@@ -5,49 +5,25 @@ export const ANALYSE_CSV_FILE = gql`
         analyseCsvFile(file: $file) {
             newModuleList {
                 id
+                odooId
                 sn
                 dbsn
                 rModuleType {
                   name
                   rModulesGroup {
                     name
-                  }
-                }
-                parameterSet {
-                  id
-                  parameterType {
-                    parameterName
-                  }
-                  parameterValue
-                  unit {
-                    name {
-                      en
-                    }
-                    id
                   }
                 }
             }
             modifiedModuleList {
                 id
+                odooId
                 sn
                 dbsn
                 rModuleType {
                   name
                   rModulesGroup {
                     name
-                  }
-                }
-                parameterSet {
-                  id
-                  parameterType {
-                    parameterName
-                  }
-                  parameterValue
-                  unit {
-                    name {
-                      en
-                    }
-                    id
                   }
                 }
             }
@@ -61,19 +37,46 @@ export const ANALYSE_CSV_FILE = gql`
                     name
                   }
                 }
-                parameterSet {
-                  id
-                  parameterType {
-                    parameterName
-                  }
-                  parameterValue
-                  unit {
-                    name {
-                      en
-                    }
-                    id
-                  }
+            }
+            newParameters {
+              id
+              parameterType {
+                parameterName
+              }
+              parameterValue
+              unit {
+                name {
+                  en
                 }
+                id
+              }
+              toolmodule {
+                id
+              }
+            }
+            modifiedParameters {
+                id
+                parameterType {
+                  parameterName
+                }
+                parameterValue
+                unit {
+                  name {
+                    en
+                  }
+                  id
+                }
+                toolmodule {
+                  id
+                }
+            }
+            newGroupList {
+                id
+                name
+            }
+            newModuleTypeList {
+                id
+                name
             }
         }
     }
