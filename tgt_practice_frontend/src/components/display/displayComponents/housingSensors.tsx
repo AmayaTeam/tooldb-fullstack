@@ -22,7 +22,8 @@ const HousingSensors: React.FC<HousingSensorsProps> = ({
         const newSensor: Sensor = {
             id: `new-${Date.now()}`,
             rToolsensortype: { id: "", name: "" },
-            unit: { name: { en: "" } },
+            unit: { id: "", name: { en: "" } },
+            recordPoint: 0,
         };
         setSensors([...sensors, newSensor]);
     };

@@ -27,11 +27,11 @@ const DisplayHeader: React.FC<DisplayHeaderProps> = ({
   const [selectedGroupId, setSelectedGroupId] = useState(groupId);
   const [selectedModuleId, setSelectedModuleId] = useState(moduleId);
 
-  const { group_loading, group_error, tool_module_group } = useToolModuleGroup();
-  const { type_loading, type_error, tool_module_types } = useToolModuleTypesById(selectedGroupId);
+  const { tool_module_group } = useToolModuleGroup();
+  const { tool_module_types } = useToolModuleTypesById(selectedGroupId);
 
   useEffect(() => {
-    if (tool_module_types.length > 0 && !tool_module_types.find(type => type.id === selectedModuleId)) {
+    if (tool_module_types.length > 0 && !tool_module_types.find((type: ToolModuleType) => type.id === selectedModuleId)) {
       // If the current selected module is not in the new list, default to the first module type
       const defaultModuleId = tool_module_types[0].id;
       setSelectedModuleId(defaultModuleId);

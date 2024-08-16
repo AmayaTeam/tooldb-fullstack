@@ -1,7 +1,7 @@
 import React from 'react';
 import { useModal } from 'src/contexts/ModalContext';
 import { LevelName, Option } from './contextMenuTypes';
-import { NewParameter } from 'src/types/interfaces';
+import {NewParameter, Parameter, Sensor} from 'src/types/interfaces';
 
 import GroupCreationModal from './modals/GroupCreationModal';
 import GroupDeletionModal from './modals/GroupDeletionModal';
@@ -46,7 +46,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
 
     const { selectedUnitId } = useUnitSystem();
 
-    const { loading, error, data } = useToolModuleQuery({
+    const { data } = useToolModuleQuery({
         id: objectId,
         unitSystem: selectedUnitId,
     });
@@ -55,10 +55,10 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
         const optionsNames: string[] = getOptionsNames();
         const optionsFunctions = getOptionsFunctions();
 
-        let optionsList: Option[] = [];
+        const optionsList: Option[] = [];
 
-        for (var i = 0; i < optionsNames.length; i++) {
-            var option: Option = { optionName: optionsNames[i], command: optionsFunctions[i] };
+        for (let i = 0; i < optionsNames.length; i++) {
+            const option: Option = {optionName: optionsNames[i], command: optionsFunctions[i]};
             optionsList.push(option);
         }
 
@@ -309,13 +309,13 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
 
                 const duplicatedModuleId = duplicatedModuleData.createToolModule.toolModule.id;
 
-                const duplicatedParameters = originalModule.parameterSet.map(param => ({
+                const duplicatedParameters = originalModule.parameterSet.map((param: Parameter) => ({
                     parameterTypeId: param.parameterType.id,
                     parameterValue: param.parameterValue,
                     unitId: param.unit.id,
                 }));
 
-                const duplicatedSensors = originalModule.toolinstalledsensorSet.map(sensor => ({
+                const duplicatedSensors = originalModule.toolinstalledsensorSet.map((sensor: Sensor) => ({
                     rToolsensortypeId: sensor.rToolsensortype.id,
                     recordPoint: sensor.recordPoint,
                     unitId: sensor.unit.id,
