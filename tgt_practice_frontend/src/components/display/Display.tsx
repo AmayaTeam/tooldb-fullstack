@@ -17,9 +17,10 @@ import { useUnitSystem } from "src/contexts/UnitSystemContext.tsx";
 
 interface DisplayProps {
     selectedItemId: string | null;
+    onSave: () => void; // New prop for handling save action
 }
 
-const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
+const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
     const { selectedUnitId } = useUnitSystem();
 
     const { loading, error, data } = useToolModuleQuery({ id: selectedItemId, unitSystem: selectedUnitId });
@@ -223,7 +224,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
                             }
                         });
                     }
-
+                    onSave();
                     showMessageModal("The update was successful!");
                 } catch (error) {
                     showMessageModal("An error occurred while saving the data.")

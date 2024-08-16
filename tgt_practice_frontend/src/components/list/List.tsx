@@ -8,14 +8,21 @@ import LevelList from './listComponents/levelList';
 
 interface ListProps {
     onItemClick: (itemId: string) => void;
+    refetchTrigger: boolean; // New prop for refetch trigger
 }
 
-const List: React.FC<ListProps> = ({ onItemClick }) => {
+const List: React.FC<ListProps> = ({ onItemClick, refetchTrigger }) => {
     const [refetchKey, setRefetchKey] = useState<number>(0);
     const { loading, error, data } = useTreeQuery(refetchKey);
+
     const [searchText, setSearchText] = useState<string>('');
     const [selectedSort, setSelectedSort] = useState<string>('novelty');
     const [sortedData, setSortedData] = useState<ToolModuleGroup[]>([]);
+
+    // Refetch data when refetchTrigger changes
+    useEffect(() => {
+        setRefetchKey(prevKey => prevKey + 1);
+    }, [refetchTrigger]);
 
     useEffect(() => {
         if (data) {

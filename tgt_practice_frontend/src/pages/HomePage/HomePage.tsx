@@ -12,11 +12,17 @@ const HomePage: React.FC = () => {
     const { loading, error, data } = useQuery(GET_CURRENT_USER);
 
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
-
     const { isShowingModal } = useModal();
+
+    // State to trigger refetch in List.tsx
+    const [refetchList, setRefetchList] = useState<boolean>(false);
 
     const handleItemClick = (itemId: string) => {
         setSelectedItemId(itemId);
+    };
+
+    const handleRefetchList = () => {
+        setRefetchList(prev => !prev); // Toggle the value to trigger refetch
     };
 
     if (loading) return <div>Loading...</div>;
@@ -24,12 +30,12 @@ const HomePage: React.FC = () => {
     if (error || !data || !data.me) {
         return <Navigate to="/" replace />;
     }
+
     return (
         <div className="container">
             <Header />
-
-            <List onItemClick={handleItemClick} />
-            {selectedItemId && <Display selectedItemId={selectedItemId} />}
+            <List onItemClick={handleItemClick} refetchTrigger={refetchList} />
+            {selectedItemId && <Display selectedItemId={selectedItemId} onSave={handleRefetchList} />}
             {isShowingModal && <Modal />}
         </div>
     );
