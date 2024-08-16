@@ -24,14 +24,12 @@ const HomePage: React.FC = () => {
     if (error || !data || !data.me) {
         return <Navigate to="/" replace />;
     }
-
     return (
         <div className="container">
             <Header />
 
             <List onItemClick={handleItemClick} />
-
-            <Display selectedItemId={selectedItemId} />
+            {selectedItemId && <Display selectedItemId={selectedItemId} />}
             {isShowingModal && <Modal />}
         </div>
     );

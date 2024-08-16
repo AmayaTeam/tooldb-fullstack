@@ -11,6 +11,7 @@ export default gql`
             rModuleType {
               name
               rModulesGroup {
+                id
                 name
               }
               id

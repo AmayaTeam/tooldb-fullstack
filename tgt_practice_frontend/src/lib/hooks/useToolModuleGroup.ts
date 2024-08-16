@@ -10,7 +10,7 @@ export const useToolModuleGroup = () => {
 
     return {
         tool_module_group: data?.toolModuleGroups || [],
-        loading,
-        error,
+        group_loading: loading,
+        group_error: error,
     }
 };
