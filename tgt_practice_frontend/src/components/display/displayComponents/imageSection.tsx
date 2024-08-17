@@ -93,9 +93,9 @@ const ImageSection: React.FC<ImageSectionProps> = ({ toolModuleId, img, sn, role
         <div className="display-content-info-image">
             {displayImage && displayImage.length > 'data:image/png;base64,'.length &&
                 displayImage.length > 'data:image/png;base64,null'.length ? (
-                <img src={displayImage} width={"100px"} alt={"Изображение отсутствует"} />
+                <img src={displayImage} width={"100px"} alt={"Empty image"} />
             ) : (
-                <div className="no-image-message">Изображение отсутствует</div>
+                <div className="no-image-message">Empty image</div>
             )}
             <div className="info-image-buttons">
                 <button onClick={() => { handleImageExport(displayImage, sn) }}

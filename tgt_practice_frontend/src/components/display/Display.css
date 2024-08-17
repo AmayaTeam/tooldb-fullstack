@@ -246,6 +246,8 @@ button {
     height: 100px; /* Устанавливаем высоту, чтобы сообщение занимало место изображения */
     border: 0.3px solid #AAAAAA; /* Добавляем границу для визуального разделения */
     color: #9F9F9F; /* Устанавливаем цвет текста */
+    padding: 10px;
+    text-align: center;
 }
 
 .display-content-buttons {
