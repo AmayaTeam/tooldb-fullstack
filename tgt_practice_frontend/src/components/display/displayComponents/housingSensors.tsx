@@ -33,7 +33,7 @@ const HousingSensors: React.FC<HousingSensorsProps> = ({
     };
 
     return (
-        <div className="params">
+        <div className="params-Housing_params">
             <h4>Housing Sensors</h4>
             <div className="table-container">
                 <table className="Housing_params-table">
@@ -62,6 +62,7 @@ const HousingSensors: React.FC<HousingSensorsProps> = ({
                                     recordPoint={sensorRecordPoints[sensor.id] || ""}
                                     onChange={handleSensorRecordPointChange}
                                     isInvalid={invalidParameters[sensor.id]}
+                                    sensors={initialSensors}
                                     role={role}
                                 />
                                 <td className="button-column">
@@ -87,6 +88,7 @@ interface DisplaySensorComponentProps {
     recordPoint: string;
     onChange: (id: string) => (event: React.ChangeEvent<HTMLInputElement>) => void;
     isInvalid: boolean;
+    sensors: Sensor[];
     role: string | undefined;
 }
 
@@ -95,15 +97,22 @@ const DisplaySensorComponent: React.FC<DisplaySensorComponentProps> = ({
     recordPoint,
     onChange,
     isInvalid,
+    sensors,
     role,
 }) => (
     <>
-        <td>
-            <input
-                type="text"
-                defaultValue={sensor.rToolsensortype.name}
+        <td className="title">
+            <select
+                defaultValue={sensor.rToolsensortype.id}
                 disabled={role === "User"}
-            />
+                className="sensor-select"
+            >
+                {sensors.map((optionSensor: Sensor) => (
+                    <option key={optionSensor.id} value={optionSensor.id}>
+                        {optionSensor.rToolsensortype.name}
+                    </option>
+                ))}
+            </select>
         </td>
         <td>
             <input

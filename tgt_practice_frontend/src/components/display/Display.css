@@ -361,3 +361,38 @@ button {
     text-align: left;
     margin-right: 10px;
 }
+
+.Housing_params-table select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Добавляем многоточие для обрезанного текста */
+}
+
+.Housing_params-table th,
+.Housing_params-table td {
+    white-space: nowrap; /* Предотвращаем перенос текста на новую строку */
+    overflow: hidden; /* Скрываем текст, который выходит за пределы ячейки */
+}
+
+.Housing_params-table {
+    table-layout: fixed; /* Жестко фиксируем ширину столбцов */
+    width: 100%;
+}
+
+.Housing_params-table th,
+.Housing_params-table td {
+    width: auto; /* Автоматически подстраиваем ширину столбцов */
+}
+
+.title select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
