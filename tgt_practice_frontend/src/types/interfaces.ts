@@ -35,10 +35,12 @@ export interface ToolModuleGroup {
 export interface Parameter {
     id: string;
     parameterType: {
+        id: string;
         parameterName: string;
     };
     parameterValue: number;
     unit: {
+        id: string;
         name: {
             en: string;
         };
@@ -59,6 +61,7 @@ export interface Sensor {
     };
     recordPoint: number;
     unit: {
+        id: string;
         name: {
             en: string;
         };

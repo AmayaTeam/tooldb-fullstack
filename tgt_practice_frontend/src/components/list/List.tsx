@@ -8,14 +8,21 @@ import LevelList from './listComponents/levelList';
 
 interface ListProps {
     onItemClick: (itemId: string) => void;
+    refetchTrigger: boolean; // New prop for refetch trigger
 }
 
-const List: React.FC<ListProps> = ({ onItemClick }) => {
+const List: React.FC<ListProps> = ({ onItemClick, refetchTrigger }) => {
     const [refetchKey, setRefetchKey] = useState<number>(0);
     const { loading, error, data } = useTreeQuery(refetchKey);
+
     const [searchText, setSearchText] = useState<string>('');
     const [selectedSort, setSelectedSort] = useState<string>('novelty');
     const [sortedData, setSortedData] = useState<ToolModuleGroup[]>([]);
+
+    // Refetch data when refetchTrigger changes
+    useEffect(() => {
+        setRefetchKey(prevKey => prevKey + 1);
+    }, [refetchTrigger]);
 
     useEffect(() => {
         if (data) {
@@ -26,11 +33,15 @@ const List: React.FC<ListProps> = ({ onItemClick }) => {
     useEffect(() => {
         if (data) {
             setSortedData(
-                sortData(data.toolModuleGroups, selectedSort).filter((group) =>
-                    group.toolmoduletypeSet.some(type =>
-                        type.toolmoduleSet?.some(module => module.sn.toLowerCase().includes(searchText.toLowerCase()))
-                    )
-                )
+                sortData(data.toolModuleGroups, selectedSort).map(group => ({
+                    ...group,
+                    toolmoduletypeSet: group.toolmoduletypeSet.map(type => ({
+                        ...type,
+                        toolmoduleSet: type.toolmoduleSet.filter(module =>
+                            module.sn.toLowerCase().includes(searchText.toLowerCase())
+                        )
+                    })).filter(type => type.toolmoduleSet.length > 0)
+                })).filter(group => group.toolmoduletypeSet.length > 0)
             );
         }
     }, [data, selectedSort, searchText]);

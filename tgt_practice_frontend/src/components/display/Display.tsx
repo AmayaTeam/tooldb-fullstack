@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./Display.css";
-import useToolModuleQuery from "../../lib/hooks/tool_module.ts";
+import { useToolModuleQuery } from "../../lib/hooks/tool_module.ts";
 import { useParameterUpdate } from "../../lib/hooks/ToolModule/useParameterUpdate.ts";
 import { useRecordPointUpdate } from "src/lib/hooks/HousingSensors/useRecordPointUpdate.ts";
+import { useUpdateToolModule } from "src/lib/hooks/ToolModule/useUpdateToolModule";
 import Cookies from 'js-cookie';
 import HousingParams from "./displayComponents/housingParams.tsx";
 import DisplayHeader from "./displayComponents/displayHeader.tsx";
@@ -16,18 +17,22 @@ import { useUnitSystem } from "src/contexts/UnitSystemContext.tsx";
 
 interface DisplayProps {
     selectedItemId: string | null;
+    onSave: () => void; // New prop for handling save action
 }
 
-const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
+const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
     const { selectedUnitId } = useUnitSystem();
 
     const { loading, error, data } = useToolModuleQuery({ id: selectedItemId, unitSystem: selectedUnitId });
-
     const { updateParameter } = useParameterUpdate();
     const { updateRecordPoint } = useRecordPointUpdate();
+    const { updateToolModule } = useUpdateToolModule();
     const [parameters, setParameters] = useState<Record<string, string>>({});
     const [sensorRecordPoints, setSensorRecordPoints] = useState<Record<string, string>>({});
     const [invalidParameters, setInvalidParameters] = useState<Record<string, boolean>>({});
+    const [sn, setSn] = useState<string>('');
+    const [selectedModuleTypeId, setSelectedModuleTypeId] = useState<string>('');
+    const [selectedGroupId, setSelectedGroupId] = useState<string>('');
     const hiddenParameters = ['Image h_y1', 'Image h_y2'];
 
     const { setModal, setModalContent } = useModal();
@@ -58,6 +63,13 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
                 return acc;
             }, {});
             setSensorRecordPoints(initialSensors);
+        }
+
+        if (data) {
+            setSn(data.sn);
+            console.log(data);
+            setSelectedModuleTypeId(data.rModuleType?.id || '');
+            setSelectedGroupId(data.rModuleType?.rModulesGroup?.id || '');
         }
     }, [data]);
 
@@ -105,6 +117,21 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
         }
     };
 
+    const handleToolModuleSnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = event.target;
+        setSn(value);
+    };
+
+    const handleModuleTypeIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const { value } = event.target;
+        setSelectedModuleTypeId(value);
+    };
+
+    const handleGroupIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const groupId = event.target.value;
+        setSelectedGroupId(groupId);
+    };
+
     const handleSave = async () => {
         const hasInvalidInputs = Object.values(invalidParameters).some((isInvalid) => isInvalid);
 
@@ -130,9 +157,19 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
                 return acc;
             }, [] as { id: string; recordPoint: number, unitId: string }[]);
 
-            if (updatedParameters.length > 0 || updatedSensors.length > 0) {
+            const updatedSn = data.sn !== sn;
+            console.log(data);
+            const updatedModuleType = data.rModuleType.id !== selectedModuleTypeId || data.rModuleType.rModulesGroup.id !== selectedGroupId;
+            console.log("data.rModuleType: ", data.rModuleType.id);
+            console.log("selectedModuleTypeId: ", selectedModuleTypeId);
+            console.log("data.rModulesGroup", data.rModuleType.rModulesGroup.id);
+            console.log("selectedGroupId", selectedGroupId);
+
+            if (updatedParameters.length > 0 || updatedSensors.length > 0 || updatedSn || updatedModuleType) {
                 console.log("Обновление параметров:", updatedParameters);
                 console.log("Обновление сенсоров:", updatedSensors);
+                console.log("Обновление sn:", updatedSn);
+                console.log("Обновление ModuleType:", updatedModuleType);
                 try {
                     for (const param of updatedParameters) {
                         await updateParameter({
@@ -157,7 +194,38 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
                         });
                     }
 
-                    showMessageModal("The update was successful!")
+                    await updateToolModule({
+                        variables: {
+                            input: {
+                                id: selectedItemId,
+                                sn: data.sn,
+                                rModuleTypeId: data.rModuleType.id
+                            }
+                        }
+                    });
+
+                    if (updatedSn) {
+                        await updateToolModule({
+                            variables: {
+                                input: {
+                                    id: selectedItemId,
+                                    sn: sn,
+                                }
+                            }
+                        });
+                    }
+                    if (updatedModuleType) {
+                        await updateToolModule({
+                            variables: {
+                                input: {
+                                    id: selectedItemId,
+                                    rModuleTypeId: selectedModuleTypeId
+                                }
+                            }
+                        });
+                    }
+                    onSave();
+                    showMessageModal("The update was successful!");
                 } catch (error) {
                     showMessageModal("An error occurred while saving the data.")
                 }
@@ -192,6 +260,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
         }
 
         setInvalidParameters({});
+        setSn(data.sn);
     };
 
     return (
@@ -199,10 +268,14 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
             <div className="display">
                 <div className="display-content">
                     <DisplayHeader
-                        sn={data.sn}
-                        groupName={data.rModuleType.rModulesGroup.name}
-                        moduleName={data.rModuleType.name}
+                        sn={sn}
+                        groupId={data.rModuleType.rModulesGroup.id}
+                        moduleId={data.rModuleType.id}
                         housing={`${data.rModuleType.rModulesGroup.name}:${data.sn}`}
+                        role={role}
+                        handleSnChange={handleToolModuleSnChange}
+                        handleModuleTypeIdChange={handleModuleTypeIdChange}
+                        handleGroupIdChange={handleGroupIdChange}
                     />
 
                     <div className="display-content-info">
@@ -228,7 +301,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId }) => {
                         <ImageSection
                             toolModuleId={selectedItemId!}
                             img={img}
-                            sn={data.sn}
+                            sn={sn}
                             role={role}
                         />
                     </div>

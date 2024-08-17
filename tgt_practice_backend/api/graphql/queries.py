@@ -52,6 +52,9 @@ class Query(graphene.ObjectType):
     tool_module_types_by_group_id = graphene.List(
         ToolModuleTypeObject, group_id=graphene.String()
     )  # по айди группы отдает все пренадлежащие ей типы модулей БЕЗ ПРИБОРОВ
+    tool_module_types_by_group_name = graphene.List(
+        ToolModuleTypeObject, group_name=graphene.String()
+    )
     tool_modules_by_module_type_id = graphene.List(
         ToolModuleObject, module_type_id=graphene.String()
     )  # по айди типа модуля отдает все приборы в рамках одного
@@ -171,6 +174,10 @@ class Query(graphene.ObjectType):
     @query_permission_required("api.view_toolmoduletype")
     def resolve_tool_module_types_by_group_id(self, info, group_id):
         return ToolModuleType.objects.filter(r_modules_group_id=group_id).all()
+
+    @query_permission_required("api.view_toolmoduletype")
+    def resolve_tool_module_types_by_group_name(self, info, group_name):
+        return ToolModuleType.objects.filter(r_modules_group_id__name=group_name).all()
 
     @query_permission_required("api.view_toolmodule")
     def resolve_tool_modules_by_module_type_id(self, info, module_type_id):
