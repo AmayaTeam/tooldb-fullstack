@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Sensor } from "src/types/interfaces";
+import { useToolSensorTypesQuery } from "src/lib/hooks/HousingSensors/useToolSensorTypesQuery.ts";
 
 interface HousingSensorsProps {
     sensors: Sensor[];
@@ -17,6 +18,7 @@ const HousingSensors: React.FC<HousingSensorsProps> = ({
     role,
 }) => {
     const [sensors, setSensors] = useState<Sensor[]>(initialSensors);
+    const { toolSensorTypes } = useToolSensorTypesQuery();
 
     const handleAddRow = () => {
         const newSensor: Sensor = {
@@ -63,6 +65,7 @@ const HousingSensors: React.FC<HousingSensorsProps> = ({
                                     onChange={handleSensorRecordPointChange}
                                     isInvalid={invalidParameters[sensor.id]}
                                     sensors={initialSensors}
+                                    toolSensorTypes={toolSensorTypes}
                                     role={role}
                                 />
                                 <td className="button-column">
@@ -89,6 +92,7 @@ interface DisplaySensorComponentProps {
     onChange: (id: string) => (event: React.ChangeEvent<HTMLInputElement>) => void;
     isInvalid: boolean;
     sensors: Sensor[];
+    toolSensorTypes: { id: string; name: string }[];
     role: string | undefined;
 }
 
@@ -98,32 +102,49 @@ const DisplaySensorComponent: React.FC<DisplaySensorComponentProps> = ({
     onChange,
     isInvalid,
     sensors,
+    toolSensorTypes,
     role,
-}) => (
-    <>
-        <td className="title">
-            <select
-                defaultValue={sensor.rToolsensortype.id}
-                disabled={role === "User"}
-                className="sensor-select"
-            >
-                {sensors.map((optionSensor: Sensor) => (
-                    <option key={optionSensor.id} value={optionSensor.id}>
-                        {optionSensor.rToolsensortype.name}
-                    </option>
-                ))}
-            </select>
-        </td>
-        <td>
-            <input
-                type="text"
-                value={recordPoint}
-                onChange={onChange(sensor.id)}
-                className={`sensors_parametrs ${isInvalid ? "invalid" : ""}`}
-                disabled={role === "User"}
-            />
-        </td>
-    </>
-);
+}) => {
+    const sensorOptions = toolSensorTypes.filter(
+        (type) => type.id !== sensor.rToolsensortype.id
+    );
+
+    // обеспечиваем уникальность ключей (устранение warning о дублирующихся ключах)
+    const options = [
+        ...sensorOptions,
+        {
+            id: `custom-${sensor.rToolsensortype.id}`,
+            name: sensor.rToolsensortype.name,
+        },
+    ];
+
+    return (
+        <>
+            <td className="title">
+                <select
+                    defaultValue={`custom-${sensor.rToolsensortype.id}`}
+                    disabled={role === "User"}
+                    className="sensor-select"
+                >
+                    {options.map((option) => (
+                        <option key={option.id} value={option.id}>
+                            {option.name}
+                        </option>
+                    ))}
+                </select>
+            </td>
+            <td>
+                <input
+                    type="text"
+                    value={recordPoint}
+                    onChange={onChange(sensor.id)}
+                    className={`sensors_parametrs ${isInvalid ? "invalid" : ""}`}
+                    disabled={role === "User"}
+                />
+            </td>
+        </>
+    );
+};
+
 
 export default HousingSensors;
