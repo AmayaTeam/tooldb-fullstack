@@ -22,6 +22,7 @@ from .types import (
     UnitSystemObject,
     ProfileObject,
     ConvertedToolInstalledSensorType,
+    UnitObject,
 )
 from api.models import (
     ToolModuleGroup,
@@ -69,6 +70,11 @@ class Query(graphene.ObjectType):
 
     parameters_with_unit_system = graphene.List(
         ParameterTypeUnitObject, unit_system=graphene.String(required=True)
+    )
+
+    record_point_unit_by_unit_system = graphene.Field(
+        UnitObject,
+        unit_system_id=graphene.String(required=True)
     )
 
     def resolve_me(self, info):
@@ -204,3 +210,23 @@ class Query(graphene.ObjectType):
             param_types_with_units.append(type_with_unit)
 
         return param_types_with_units
+
+    def resolve_record_point_unit_by_unit_system(self, info, unit_system_id):
+        try:
+            unit_system = UnitSystem.objects.get(pk=unit_system_id)
+        except UnitSystem.DoesNotExist:
+            return None
+
+        distance_measure = ConversionUtils.get_measure()
+
+        if not distance_measure:
+            return None
+
+        try:
+            unit_system_measure_unit = UnitSystemMeasureUnit.objects.get(
+                measure_unit__measure=distance_measure,
+                unit_system=unit_system
+            )
+            return unit_system_measure_unit.measure_unit.unit
+        except UnitSystemMeasureUnit.DoesNotExist:
+            return distance_measure.default_unit

@@ -14,6 +14,8 @@ import { Parameter, Sensor } from "src/types/interfaces.ts";
 import { useModal } from "src/contexts/ModalContext.tsx";
 import MessageModal from "./displayComponents/messageModal.tsx";
 import { useUnitSystem } from "src/contexts/UnitSystemContext.tsx";
+import { useRecordPointUnitQuery} from "src/lib/hooks/HousingSensors/useRecordPointUnitQuery.ts";
+import { useCreateSensor } from "src/lib/hooks/HousingSensors/useCreateSensor.ts";
 
 interface DisplayProps {
     selectedItemId: string | null;
@@ -27,6 +29,8 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
     const { updateParameter } = useParameterUpdate();
     const { updateRecordPoint } = useRecordPointUpdate();
     const { updateToolModule } = useUpdateToolModule();
+    const { createSensor } = useCreateSensor();
+    const { recordPointUnit, loading: unitLoading, error: unitError } = useRecordPointUnitQuery(selectedUnitId);
     const [parameters, setParameters] = useState<Record<string, string>>({});
     const [sensorRecordPoints, setSensorRecordPoints] = useState<Record<string, string>>({});
     const [invalidParameters, setInvalidParameters] = useState<Record<string, boolean>>({});
@@ -117,26 +121,17 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
                 [sensor.id]: true,
             }));
         }
-
-        console.log(`для сенсора ${sensor.id}:
-            "rToolsensortypeId": ${sensor.rToolsensortype.id}
-             "recordPoint": ${value}`);
-                };
+    };
 
     const handleSensorTypeChange = (sensor: Sensor) => (event: React.ChangeEvent<HTMLSelectElement>) => {
         const { value } = event.target;
 
-        // Обновление состояния сенсора
         setSensors((prevSensors) =>
             prevSensors.map((s) =>
                 s.id === sensor.id ? { ...s, rToolsensortype: { id: value, name: event.target.selectedOptions[0].text } } : s
             )
         );
-
-        console.log(`для сенсора ${sensor.id}:
-            "rToolsensortypeId": ${value}
-             "recordPoint": ${sensorRecordPoints[sensor.id]}`);
-                };
+    };
 
     const handleToolModuleSnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
@@ -179,18 +174,10 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
             }, [] as { id: string; recordPoint: number, unitId: string }[]);
 
             const updatedSn = data.sn !== sn;
-            console.log(data);
             const updatedModuleType = data.rModuleType.id !== selectedModuleTypeId || data.rModuleType.rModulesGroup.id !== selectedGroupId;
-            console.log("data.rModuleType: ", data.rModuleType.id);
-            console.log("selectedModuleTypeId: ", selectedModuleTypeId);
-            console.log("data.rModulesGroup", data.rModuleType.rModulesGroup.id);
-            console.log("selectedGroupId", selectedGroupId);
+            const newSensors = sensors.filter(sensor => sensor.id.startsWith('new-'));
 
-            if (updatedParameters.length > 0 || updatedSensors.length > 0 || updatedSn || updatedModuleType) {
-                console.log("Обновление параметров:", updatedParameters);
-                console.log("Обновление сенсоров:", updatedSensors);
-                console.log("Обновление sn:", updatedSn);
-                console.log("Обновление ModuleType:", updatedModuleType);
+            if (updatedParameters.length > 0 || updatedSensors.length > 0 || updatedSn || updatedModuleType || newSensors) {
                 try {
                     for (const param of updatedParameters) {
                         await updateParameter({
@@ -245,6 +232,19 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
                             }
                         });
                     }
+
+                    for (const sensor of newSensors) {
+                        await createSensor({
+                            variables: {
+                                input: {
+                                    rToolmoduleId: selectedItemId,
+                                    rToolsensortypeId: sensor.rToolsensortype.id,
+                                    recordPoint: parseFloat(sensorRecordPoints[sensor.id]),
+                                    unitId: recordPointUnit.id,
+                                },
+                            },
+                        });
+                    }
                     onSave();
                     showMessageModal("The update was successful!");
                 } catch (error) {
@@ -256,6 +256,9 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
+    if (unitLoading || !recordPointUnit) return <div>Loading...</div>;
+    if (unitError) return <div>Error: {unitError.message}</div>;
+
 
     const img = data.image;
 
@@ -319,6 +322,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
                                 invalidParameters={invalidParameters}
                                 role={role}
                                 setSensors={setSensors}
+                                unit={recordPointUnit}
                             />
                         </div>
 

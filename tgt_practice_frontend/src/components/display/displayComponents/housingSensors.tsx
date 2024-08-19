@@ -10,6 +10,7 @@ interface HousingSensorsProps {
     invalidParameters: Record<string, boolean>;
     role: string | undefined;
     setSensors: React.Dispatch<React.SetStateAction<Sensor[]>>;
+    unit: { id: string; name: { en: string } };
 }
 
 const HousingSensors: React.FC<HousingSensorsProps> = ({
@@ -20,6 +21,7 @@ const HousingSensors: React.FC<HousingSensorsProps> = ({
     invalidParameters,
     role,
     setSensors,
+    unit,
 }) => {
     const { toolSensorTypes } = useToolSensorTypesQuery();
 
@@ -46,7 +48,10 @@ const HousingSensors: React.FC<HousingSensorsProps> = ({
                         <tr>
                             <th>Name</th>
                             <th>
-                                Record Point{initialSensors.length > 0 && initialSensors[0].unit.name.en ? `, ${initialSensors[0].unit.name.en}` : ""}
+                                Record Point
+                                {unit && unit.name && unit.name.en
+                                    ? `, ${unit.name.en}`
+                                    : ""}
                             </th>
                             <th className="button-column">
                                 <button
