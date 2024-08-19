@@ -33,6 +33,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
     const [sn, setSn] = useState<string>('');
     const [selectedModuleTypeId, setSelectedModuleTypeId] = useState<string>('');
     const [selectedGroupId, setSelectedGroupId] = useState<string>('');
+    const [sensors, setSensors] = useState<Sensor[]>([]);
     const hiddenParameters = ['Image h_y1', 'Image h_y2'];
 
     const { setModal, setModalContent } = useModal();
@@ -63,6 +64,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
                 return acc;
             }, {});
             setSensorRecordPoints(initialSensors);
+            setSensors(data.toolinstalledsensorSet);
         }
 
         if (data) {
@@ -95,27 +97,46 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
         }
     };
 
-    const handleSensorRecordPointChange = (sensorId: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSensorRecordPointChange = (sensor: Sensor) => (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
         const regex = /^\d*\.?\d*$/;
 
         setSensorRecordPoints((prevRecordPoints) => ({
             ...prevRecordPoints,
-            [sensorId]: value,
+            [sensor.id]: value,
         }));
 
         if (regex.test(value)) {
             setInvalidParameters((prevInvalid) => ({
                 ...prevInvalid,
-                [sensorId]: false,
+                [sensor.id]: false,
             }));
         } else {
             setInvalidParameters((prevInvalid) => ({
                 ...prevInvalid,
-                [sensorId]: true,
+                [sensor.id]: true,
             }));
         }
-    };
+
+        console.log(`для сенсора ${sensor.id}:
+            "rToolsensortypeId": ${sensor.rToolsensortype.id}
+             "recordPoint": ${value}`);
+                };
+
+    const handleSensorTypeChange = (sensor: Sensor) => (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const { value } = event.target;
+
+        // Обновление состояния сенсора
+        setSensors((prevSensors) =>
+            prevSensors.map((s) =>
+                s.id === sensor.id ? { ...s, rToolsensortype: { id: value, name: event.target.selectedOptions[0].text } } : s
+            )
+        );
+
+        console.log(`для сенсора ${sensor.id}:
+            "rToolsensortypeId": ${value}
+             "recordPoint": ${sensorRecordPoints[sensor.id]}`);
+                };
 
     const handleToolModuleSnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
@@ -237,7 +258,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
     if (error) return <div>Error: {error.message}</div>;
 
     const img = data.image;
-    
+
     const role = Cookies.get('role');
 
     const handleUndoChanges = () => {
@@ -257,6 +278,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
                 return acc;
             }, {});
             setSensorRecordPoints(initialSensors);
+            setSensors(data.toolinstalledsensorSet);
         }
 
         setInvalidParameters({});
@@ -290,11 +312,13 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
                             />
 
                             <HousingSensors
-                                sensors={data.toolinstalledsensorSet}
+                                sensors={sensors}
                                 sensorRecordPoints={sensorRecordPoints}
                                 handleSensorRecordPointChange={handleSensorRecordPointChange}
+                                handleSensorTypeChange={handleSensorTypeChange}
                                 invalidParameters={invalidParameters}
                                 role={role}
+                                setSensors={setSensors}
                             />
                         </div>
 

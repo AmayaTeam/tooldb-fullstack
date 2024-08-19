@@ -1,23 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import { Sensor } from "src/types/interfaces";
 import { useToolSensorTypesQuery } from "src/lib/hooks/HousingSensors/useToolSensorTypesQuery.ts";
 
 interface HousingSensorsProps {
     sensors: Sensor[];
     sensorRecordPoints: Record<string, string>;
-    handleSensorRecordPointChange: (id: string) => (event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleSensorRecordPointChange: (sensor: Sensor) => (event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleSensorTypeChange: (sensor: Sensor) => (event: React.ChangeEvent<HTMLSelectElement>) => void;
     invalidParameters: Record<string, boolean>;
     role: string | undefined;
+    setSensors: React.Dispatch<React.SetStateAction<Sensor[]>>;
 }
 
 const HousingSensors: React.FC<HousingSensorsProps> = ({
     sensors: initialSensors,
     sensorRecordPoints,
     handleSensorRecordPointChange,
+    handleSensorTypeChange,
     invalidParameters,
     role,
+    setSensors,
 }) => {
-    const [sensors, setSensors] = useState<Sensor[]>(initialSensors);
     const { toolSensorTypes } = useToolSensorTypesQuery();
 
     const handleAddRow = () => {
@@ -27,11 +30,11 @@ const HousingSensors: React.FC<HousingSensorsProps> = ({
             unit: { id: "", name: { en: "" } },
             recordPoint: 0,
         };
-        setSensors([...sensors, newSensor]);
+        setSensors((prevSensors) => [...prevSensors, newSensor]);
     };
 
     const handleRemoveRow = (id: string) => {
-        setSensors(sensors.filter(sensor => sensor.id !== id));
+        setSensors((prevSensors) => prevSensors.filter(sensor => sensor.id !== id));
     };
 
     return (
@@ -57,12 +60,13 @@ const HousingSensors: React.FC<HousingSensorsProps> = ({
                         </tr>
                     </thead>
                     <tbody>
-                        {sensors.map((sensor: Sensor) => (
+                        {initialSensors.map((sensor: Sensor) => (
                             <tr key={sensor.id}>
                                 <DisplaySensorComponent
                                     sensor={sensor}
                                     recordPoint={sensorRecordPoints[sensor.id] || ""}
-                                    onChange={handleSensorRecordPointChange}
+                                    onChange={handleSensorRecordPointChange(sensor)}
+                                    onSensorTypeChange={handleSensorTypeChange(sensor)}
                                     isInvalid={invalidParameters[sensor.id]}
                                     sensors={initialSensors}
                                     toolSensorTypes={toolSensorTypes}
@@ -89,7 +93,8 @@ const HousingSensors: React.FC<HousingSensorsProps> = ({
 interface DisplaySensorComponentProps {
     sensor: Sensor;
     recordPoint: string;
-    onChange: (id: string) => (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onSensorTypeChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
     isInvalid: boolean;
     sensors: Sensor[];
     toolSensorTypes: { id: string; name: string }[];
@@ -100,6 +105,7 @@ const DisplaySensorComponent: React.FC<DisplaySensorComponentProps> = ({
     sensor,
     recordPoint,
     onChange,
+    onSensorTypeChange,
     isInvalid,
     sensors,
     toolSensorTypes,
@@ -122,7 +128,8 @@ const DisplaySensorComponent: React.FC<DisplaySensorComponentProps> = ({
         <>
             <td className="title">
                 <select
-                    defaultValue={`custom-${sensor.rToolsensortype.id}`}
+                    value={`custom-${sensor.rToolsensortype.id}`}
+                    onChange={onSensorTypeChange}
                     disabled={role === "User"}
                     className="sensor-select"
                 >
@@ -137,7 +144,7 @@ const DisplaySensorComponent: React.FC<DisplaySensorComponentProps> = ({
                 <input
                     type="text"
                     value={recordPoint}
-                    onChange={onChange(sensor.id)}
+                    onChange={onChange}
                     className={`sensors_parametrs ${isInvalid ? "invalid" : ""}`}
                     disabled={role === "User"}
                 />
@@ -145,6 +152,5 @@ const DisplaySensorComponent: React.FC<DisplaySensorComponentProps> = ({
         </>
     );
 };
-
 
 export default HousingSensors;
