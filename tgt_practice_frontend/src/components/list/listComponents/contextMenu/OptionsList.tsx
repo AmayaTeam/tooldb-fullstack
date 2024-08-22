@@ -1,7 +1,7 @@
 import React from 'react';
 import { useModal } from 'src/contexts/ModalContext';
 import { LevelName, Option } from './contextMenuTypes';
-import { NewParameter } from 'src/types/interfaces';
+import {NewParameter, Parameter, Sensor} from 'src/types/interfaces';
 
 import GroupCreationModal from './modals/GroupCreationModal';
 import GroupDeletionModal from './modals/GroupDeletionModal';
@@ -16,7 +16,11 @@ import { useCreateToolModuleType } from 'src/lib/hooks/ToolModuleType/useCreateT
 import { useDeleteToolModuleType } from 'src/lib/hooks/ToolModuleType/useDeleteToolModuleType';
 import { useCreateToolModule } from 'src/lib/hooks/ToolModule/useCreateToolModule';
 import { useDeleteToolModule } from 'src/lib/hooks/ToolModule/useDeleteToolModule';
+import { useToolModuleQuery } from 'src/lib/hooks/tool_module.ts';
 import { useCreateParameter } from 'src/lib/hooks/ToolModule/useCreateParameter';
+import { useCreateSensor } from 'src/lib/hooks/HousingSensors/useCreateSensor.ts';
+import { useUnitSystem } from 'src/contexts/UnitSystemContext.tsx';
+
 
 interface OptionsListProps {
     levelName: LevelName;
@@ -38,14 +42,23 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
 
     const { createParameter } = useCreateParameter();
 
+    const { createSensor } = useCreateSensor()
+
+    const { selectedUnitId } = useUnitSystem();
+
+    const { data } = useToolModuleQuery({
+        id: objectId,
+        unitSystem: selectedUnitId,
+    });
+
     function getOptionsList() {
         const optionsNames: string[] = getOptionsNames();
         const optionsFunctions = getOptionsFunctions();
 
-        let optionsList: Option[] = [];
+        const optionsList: Option[] = [];
 
-        for (var i = 0; i < optionsNames.length; i++) {
-            var option: Option = { optionName: optionsNames[i], command: optionsFunctions[i] };
+        for (let i = 0; i < optionsNames.length; i++) {
+            const option: Option = {optionName: optionsNames[i], command: optionsFunctions[i]};
             optionsList.push(option);
         }
 
@@ -58,7 +71,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
 
         levelMap.set(LevelName.Group, ['Create New Group', 'Delete Group', 'Create New Type']);
         levelMap.set(LevelName.Type, ['Delete Type', 'Create New Module']);
-        levelMap.set(LevelName.Module, ['Delete Module']);
+        levelMap.set(LevelName.Module, ['Delete Module', 'Duplicate Module']);
 
         return levelMap.get(levelName)!;
     }
@@ -90,7 +103,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
     function getModuleFunctions(typeId: string) {
         const moduleManager = new ModuleManager(typeId);
 
-        return [moduleManager.showDeletionModal];
+        return [moduleManager.showDeletionModal, moduleManager.duplicateModule];
     }
 
     abstract class Manager {
@@ -109,6 +122,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
             setModalContent(this.getDeletionModal());
             setModal(true);
         }
+
 
         protected abstract getCreationModal(): any;
         protected abstract getDeletionModal(): any;
@@ -243,6 +257,26 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
             }
         }
 
+        private createSensors = async (newModuleId: string, sensors: any[]) => {
+            for (const sensor of sensors) {
+                try {
+                    const { data } = await createSensor({
+                        variables: {
+                            "input": {
+                                "rToolmoduleId": newModuleId,
+                                "rToolsensortypeId": sensor.rToolsensortypeId,
+                                "recordPoint": sensor.recordPoint,
+                                "unitId": sensor.unitId
+                            }
+                        }
+                    });
+                    console.log('Sensor created with ID:', data.createToolInstalledSensor.toolInstalledSensor.id);
+                } catch (err) {
+                    console.error('Error creating sensor:', err);
+                }
+            }
+        }
+
         private deleteModule = async () => {
             const response = await deleteToolModule({
                 variables: {
@@ -258,6 +292,46 @@ const OptionsList: React.FC<OptionsListProps> = ({ levelName, objectId, onOption
                 throw new Error(`Failed to delete module with id ${objectId}`);
             }
         }
+
+        public duplicateModule = async () => {
+            try {
+                const originalModule = data;
+                const { data: duplicatedModuleData } = await createToolModule({
+                    variables: {
+                        "input": {
+                            "rModuleTypeId": originalModule.rModuleType.id,
+                            "dbtname": originalModule.dbtname,
+                            "image": originalModule.image,
+                            "sn": "Duplicated:" + originalModule.sn, // временное решение
+                        },
+                    },
+                });
+
+                const duplicatedModuleId = duplicatedModuleData.createToolModule.toolModule.id;
+
+                const duplicatedParameters = originalModule.parameterSet.map((param: Parameter) => ({
+                    parameterTypeId: param.parameterType.id,
+                    parameterValue: param.parameterValue,
+                    unitId: param.unit.id,
+                }));
+
+                const duplicatedSensors = originalModule.toolinstalledsensorSet.map((sensor: Sensor) => ({
+                    rToolsensortypeId: sensor.rToolsensortype.id,
+                    recordPoint: sensor.recordPoint,
+                    unitId: sensor.unit.id,
+                }));
+
+                await this.createParameters(duplicatedModuleId, duplicatedParameters);
+
+                await this.createSensors(duplicatedModuleId, duplicatedSensors);
+
+                console.log('Module duplicated successfully');
+
+                onOptionClick();
+            } catch (error) {
+                console.error('Error duplicating module:', error);
+            }
+        };
     }
 
     const onModalClose = () => {

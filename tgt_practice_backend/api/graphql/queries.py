@@ -23,7 +23,8 @@ from .types import (
     UnitSystemObject,
     ProfileObject,
     ConvertedToolInstalledSensorType,
-    AnalyseCsvFileType
+    AnalyseCsvFileType,
+    UnitObject
 )
 from api.models import (
     ToolModuleGroup,
@@ -54,6 +55,9 @@ class Query(graphene.ObjectType):
     tool_module_types_by_group_id = graphene.List(
         ToolModuleTypeObject, group_id=graphene.String()
     )  # по айди группы отдает все пренадлежащие ей типы модулей БЕЗ ПРИБОРОВ
+    tool_module_types_by_group_name = graphene.List(
+        ToolModuleTypeObject, group_name=graphene.String()
+    )
     tool_modules_by_module_type_id = graphene.List(
         ToolModuleObject, module_type_id=graphene.String()
     )  # по айди типа модуля отдает все приборы в рамках одного
@@ -68,6 +72,11 @@ class Query(graphene.ObjectType):
 
     parameters_with_unit_system = graphene.List(
         ParameterTypeUnitObject, unit_system=graphene.String(required=True)
+    )
+
+    record_point_unit_by_unit_system = graphene.Field(
+        UnitObject,
+        unit_system_id=graphene.String(required=True)
     )
 
     analyse_csv_file = graphene.Field(
@@ -178,6 +187,10 @@ class Query(graphene.ObjectType):
     def resolve_tool_module_types_by_group_id(self, info, group_id):
         return ToolModuleType.objects.filter(r_modules_group_id=group_id).all()
 
+    @query_permission_required("api.view_toolmoduletype")
+    def resolve_tool_module_types_by_group_name(self, info, group_name):
+        return ToolModuleType.objects.filter(r_modules_group_id__name=group_name).all()
+
     @query_permission_required("api.view_toolmodule")
     def resolve_tool_modules_by_module_type_id(self, info, module_type_id):
         return ToolModule.objects.filter(r_module_type_id=module_type_id).all()
@@ -203,6 +216,26 @@ class Query(graphene.ObjectType):
             param_types_with_units.append(type_with_unit)
 
         return param_types_with_units
+
+    def resolve_record_point_unit_by_unit_system(self, info, unit_system_id):
+        try:
+            unit_system = UnitSystem.objects.get(pk=unit_system_id)
+        except UnitSystem.DoesNotExist:
+            return None
+
+        distance_measure = ConversionUtils.get_measure()
+
+        if not distance_measure:
+            return None
+
+        try:
+            unit_system_measure_unit = UnitSystemMeasureUnit.objects.get(
+                measure_unit__measure=distance_measure,
+                unit_system=unit_system
+            )
+            return unit_system_measure_unit.measure_unit.unit
+        except UnitSystemMeasureUnit.DoesNotExist:
+            return distance_measure.default_unit
 
     def resolve_analyse_csv_file(self, info, file):
         new_module, modified_module, new_parameters, modified_parameters, new_group_list, new_module_type_list, errors = ODOOUtils.analyse_file(file)

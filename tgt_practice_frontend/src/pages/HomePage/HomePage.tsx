@@ -13,10 +13,17 @@ const HomePage: React.FC = () => {
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
     const { isShowingModal } = useModal();
 
+    // State to trigger refetch in List.tsx
+    const [refetchList, setRefetchList] = useState<boolean>(false);
+
     const [csvAnalysisResult, setCsvAnalysisResult] = useState<any>(null);
 
     const handleItemClick = (itemId: string) => {
         setSelectedItemId(itemId);
+    };
+
+    const handleRefetchList = () => {
+        setRefetchList(prev => !prev); // Toggle the value to trigger refetch
     };
 
     const handleCsvFileProcessed = (data: any) => {
@@ -33,9 +40,9 @@ const HomePage: React.FC = () => {
         <div className="container">
             <Header onFileProcessed={handleCsvFileProcessed} />
 
-            <List onItemClick={handleItemClick} />
+            <List onItemClick={handleItemClick} refetchTrigger={refetchList}/>
 
-            <Display selectedItemId={selectedItemId} csvAnalysisResult={csvAnalysisResult} />
+            {selectedItemId && <Display selectedItemId={selectedItemId} onSave={handleRefetchList} />}
             {isShowingModal && <Modal />}
         </div>
     );
