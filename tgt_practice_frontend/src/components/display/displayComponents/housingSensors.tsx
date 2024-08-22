@@ -112,7 +112,6 @@ const DisplaySensorComponent: React.FC<DisplaySensorComponentProps> = ({
     onChange,
     onSensorTypeChange,
     isInvalid,
-    sensors,
     toolSensorTypes,
     role,
 }) => {
