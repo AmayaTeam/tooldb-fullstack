@@ -12,8 +12,11 @@ from api.models.tool_models import (
     ToolModuleGroup,
     ToolModuleType,
     ToolModule,
-    Parameter
+    Parameter,
+    ParameterType
 )
+
+from api.models.unit_system_models import Unit
 
 logger = logging.getLogger('odoo')
 
@@ -29,36 +32,36 @@ class UploadToolModules(graphene.Mutation):
     @permission_required("api.add_toolmodulegroup")
     @permission_required("api.add_toolmoduletype")
     def mutate(cls, root, info, input):
-        # ToolModuleGroup.objects.bulk_create(input.new_group_list)
-        # ToolModuleType.objects.bulk_create(input.new_module_type_list)
-        # ToolModule.objects.bulk_create(input.new_module_list)
-        # Parameter.objects.bulk_create(input.new_parameter_list)
-        logger.info("i'm here")
+        # logger.info("i'm here")
         new_module_list = []
-        new_module_group_list = []
-        new_module_type_list = []
+        new_parameters = []
         data = json.loads(input["data"])
-        for elem in data["newModuleList"]:
-            logger.info("i'm here")
-            logger.info(elem)
-            logger.info(elem["rModuleType"]["rModulesGroup"]["name"])
-            logger.info(elem["rModuleType"]["name"])
-            new_tool_module_group, created = ToolModuleGroup.objects.get_or_create(name=elem["rModuleType"]["rModulesGroup"]["name"])
-            new_module_group_list.append(new_tool_module_group)
-            logger.info(created)
-            new_tool_module_type, created = ToolModuleType.objects.get_or_create(name=elem["rModuleType"]["name"], r_module_group=new_tool_module_group)
-            new_module_type_list.append(new_tool_module_type)
-            logger.info(created)
+        for group in data["newGroupList"]:
+            ToolModuleGroup.objects.create(
+                name=group["name"],
+            )
+        # new_module_type_list = []
+        for module in data["newModuleList"]:
+            module_type = ToolModuleType.objects.get_or_create(name=module["rModuleType"]["name"], r_modules_group=ToolModuleGroup.objects.filter(name=module["rModuleType"]["rModulesGroup"]["name"]).first())[0]
             new_module_list.append(
                 ToolModule(
-                    id=elem["id"],
-                    odoo_id=elem["odoo_id"],
-                    sn=elem["sn"],
-                    rModuleType=new_tool_module_type
-                    ),
+                    id=module["id"],
+                    odoo_id=module["odooId"],
+                    sn=module["sn"],
+                    r_module_type=module_type,
                 )
-        logger.info(new_module_list)
-        logger.info("group:", new_module_group_list)
-        logger.info("type:", new_module_type_list)
+            )
+        for parameter in data["newParameters"]:
+            new_parameters.append(
+                Parameter(
+                    id=parameter["id"],
+                    parameter_type=ParameterType.objects.get(parameter_name=parameter["parameterType"]["parameterName"]),
+                    parameter_value=parameter["parameterValue"],
+                    unit=Unit.objects.get(name__en=parameter["unit"]["name"]["en"]),
+                    toolmodule=ToolModule.objects.filter(id=parameter["toolmodule"]["id"]).first(),
+                )
+            )
+        ToolModule.objects.bulk_create(new_module_list)
+        Parameter.objects.bulk_create(new_parameters)
         return UploadToolModulePayload(success=True)
 

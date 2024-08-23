@@ -16,6 +16,7 @@ import MessageModal from "./displayComponents/messageModal.tsx";
 import { useUnitSystem } from "src/contexts/UnitSystemContext.tsx";
 import { useRecordPointUnitQuery} from "src/lib/hooks/HousingSensors/useRecordPointUnitQuery.ts";
 import { useCreateSensor } from "src/lib/hooks/HousingSensors/useCreateSensor.ts";
+import CsvImportTable from "./displayComponents/csvImportTable.tsx";
 
 interface DisplayProps {
     selectedItemId: string | null;
@@ -254,9 +255,10 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, csvAnalysisResult, on
             }
         }
     };
-
+    console.log("res", csvAnalysisResult);
     if (csvAnalysisResult) {
         const res = csvAnalysisResult;
+        console.log("res", res);
         return (
             <div className="display-container">
                 <div className="display">

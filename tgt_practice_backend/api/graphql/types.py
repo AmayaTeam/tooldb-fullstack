@@ -27,14 +27,18 @@ from api.models.tool_models import (
 )
 
 
-class ToolModuleGroupObject(DjangoObjectType):
-    class Meta:
-        model = ToolModuleGroup
-
-
 class ToolModuleTypeObject(DjangoObjectType):
     class Meta:
         model = ToolModuleType
+        fields = '__all__'
+
+
+class ToolModuleGroupObject(DjangoObjectType):
+    types = graphene.List(ToolModuleTypeObject)
+
+    class Meta:
+        model = ToolModuleGroup
+        fields = '__all__'
 
 
 class ToolModuleObject(DjangoObjectType):

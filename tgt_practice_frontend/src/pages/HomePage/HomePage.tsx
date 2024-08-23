@@ -42,7 +42,7 @@ const HomePage: React.FC = () => {
 
             <List onItemClick={handleItemClick} refetchTrigger={refetchList}/>
 
-            {selectedItemId && <Display selectedItemId={selectedItemId} onSave={handleRefetchList} />}
+            <Display selectedItemId={selectedItemId} csvAnalysisResult={csvAnalysisResult} onSave={handleRefetchList} />
             {isShowingModal && <Modal />}
         </div>
     );
