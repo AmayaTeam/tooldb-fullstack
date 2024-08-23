@@ -153,12 +153,17 @@ LOGGING = {
         "django": {
             "handlers": ["file"],
             "level": "INFO",
-            "propagate": True
+            "propagate": False
         },
-    "conversion": {
+        "conversion": {
             "handlers": ["file"],
             "level": "INFO",
-            "propagate": True,
+            "propagate": False,
+        },
+        "odoo": {
+                "handlers": ["file"],
+                "level": "INFO",
+                "propagate": False,
         },
     },
     "formatters": {

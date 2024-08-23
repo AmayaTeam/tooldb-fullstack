@@ -361,3 +361,69 @@ button {
     text-align: left;
     margin-right: 10px;
 }
+
+.Housing_params-table select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Добавляем многоточие для обрезанного текста */
+}
+
+.title select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.module-section {
+    margin-bottom: 15px; /* Отступ между секциями */
+}
+
+.module-header {
+    display: flex;
+    justify-content: space-between; /* Разделяем текст и стрелку */
+    cursor: pointer; /* Указываем на интерактивность */
+    padding: 10px;
+    background-color: #f2f2f2; /* Цвет фона заголовка */
+    border: 1px solid #ddd; /* Рамка вокруг заголовка */
+    border-radius: 4px; /* Скругление углов */
+}
+
+.toggle-arrow {
+    margin-left: 10px; /* Отступ между текстом и стрелкой */
+    transition: transform 0.2s ease; /* Анимация для стрелки */
+}
+
+.toggle-arrow.expanded {
+    transform: rotate(180deg); /* Поворачиваем стрелку, когда открыт */
+}
+
+.Housing_params-table {
+    table-layout: auto; /* Автоматическая ширина столбцов */
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+}
+
+.Housing_params-table th,
+.Housing_params-table td {
+    overflow: hidden;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.Housing_params-table th {
+    background-color: #f2f2f2;
+    color: black;
+}
+
+.Housing_params-table td {
+    white-space: normal; /* Разрешить перенос текста, если необходимо */
+}
+
+

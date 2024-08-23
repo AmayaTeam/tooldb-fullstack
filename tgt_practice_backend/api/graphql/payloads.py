@@ -33,10 +33,14 @@ class ToolModuleTypePayload(graphene.ObjectType):
 class ToolSensorTypePayload(graphene.ObjectType):
     tool_sensor_type = graphene.Field(ToolSensorTypeObject)
 
+
 class ParameterPayload(graphene.ObjectType):
     parameter = graphene.Field(ParameterObject)
+
 
 class ProfilePayload(graphene.ObjectType):
     profile = graphene.Field(ProfileObject)
 
 
+class UploadToolModulePayload(graphene.ObjectType):
+    success = graphene.Boolean()

@@ -28,6 +28,9 @@ from api.graphql.mutations.tool_sensor_type import (
     UpdateToolSensorType,
     DeleteToolSensorType,
 )
+from api.graphql.mutations.upload_tool_modules import (
+    UploadToolModules
+)
 
 
 class Mutation(graphene.ObjectType):
@@ -55,3 +58,5 @@ class Mutation(graphene.ObjectType):
     update_parameter = UpdateParameter.Field()
 
     update_profile = UpdateProfile.Field()
+
+    upload_tool_modules = UploadToolModules.Field()

@@ -31,6 +31,7 @@ class ToolModuleType(models.Model):
 
 class ToolModule(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    odoo_id = models.TextField(null=True, blank=True)
     r_module_type = models.ForeignKey(ToolModuleType, on_delete=models.CASCADE)
     sn = models.TextField(max_length=255, null=True, blank=True)
     dbdate = models.DateField(null=True, blank=True)
@@ -39,7 +40,8 @@ class ToolModule(models.Model):
     dbcomment = models.TextField(null=True, blank=True)
     dbtname = models.TextField(null=True, blank=True)
     image = models.TextField(null=True, blank=True)
-    status = models.TextField(null=True, blank=True)
+    physical_status = models.TextField(null=True, blank=True)
+    logical_status = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.sn

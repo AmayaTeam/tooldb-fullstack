@@ -45,7 +45,9 @@ class ToolModuleAdmin(admin.ModelAdmin):
         "dbsn",
         "dbcomment",
         "dbtname",
-        "status"
+        "odoo_id",
+        "physical_status",
+        "logical_status"
     )
     search_fields = (
         "sn",
@@ -54,7 +56,9 @@ class ToolModuleAdmin(admin.ModelAdmin):
         "dbsn",
         "dbcomment",
         "dbtname",
-        "status"
+        "odoo_id",
+        "physical_status",
+        "logical_status"
     )
     list_display_links = ("sn",)
 

@@ -7,8 +7,14 @@ import { useUnitSystemsQuery } from '../../lib/hooks/useUnitSystemsQuery';
 import { useUserUnitSystemQuery } from '../../lib/hooks/useUserUnitSystemQuery';
 import { useUpdateProfileUnitSystem } from '../../lib/hooks/UnitSystem/useUpdateProfileUnitSystem';
 import { useUnitSystem } from 'src/contexts/UnitSystemContext';
+import UploadCsvFileButton from "src/components/UploadToolModules/UploadCsvFileButton/UploadCsvFileButton.tsx";
 
-const Header: React.FC = () => {
+
+interface HeaderProps {
+    onFileProcessed: (data: any) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onFileProcessed }) => {
     const [isUnitDropdownOpen, setIsUnitDropdownOpen] = useState(false);
     const [isUsernameDropdownOpen, setIsUsernameDropdownOpen] = useState(false);
     const [username, setUsername] = useState('');
@@ -122,7 +128,7 @@ const Header: React.FC = () => {
     return (
         <div className="header">
             <div className="header-left">
-                {/* You can add left-side content here if needed */}
+                <UploadCsvFileButton role={role} onFileProcessed={onFileProcessed}/>
             </div>
 
             <div className="header-center">

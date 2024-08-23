@@ -14,25 +14,32 @@ import { Parameter, Sensor } from "src/types/interfaces.ts";
 import { useModal } from "src/contexts/ModalContext.tsx";
 import MessageModal from "./displayComponents/messageModal.tsx";
 import { useUnitSystem } from "src/contexts/UnitSystemContext.tsx";
+import { useRecordPointUnitQuery} from "src/lib/hooks/HousingSensors/useRecordPointUnitQuery.ts";
+import { useCreateSensor } from "src/lib/hooks/HousingSensors/useCreateSensor.ts";
+import CsvImportTable from "./displayComponents/csvImportTable.tsx";
 
 interface DisplayProps {
     selectedItemId: string | null;
+    csvAnalysisResult?: any;
     onSave: () => void; // New prop for handling save action
 }
 
-const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
+const Display: React.FC<DisplayProps> = ({ selectedItemId, csvAnalysisResult, onSave }) => {
     const { selectedUnitId } = useUnitSystem();
 
     const { loading, error, data } = useToolModuleQuery({ id: selectedItemId, unitSystem: selectedUnitId });
     const { updateParameter } = useParameterUpdate();
     const { updateRecordPoint } = useRecordPointUpdate();
     const { updateToolModule } = useUpdateToolModule();
+    const { createSensor } = useCreateSensor();
+    const { recordPointUnit, loading: unitLoading, error: unitError } = useRecordPointUnitQuery(selectedUnitId);
     const [parameters, setParameters] = useState<Record<string, string>>({});
     const [sensorRecordPoints, setSensorRecordPoints] = useState<Record<string, string>>({});
     const [invalidParameters, setInvalidParameters] = useState<Record<string, boolean>>({});
     const [sn, setSn] = useState<string>('');
     const [selectedModuleTypeId, setSelectedModuleTypeId] = useState<string>('');
     const [selectedGroupId, setSelectedGroupId] = useState<string>('');
+    const [sensors, setSensors] = useState<Sensor[]>([]);
     const hiddenParameters = ['Image h_y1', 'Image h_y2'];
 
     const { setModal, setModalContent } = useModal();
@@ -63,6 +70,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
                 return acc;
             }, {});
             setSensorRecordPoints(initialSensors);
+            setSensors(data.toolinstalledsensorSet);
         }
 
         if (data) {
@@ -95,26 +103,36 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
         }
     };
 
-    const handleSensorRecordPointChange = (sensorId: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSensorRecordPointChange = (sensor: Sensor) => (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
         const regex = /^\d*\.?\d*$/;
 
         setSensorRecordPoints((prevRecordPoints) => ({
             ...prevRecordPoints,
-            [sensorId]: value,
+            [sensor.id]: value,
         }));
 
         if (regex.test(value)) {
             setInvalidParameters((prevInvalid) => ({
                 ...prevInvalid,
-                [sensorId]: false,
+                [sensor.id]: false,
             }));
         } else {
             setInvalidParameters((prevInvalid) => ({
                 ...prevInvalid,
-                [sensorId]: true,
+                [sensor.id]: true,
             }));
         }
+    };
+
+    const handleSensorTypeChange = (sensor: Sensor) => (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const { value } = event.target;
+
+        setSensors((prevSensors) =>
+            prevSensors.map((s) =>
+                s.id === sensor.id ? { ...s, rToolsensortype: { id: value, name: event.target.selectedOptions[0].text } } : s
+            )
+        );
     };
 
     const handleToolModuleSnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -158,18 +176,10 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
             }, [] as { id: string; recordPoint: number, unitId: string }[]);
 
             const updatedSn = data.sn !== sn;
-            console.log(data);
             const updatedModuleType = data.rModuleType.id !== selectedModuleTypeId || data.rModuleType.rModulesGroup.id !== selectedGroupId;
-            console.log("data.rModuleType: ", data.rModuleType.id);
-            console.log("selectedModuleTypeId: ", selectedModuleTypeId);
-            console.log("data.rModulesGroup", data.rModuleType.rModulesGroup.id);
-            console.log("selectedGroupId", selectedGroupId);
+            const newSensors = sensors.filter(sensor => sensor.id.startsWith('new-'));
 
-            if (updatedParameters.length > 0 || updatedSensors.length > 0 || updatedSn || updatedModuleType) {
-                console.log("Обновление параметров:", updatedParameters);
-                console.log("Обновление сенсоров:", updatedSensors);
-                console.log("Обновление sn:", updatedSn);
-                console.log("Обновление ModuleType:", updatedModuleType);
+            if (updatedParameters.length > 0 || updatedSensors.length > 0 || updatedSn || updatedModuleType || newSensors) {
                 try {
                     for (const param of updatedParameters) {
                         await updateParameter({
@@ -224,6 +234,19 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
                             }
                         });
                     }
+
+                    for (const sensor of newSensors) {
+                        await createSensor({
+                            variables: {
+                                input: {
+                                    rToolmoduleId: selectedItemId,
+                                    rToolsensortypeId: sensor.rToolsensortype.id,
+                                    recordPoint: parseFloat(sensorRecordPoints[sensor.id]),
+                                    unitId: recordPointUnit.id,
+                                },
+                            },
+                        });
+                    }
                     onSave();
                     showMessageModal("The update was successful!");
                 } catch (error) {
@@ -232,12 +255,29 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
             }
         }
     };
+    console.log("res", csvAnalysisResult);
+    if (csvAnalysisResult) {
+        const res = csvAnalysisResult;
+        console.log("res", res);
+        return (
+            <div className="display-container">
+                <div className="display">
+                    <div className="display-content">
+                        <CsvImportTable data={res}/>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
+    if (unitLoading || !recordPointUnit) return <div>Loading...</div>;
+    if (unitError) return <div>Error: {unitError.message}</div>;
+
 
     const img = data.image;
-    
+
     const role = Cookies.get('role');
 
     const handleUndoChanges = () => {
@@ -257,6 +297,7 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
                 return acc;
             }, {});
             setSensorRecordPoints(initialSensors);
+            setSensors(data.toolinstalledsensorSet);
         }
 
         setInvalidParameters({});
@@ -290,11 +331,14 @@ const Display: React.FC<DisplayProps> = ({ selectedItemId, onSave }) => {
                             />
 
                             <HousingSensors
-                                sensors={data.toolinstalledsensorSet}
+                                sensors={sensors}
                                 sensorRecordPoints={sensorRecordPoints}
                                 handleSensorRecordPointChange={handleSensorRecordPointChange}
+                                handleSensorTypeChange={handleSensorTypeChange}
                                 invalidParameters={invalidParameters}
                                 role={role}
+                                setSensors={setSensors}
+                                unit={recordPointUnit}
                             />
                         </div>
 

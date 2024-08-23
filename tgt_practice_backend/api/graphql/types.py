@@ -27,14 +27,18 @@ from api.models.tool_models import (
 )
 
 
-class ToolModuleGroupObject(DjangoObjectType):
-    class Meta:
-        model = ToolModuleGroup
-
-
 class ToolModuleTypeObject(DjangoObjectType):
     class Meta:
         model = ToolModuleType
+        fields = '__all__'
+
+
+class ToolModuleGroupObject(DjangoObjectType):
+    types = graphene.List(ToolModuleTypeObject)
+
+    class Meta:
+        model = ToolModuleGroup
+        fields = '__all__'
 
 
 class ToolModuleObject(DjangoObjectType):
@@ -110,17 +114,21 @@ class UnitSystemMeasureUnitObject(DjangoObjectType):
     class Meta:
         model = UnitSystemMeasureUnit
 
+
 class ConversionFactorObject(DjangoObjectType):
     class Meta:
         model = ConversionFactor
+
 
 class ParameterTypeUnitObject(DjangoObjectType):
     class Meta:
         model = ParameterTypeUnit
 
+
 class ProfileObject(DjangoObjectType):
     class Meta:
         model = Profile
+
 
 class ConvertedParameterType(graphene.ObjectType):
     id = graphene.String()
@@ -128,11 +136,13 @@ class ConvertedParameterType(graphene.ObjectType):
     parameter_value = graphene.Float()
     unit = graphene.Field(UnitObject)
 
+
 class ConvertedToolInstalledSensorType(graphene.ObjectType):
     id = graphene.String()
     r_toolsensortype = graphene.Field(ToolSensorTypeObject)
     record_point = graphene.Float()
     unit = graphene.Field(UnitObject)
+
 
 class ToolModuleResponseType(graphene.ObjectType):
     id = graphene.String()
@@ -143,3 +153,13 @@ class ToolModuleResponseType(graphene.ObjectType):
     r_module_type = graphene.Field(ToolModuleTypeObject)
     parameter_set = graphene.List(ConvertedParameterType)
     toolinstalledsensorSet = graphene.List(ConvertedToolInstalledSensorType)
+
+
+class AnalyseCsvFileType(graphene.ObjectType):
+    new_module_list = graphene.List(ToolModuleObject)
+    modified_module_list = graphene.List(ToolModuleObject)
+    new_parameters = graphene.List(ParameterObject)
+    modified_parameters = graphene.List(ParameterObject)
+    errors_list = graphene.List(ToolModuleObject)
+    new_group_list = graphene.List(ToolModuleGroupObject)
+    new_module_type_list = graphene.List(ToolModuleTypeObject)
