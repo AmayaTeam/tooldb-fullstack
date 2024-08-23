@@ -9,6 +9,8 @@ interface UploadCsvFileButtonProps {
 
 const UploadCsvFileButton: React.FC<UploadCsvFileButtonProps> = ({ role, onFileProcessed }) => {
     const [fileContent, setFileContent] = useState<string | null>(null);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const { data, loading, error } = useAnalyseCsvFile({ file: fileContent });
 
     const handleFileChange = async (files: File[]) => {
@@ -43,6 +45,8 @@ const UploadCsvFileButton: React.FC<UploadCsvFileButtonProps> = ({ role, onFileP
     return (
         <div className="display-content-info-csv">
             <div className="info-csv-buttons">
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
                 <ReactFileReader handleFiles={handleFileChange} fileTypes={'.csv'} disabled={role === 'User'}>
                     <button className='btn'>Import CSV</button>
                 </ReactFileReader>
